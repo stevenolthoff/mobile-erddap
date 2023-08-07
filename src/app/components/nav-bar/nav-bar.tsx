@@ -11,6 +11,7 @@ interface ITab {
   id: ETab
   label: string
   icon: ReactElement
+  path: string
 }
 
 export default function NavBar (): ReactElement {
@@ -20,27 +21,32 @@ export default function NavBar (): ReactElement {
     {
       id: 'map',
       label: 'Map',
-      icon: <GlobeIcon className='w-6 h-6' />
+      icon: <GlobeIcon className='w-6 h-6' />,
+      path: '/'
     },
     {
       id: 'search',
       label: 'Search',
-      icon: <MagnifyingGlassIcon className='w-6 h-6' />
+      icon: <MagnifyingGlassIcon className='w-6 h-6' />,
+      path: '/stations'
     },
     {
       id: 'sensors',
       label: 'Sensors',
-      icon: <Crosshair2Icon className='w-6 h-6' />
+      icon: <Crosshair2Icon className='w-6 h-6' />,
+      path: '/'
     },
     {
       id: 'favorites',
       label: 'Favorites',
-      icon: <HeartIcon className='w-6 h-6' />
+      icon: <HeartIcon className='w-6 h-6' />,
+      path: '/'
     },
     {
       id: 'settings',
       label: 'Settings',
-      icon: <GearIcon className='w-6 h-6' />
+      icon: <GearIcon className='w-6 h-6' />,
+      path: '/'
     }
   ]
 
@@ -51,12 +57,13 @@ export default function NavBar (): ReactElement {
     }
     return (
       <NavigationMenu.Item key={tab.id} onClick={() => { setActiveTab(tab.id) }}>
-        <NavigationMenu.Link className={`${color} flex flex-col items-center cursor-pointer`}>
+        <Link href={tab.path} className={`${color} flex flex-col items-center cursor-pointer`}>
           {tab.icon}
           <Label.Root className='cursor-pointer'>
             {tab.label}
           </Label.Root>
-        </NavigationMenu.Link>
+        </Link>
+        {/* </NavigationMenu.Link> */}
       </NavigationMenu.Item>
     )
   })
