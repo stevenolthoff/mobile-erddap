@@ -20,12 +20,12 @@ export default function NavBar (): ReactElement {
     {
       id: 'map',
       label: 'Map',
-      icon: <Link href='/map'><GlobeIcon className='w-6 h-6' /></Link>
+      icon: <GlobeIcon className='w-6 h-6' />
     },
     {
       id: 'search',
       label: 'Search',
-      icon: <Link href='/stations'><MagnifyingGlassIcon className='w-6 h-6' /></Link>
+      icon: <MagnifyingGlassIcon className='w-6 h-6' />
     },
     {
       id: 'sensors',

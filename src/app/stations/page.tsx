@@ -3,6 +3,7 @@
 import StationsListItem from '@/app/components/stations-list-item/stations-list-item'
 import * as DataService from '@axdspub/axiom-ui-data-services'
 import { api } from '@axdspub/erddap-service'
+import Link from 'next/link'
 import React, { type ReactElement, useState, useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { ClipLoader } from 'react-spinners'
@@ -108,10 +109,13 @@ export default function Stations (): ReactElement {
 
   const getCards = (): ReactElement[] => {
     return results.map((catalogItem, i) => (
-      <StationsListItem
+      <Link
         key={`${catalogItem.Title}-${i}`}
-        title={catalogItem.Title}
-        summary={catalogItem.Summary} />
+        href={`/stations/${catalogItem['Dataset ID']}`}>
+        < StationsListItem
+          title={catalogItem.Title}
+          summary={catalogItem.Summary} />
+      </Link>
     ))
   }
 
