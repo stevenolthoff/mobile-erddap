@@ -1,0 +1,16 @@
+services:
+  app:
+    image: mobile-erddap:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8787:80"
+
+  storybook:
+    image: mobile-erddap-storybook:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile.storybook
+    ports:
+      - "8888:80"

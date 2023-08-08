@@ -1,0 +1,123 @@
+stages:
+  - build
+  - test
+  - push
+  - clean
+  - deploy
+
+build_image:
+  stage: build
+  script:
+  - docker build -f Dockerfile -t $CI_PROJECT_NAME:$CI_PIPELINE_ID .
+  - docker build -f Dockerfile.storybook -t $CI_PROJECT_NAME-storybook:$CI_PIPELINE_ID .
+
+test:
+  stage: test
+  image: $CI_PROJECT_NAME:$CI_PIPELINE_ID
+  script:
+    - test -e /usr/share/nginx/html/index.html
+    - test -e /usr/share/nginx/html/asset-manifest.json
+
+test_storybook:
+  stage: test
+  image: $CI_PROJECT_NAME-storybook:$CI_PIPELINE_ID
+  script:
+    - test -e /usr/share/nginx/html/index.html
+    - test -e /usr/share/nginx/html/stories.json
+
+push_latest:
+  stage: push
+  only:
+    - main
+  script:
+    - docker tag $CI_PROJECT_NAME:$CI_PIPELINE_ID registry.axiom/$CI_PROJECT_NAME:latest
+    - docker push registry.axiom/$CI_PROJECT_NAME:latest
+
+push_branch:
+  stage: push
+  only:
+    - branches
+  except:
+    - main
+  script:
+    - docker tag $CI_PROJECT_NAME:$CI_PIPELINE_ID registry.axiom/$CI_PROJECT_NAME:$CI_COMMIT_REF_NAME
+    - docker push registry.axiom/$CI_PROJECT_NAME:$CI_COMMIT_REF_NAME
+
+push_branch_storybook:
+  stage: push
+  only:
+    - branches
+  except:
+    - main
+  script:
+    - docker tag $CI_PROJECT_NAME-storybook:$CI_PIPELINE_ID registry.axiom/$CI_PROJECT_NAME-storybook:$CI_COMMIT_REF_NAME
+    - docker push registry.axiom/$CI_PROJECT_NAME-storybook:$CI_COMMIT_REF_NAME
+
+push_latest_storybook:
+  stage: push
+  only:
+    - main
+  script:
+    - docker tag $CI_PROJECT_NAME-storybook:$CI_PIPELINE_ID registry.axiom/$CI_PROJECT_NAME-storybook:latest
+    - docker push registry.axiom/$CI_PROJECT_NAME-storybook:latest
+
+push_tag:
+  stage: push
+  only:
+    - tags
+  script:
+    - docker tag $CI_PROJECT_NAME:$CI_PIPELINE_ID registry.axiom/$CI_PROJECT_NAME:$CI_BUILD_TAG
+    - docker push registry.axiom/$CI_PROJECT_NAME:$CI_BUILD_TAG
+    - docker tag $CI_PROJECT_NAME:$CI_PIPELINE_ID registry.axiom/$CI_PROJECT_NAME:prod
+    - docker push registry.axiom/$CI_PROJECT_NAME:prod
+
+push_tag_storybook:
+  stage: push
+  only:
+    - tags
+  script:
+    - docker tag $CI_PROJECT_NAME-storybook:$CI_PIPELINE_ID registry.axiom/$CI_PROJECT_NAME-storybook:$CI_BUILD_TAG
+    - docker push registry.axiom/$CI_PROJECT_NAME-storybook:$CI_BUILD_TAG
+    - docker tag $CI_PROJECT_NAME-storybook:$CI_PIPELINE_ID registry.axiom/$CI_PROJECT_NAME-storybook:prod
+    - docker push registry.axiom/$CI_PROJECT_NAME-storybook:prod
+
+clean_latest:
+  stage: clean
+  only:
+    - main
+  script:
+    - docker rmi --no-prune $CI_PROJECT_NAME:$CI_PIPELINE_ID
+    - docker rmi --no-prune registry.axiom/$CI_PROJECT_NAME:latest
+
+clean_latest_storybook:
+  stage: clean
+  only:
+    - main
+  script:
+    - docker rmi --no-prune $CI_PROJECT_NAME-storybook:$CI_PIPELINE_ID
+    - docker rmi --no-prune registry.axiom/$CI_PROJECT_NAME-storybook:latest
+
+clean_tag:
+  stage: clean
+  only:
+    - tags
+  script:
+    - docker rmi --no-prune $CI_PROJECT_NAME:$CI_PIPELINE_ID
+    - docker rmi --no-prune registry.axiom/$CI_PROJECT_NAME:$CI_BUILD_TAG
+    - docker rmi --no-prune registry.axiom/$CI_PROJECT_NAME:prod
+
+clean_tag_storybook:
+  stage: clean
+  only:
+    - tags
+  script:
+    - docker rmi --no-prune $CI_PROJECT_NAME-storybook:$CI_PIPELINE_ID
+    - docker rmi --no-prune registry.axiom/$CI_PROJECT_NAME-storybook:$CI_BUILD_TAG
+    - docker rmi --no-prune registry.axiom/$CI_PROJECT_NAME-storybook:prod
+
+deploy_app_and_storybook:
+  stage: deploy
+  only:
+    - main
+  script:
+    - aps apps-prod mobile-erddap-and-storybook
