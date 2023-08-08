@@ -1,5 +1,3 @@
-'use client'
-
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { DataService, type IDataResult } from '@axdspub/axiom-ui-data-services'
