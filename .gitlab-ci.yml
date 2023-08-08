@@ -120,4 +120,4 @@ deploy_app_and_storybook:
   only:
     - main
   script:
-    - aps apps-prod mobile-erddap-and-storybook
+    - aps apps-stage mobile-erddap-and-storybook
