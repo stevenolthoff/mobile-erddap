@@ -1,4 +1,5 @@
 import React, { type ReactElement, useState, useEffect } from 'react'
+import { renderToString } from 'react-dom/server'
 import { Map as AxiomMap, ILatLon, GeoJsonLayerType, LayerType } from '@axdspub/axiom-maps'
 import SearchService, { IDatasetOnMap } from '../../Services/Search/index'
 
@@ -23,7 +24,9 @@ export default function Map (): ReactElement {
         type: 'Point',
         coordinates: [Number(dataset.maxLongitude), Number(dataset.maxLatitude)]
       },
-      properties: {}
+      properties: {
+        onClick: (event: Event) => { console.log(event.target) }
+      }
     }))
     console.log(geoJson)
     const layer: GeoJsonLayerType = {
