@@ -1,6 +1,18 @@
 import { ErddapApi, IConstraint } from '@axdspub/erddap-service/lib/api'
 import { DataService } from '@axdspub/axiom-ui-data-services'
 
+export interface IDatasetOnMap {
+  datasetID: string
+  title: string
+  minLongitude: string
+  maxLongitude: string
+  minLatitude: string
+  maxLatitude: string
+  minTime: string
+  maxTime: string
+  summary: string
+}
+
 export default class SearchService {
   static SERVER = 'https://erddap.sensors.axds.co/erddap'
   static erddapApi = new ErddapApi(this.SERVER)
@@ -46,7 +58,7 @@ export default class SearchService {
   constructor () {
     console.log('SearchService')
   }
-  public static async getAllDatasets (): Promise<any[]> {
+  public static async getAllDatasets (): Promise<IDatasetOnMap[]> {
     const url = this.erddapApi.getUrl({
       protocol: 'tabledap',
       allDatasets: true,
@@ -55,7 +67,7 @@ export default class SearchService {
       variables: this.COLUMN_NAMES
     })
     const dataService = new DataService({ resultType: 'csv', url, type: '' })
-    const results = await dataService.get()
+    const results: { data: IDatasetOnMap[] } = await dataService.get()
     console.log(results)
     return results.data
   }

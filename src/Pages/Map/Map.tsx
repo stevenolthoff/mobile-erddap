@@ -1,6 +1,6 @@
 import React, { type ReactElement, useState, useEffect } from 'react'
-import { Map as AxiomMap, ILatLon } from '@axdspub/axiom-maps'
-import SearchService from '../../Services/Search/index'
+import { Map as AxiomMap, ILatLon, GeoJsonLayerType, LayerType } from '@axdspub/axiom-maps'
+import SearchService, { IDatasetOnMap } from '../../Services/Search/index'
 
 export default function Map (): ReactElement {
   const DEFAULT_CENTER: ILatLon = {
@@ -8,7 +8,7 @@ export default function Map (): ReactElement {
     lon: -149.863129
   }
 
-  const [layers, setLayers] = useState<any>([])
+  const [layer, setLayer] = useState<any>()
 
   async function loadStations (): Promise<any> {
     console.log('load')
@@ -16,31 +16,34 @@ export default function Map (): ReactElement {
     return datasets
   }
 
+  function createGeoJsonLayer (datasets: IDatasetOnMap[]): GeoJsonLayerType {
+    const geoJson: GeoJSON.Feature[] = datasets.slice(1).map((dataset: IDatasetOnMap) => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [Number(dataset.maxLongitude), Number(dataset.maxLatitude)]
+      },
+      properties: {}
+    }))
+    console.log(geoJson)
+    const layer: GeoJsonLayerType = {
+      id: 'geoJson',
+      type: 'geoJson',
+      label: 'geoJson',
+      zIndex: 20,
+      isBaseLayer: false,
+      options: { geoJson }
+    }
+    return layer
+  }
+
   useEffect(() => {
-    loadStations().then((datasets: any[]) => {
-      console.log(datasets)
-      const geoJson = datasets.slice(1).map((dataset: any) => ({
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [dataset.maxLongitude, dataset.maxLatitude]
-        },
-        properties: {}
-      }))
-      console.log(geoJson)
-      const layer = {
-        id: 'geoJson',
-        type: 'geoJson',
-        label: 'geoJson',
-        zIndex: 20,
-        isBaseLayer: false,
-        options: { geoJson }
-      }
-      setLayers([layer])
+    loadStations().then((datasets: IDatasetOnMap[]) => {
+      setLayer(createGeoJsonLayer(datasets))
     }).catch(error => console.error(error))
   }, [])
 
-  if (layers.length === 0) {
+  if (layer === null || layer == undefined) {
     return <div>loading</div>
   } else
   return <AxiomMap
@@ -58,6 +61,6 @@ export default function Map (): ReactElement {
     }}
     center={DEFAULT_CENTER}
     zoom={5}
-    layers={layers}
+    layers={[layer]}
   />
 }
