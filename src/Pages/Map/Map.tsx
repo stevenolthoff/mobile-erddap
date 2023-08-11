@@ -1,59 +1,48 @@
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { Map as AxiomMap, ILatLon } from '@axdspub/axiom-maps'
-// import './Map.css' // For now, only way I know how to get map to show.
-
-import * as DataService from '@axdspub/axiom-ui-data-services'
-import { api } from '@axdspub/erddap-service'
+import SearchService from '../../Services/Search/index'
 
 export default function Map (): ReactElement {
-  const SERVER = 'https://erddap.sensors.axds.co/erddap'
   const DEFAULT_CENTER: ILatLon = {
     lat: 61.217381,
     lon: -149.863129
   }
-  const ITEMS_PER_PAGE = 100
-  const erddapApi = new api.ErddapApi(SERVER)
 
-  const [page, setPage] = useState(1)
+  const [layers, setLayers] = useState<any>([])
 
-  useEffect(getSearchUrl, [])
-
-  function getSearchUrl () {
-    const url = erddapApi.getUrl({
-      request: 'search/advanced',
-      constraints: [
-        {
-          name: 'itemsPerPage',
-          operator: '=',
-          value: ITEMS_PER_PAGE
-        },
-        {
-          name: 'page',
-          operator: '=',
-          value: page
-        },
-        {
-          name: 'maxLat',
-          operator: '=',
-          value: 80
-        },
-        {
-          name: 'maxLat',
-          operator: '=',
-          value: 80
-        }
-      ],
-      response: 'csv'
-    })
-    console.log('search url', url)
+  async function loadStations (): Promise<any> {
+    console.log('load')
+    const datasets = await SearchService.getAllDatasets()
+    return datasets
   }
 
-  useEffect(getDatasets, [])
+  useEffect(() => {
+    loadStations().then((datasets: any[]) => {
+      console.log(datasets)
+      const geoJson = datasets.slice(1).map((dataset: any) => ({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [dataset.maxLongitude, dataset.maxLatitude]
+        },
+        properties: {}
+      }))
+      console.log(geoJson)
+      const layer = {
+        id: 'geoJson',
+        type: 'geoJson',
+        label: 'geoJson',
+        zIndex: 20,
+        isBaseLayer: false,
+        options: { geoJson }
+      }
+      setLayers([layer])
+    }).catch(error => console.error(error))
+  }, [])
 
-  function getDatasets () {
-
-  }
-
+  if (layers.length === 0) {
+    return <div>loading</div>
+  } else
   return <AxiomMap
     baseLayerKey='hybrid'
     mapLibraryKey='leaflet'
@@ -64,9 +53,11 @@ export default function Map (): ReactElement {
       left: '0px',
       top: '0px',
       right: '0px',
-      bottom: '0px'
+      bottom: '0px',
+      padding: '0'
     }}
     center={DEFAULT_CENTER}
     zoom={5}
+    layers={layers}
   />
 }

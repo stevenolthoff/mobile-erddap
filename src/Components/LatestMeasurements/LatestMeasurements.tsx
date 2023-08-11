@@ -22,7 +22,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   async function getData (): Promise<IDataResult> {
     const variables = ['time', ...props.columnNames]
     const url = erddapApi.getUrl({
-      request: 'tabledap',
+      protocol: 'tabledap',
       response: 'csv',
       dataset_id: props.datasetId,
       variables,

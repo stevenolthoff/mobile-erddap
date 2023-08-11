@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState, type ReactElement, useEffect } from 'react'
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import * as Label from '@radix-ui/react-label'

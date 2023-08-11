@@ -42,7 +42,7 @@ export default function Sensor (props: ISensorProps): ReactElement {
     console.log(props)
     const variables = ['time', props.name]
     const url = erddapApi.getUrl({
-      request: 'tabledap',
+      protocol: 'tabledap',
       response: 'csvp',
       dataset_id: props.datasetId,
       variables,
