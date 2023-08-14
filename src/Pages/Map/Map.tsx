@@ -2,13 +2,14 @@ import React, { type ReactElement, useState, useEffect, useRef } from 'react'
 import { Map as AxiomMap, ILatLon, GeoJsonLayerType, GeoJsonElement } from '@axdspub/axiom-maps'
 import SearchService, { IDatasetOnMap } from '../../Services/Search/index'
 import { useOnClickOutside } from 'usehooks-ts'
+import { SearchContext, useSearchContext } from '../../Contexts/SearchContext'
 
 export default function Map (): ReactElement {
   const DEFAULT_CENTER: ILatLon = {
     lat: 61.217381,
     lon: -149.863129
   }
-
+  const { minTime, maxTime } = useSearchContext()
   const [layer, setLayer] = useState<any>()
   const [activeStation, setActiveStation] = useState<IDatasetOnMap | null>(null)
   const ref = useRef(null)
@@ -21,7 +22,8 @@ export default function Map (): ReactElement {
   useOnClickOutside(ref, handleClickOutside)
 
   async function loadStations (): Promise<any> {
-    const datasets = await SearchService.getAllDatasets()
+    const search = new SearchService()
+    const datasets = await search.getAllDatasets(minTime, maxTime)
     return datasets
   }
 
@@ -58,7 +60,7 @@ export default function Map (): ReactElement {
     }).catch(error => console.error(error))
   }, [])
 
-  function getStationDetail () {
+  function getStationCard () {
     if (!activeStation) return <></>
     return <a ref={ref} href={`/stations/${activeStation.datasetID}`}>
       <div className='absolute bg-slate-100 bottom-16 mx-4 my-4 p-3 left-0 right-0 rounded-md
@@ -67,6 +69,15 @@ export default function Map (): ReactElement {
         <div className='text-sm leading-3 text-slate-500'>{activeStation.summary}</div>
       </div>
     </a>
+  }
+
+  function getTimeFrameCard () {
+    const formatter = (date: string) => new Date(date).toLocaleDateString('en-us', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'}) 
+    const prettyMinTime = formatter(minTime)
+    const prettyMaxTime = formatter(maxTime)
+    return <div className='absolute bg-slate-100 top-0 p-3 left-0 right-0'>
+      {prettyMinTime} to {prettyMaxTime}
+    </div>
   }
 
   if (layer === null || layer == undefined) {
@@ -91,7 +102,8 @@ export default function Map (): ReactElement {
         zoom={5}
         layers={[layer]}
       />
-      {getStationDetail()}
+      {getTimeFrameCard()}
+      {getStationCard()}
     </div>
   )
 }

@@ -114,8 +114,9 @@ export default function Stations (): ReactElement {
     return results.map((catalogItem, i) => (
       <Link
         key={`${catalogItem.Title}-${i}`}
-        to={`/stations/${catalogItem['Dataset ID']}`}>
-        < StationsListItem
+        to={`/stations/${catalogItem['Dataset ID']}`}
+      >
+        <StationsListItem
           title={catalogItem.Title}
           summary={catalogItem.Summary} />
       </Link>

@@ -1,4 +1,5 @@
 import React from 'react'
+import SearchContextProvider from './Contexts/SearchContext'
 import logo from './logo.svg'
 import {
   BrowserRouter,
@@ -17,21 +18,23 @@ function App () {
     <div className='grid grid-rows-[1fr_auto] h-screen overflow-y-hidden divide-y'>
       <BrowserRouter basename='/'>
         <div className='max-h-full overflow-hidden'>       
-          <Routes>
-            <Route
-              path='/map'
-              element={<Map />}
-            />
-            <Route
-              path='/stations'
-              element={<Stations />}
-            />
-            <Route
-              path='/stations/:datasetId'
-              element={<Station />}
-            />
-            <Route path="*" element={<Navigate to='/map' replace />} />
-          </Routes>
+          <SearchContextProvider>
+            <Routes>
+              <Route
+                path='/map'
+                element={<Map />}
+              />
+              <Route
+                path='/stations'
+                element={<Stations />}
+              />
+              <Route
+                path='/stations/:datasetId'
+                element={<Station />}
+              />
+              <Route path="*" element={<Navigate to='/map' replace />} />
+            </Routes>
+          </SearchContextProvider>
         </div>
         <div className='z-10'>
           <NavBar />
