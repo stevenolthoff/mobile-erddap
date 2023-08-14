@@ -1,7 +1,7 @@
-import React, { type ReactElement, useState, useEffect } from 'react'
-import { renderToString } from 'react-dom/server'
-import { Map as AxiomMap, ILatLon, GeoJsonLayerType, LayerType } from '@axdspub/axiom-maps'
+import React, { type ReactElement, useState, useEffect, useRef } from 'react'
+import { Map as AxiomMap, ILatLon, GeoJsonLayerType, GeoJsonElement } from '@axdspub/axiom-maps'
 import SearchService, { IDatasetOnMap } from '../../Services/Search/index'
+import { useOnClickOutside } from 'usehooks-ts'
 
 export default function Map (): ReactElement {
   const DEFAULT_CENTER: ILatLon = {
@@ -10,22 +10,34 @@ export default function Map (): ReactElement {
   }
 
   const [layer, setLayer] = useState<any>()
+  const [activeStation, setActiveStation] = useState<IDatasetOnMap | null>(null)
+  const ref = useRef(null)
+  const handleClickOutside = () => {
+    if (activeStation !== null) {
+      setActiveStation(null)
+    }
+  }
+
+  useOnClickOutside(ref, handleClickOutside)
 
   async function loadStations (): Promise<any> {
-    console.log('load')
     const datasets = await SearchService.getAllDatasets()
     return datasets
   }
 
   function createGeoJsonLayer (datasets: IDatasetOnMap[]): GeoJsonLayerType {
-    const geoJson: GeoJSON.Feature[] = datasets.slice(1).map((dataset: IDatasetOnMap) => ({
+    const geoJson: GeoJsonElement[] = datasets.slice(1).map((dataset: IDatasetOnMap) => ({
       type: 'Feature',
       geometry: {
         type: 'Point',
         coordinates: [Number(dataset.maxLongitude), Number(dataset.maxLatitude)]
       },
       properties: {
-        onClick: (event: Event) => { console.log(event.target) }
+        bindings: {
+          eventListeners: {
+            onClick: (event: PointerEvent) => { setActiveStation(dataset) }
+          }
+        }
       }
     }))
     console.log(geoJson)
@@ -46,24 +58,40 @@ export default function Map (): ReactElement {
     }).catch(error => console.error(error))
   }, [])
 
+  function getStationDetail () {
+    if (!activeStation) return <></>
+    return <a ref={ref} href={`/stations/${activeStation.datasetID}`}>
+      <div className='absolute bg-slate-100 bottom-16 mx-4 my-4 p-3 left-0 right-0 rounded-md
+        shadow-md leading-4 gap-2 flex flex-col active:bg-slate-300'>
+        <div className='font-semibold uppercase text-slate-800'>{activeStation.title}</div>
+        <div className='text-sm leading-3 text-slate-500'>{activeStation.summary}</div>
+      </div>
+    </a>
+  }
+
   if (layer === null || layer == undefined) {
     return <div>loading</div>
   } else
-  return <AxiomMap
-    baseLayerKey='hybrid'
-    mapLibraryKey='leaflet'
-    tools={{ draw: { enabled: true } }}
-    height=''
-    style={{
-      position: 'fixed',
-      left: '0px',
-      top: '0px',
-      right: '0px',
-      bottom: '0px',
-      padding: '0'
-    }}
-    center={DEFAULT_CENTER}
-    zoom={5}
-    layers={[layer]}
-  />
+  return (
+    <div>
+      <AxiomMap
+        baseLayerKey='hybrid'
+        mapLibraryKey='leaflet'
+        tools={{ draw: { enabled: true } }}
+        height=''
+        style={{
+          position: 'fixed',
+          left: '0px',
+          top: '0px',
+          right: '0px',
+          bottom: '0px',
+          padding: '0'
+        }}
+        center={DEFAULT_CENTER}
+        zoom={5}
+        layers={[layer]}
+      />
+      {getStationDetail()}
+    </div>
+  )
 }
