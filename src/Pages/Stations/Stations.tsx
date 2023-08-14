@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import React, { type ReactElement, useState, useEffect } from 'react'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
 import { ClipLoader } from 'react-spinners'
+import { useSearchContext } from '../../Contexts/SearchContext'
 
 const SERVER = 'https://erddap.sensors.axds.co/erddap'
 
@@ -14,6 +15,7 @@ export default function Stations (): ReactElement {
   const [page, setPage] = useState(0)
   const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(false)
+  const { minTime, maxTime, minLatitude, minLongitude, maxLatitude, maxLongitude } = useSearchContext()
   const ITEMS_PER_PAGE = 10
   console.log('DataService', DataService)
   console.log('api', api)
@@ -27,8 +29,7 @@ export default function Stations (): ReactElement {
       page = 1
     }
     return erddapApi.getUrl({
-      request: 'search',
-      // constraints: { searchFor, page, itemsPerPage: ITEMS_PER_PAGE },
+      request: 'search/advanced',
       constraints: [
         {
           name: 'searchFor',
@@ -44,6 +45,36 @@ export default function Stations (): ReactElement {
           name: 'page',
           operator: '=',
           value: page
+        },
+        {
+          name: 'minLatitude',
+          operator: '>=',
+          value: minLatitude
+        },
+        {
+          name: 'minLongitude',
+          operator: '>=',
+          value: minLongitude
+        },
+        {
+          name: 'maxLongitude',
+          operator: '<=',
+          value: maxLongitude
+        },
+        {
+          name: 'maxLatitude',
+          operator: '<=',
+          value: maxLatitude
+        },
+        {
+          name: 'minTime',
+          operator: '>=',
+          value: minTime
+        },
+        {
+          name: 'maxTime',
+          operator: '<=',
+          value: maxTime
         }
       ],
       response: 'csv'

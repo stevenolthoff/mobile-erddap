@@ -24,48 +24,52 @@ export default class SearchService {
   constructor () {
     console.log('SearchService')
   }
-  public async getAllDatasets (minTime: string, maxTime: string): Promise<IDatasetOnMap[]> {
+  public async getAllDatasets (minTime: string, maxTime: string, minLatitude: number, maxLatitude: number, minLongitude: number, maxLongitude: number): Promise<IDatasetOnMap[]> {
     const url = this.erddapApi.getUrl({
       protocol: 'tabledap',
       allDatasets: true,
       response: 'csv',
       variables: this.COLUMN_NAMES,
-      constraints: [
-        {
-          name: 'minLatitude',
-          operator: '<=',
-          value: this.MAX_LATITUDE
-        },
-        {
-          name: 'minLongitude',
-          operator: '>=',
-          value: this.MIN_LONGITUDE
-        },
-        {
-          name: 'maxLongitude',
-          operator: '<=',
-          value: this.MAX_LONGITUDE
-        },
-        {
-          name: 'maxLatitude',
-          operator: '>=',
-          value: this.MIN_LATITUDE
-        },
-        {
-          name: 'minTime',
-          operator: '>=',
-          value: minTime
-        },
-        {
-          name: 'maxTime',
-          operator: '<=',
-          value: maxTime
-        }
-      ]
+      constraints: this.getConstraints(minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude)
     })
     const dataService = new DataService({ resultType: 'csv', url, type: '' })
     const results: { data: IDatasetOnMap[] } = await dataService.get()
     console.log(results)
     return results.data
+  }
+
+  private getConstraints (minTime: string, maxTime: string, minLatitude: number, maxLatitude: number, minLongitude: number, maxLongitude: number): IConstraint[] {
+    return [
+      {
+        name: 'minLatitude',
+        operator: '>=',
+        value: minLatitude
+      },
+      {
+        name: 'minLongitude',
+        operator: '>=',
+        value: minLongitude
+      },
+      {
+        name: 'maxLongitude',
+        operator: '<=',
+        value: maxLongitude
+      },
+      {
+        name: 'maxLatitude',
+        operator: '<=',
+        value: maxLatitude
+      },
+      {
+        name: 'minTime',
+        operator: '>=',
+        value: minTime
+      },
+      {
+        name: 'maxTime',
+        operator: '<=',
+        value: maxTime
+      }
+    ]
   }
 }

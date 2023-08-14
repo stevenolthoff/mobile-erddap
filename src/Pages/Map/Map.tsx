@@ -9,7 +9,7 @@ export default function Map (): ReactElement {
     lat: 61.217381,
     lon: -149.863129
   }
-  const { minTime, maxTime } = useSearchContext()
+  const { minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude } = useSearchContext()
   const [layer, setLayer] = useState<any>()
   const [activeStation, setActiveStation] = useState<IDatasetOnMap | null>(null)
   const ref = useRef(null)
@@ -23,7 +23,7 @@ export default function Map (): ReactElement {
 
   async function loadStations (): Promise<any> {
     const search = new SearchService()
-    const datasets = await search.getAllDatasets(minTime, maxTime)
+    const datasets = await search.getAllDatasets(minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude)
     return datasets
   }
 
