@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react'
 
 // TODO Load defaults through env
 const defaultState = {
-  minTime: '2023-07-01T00:00:00Z',
+  minTime: '2023-01-01T00:00:00Z',
   maxTime: '2023-08-01T00:00:00Z',
   maxLatitude: 77,
   minLongitude: -171,

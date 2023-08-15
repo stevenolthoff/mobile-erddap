@@ -115,7 +115,7 @@ export default function Station (): ReactElement {
     border-solid border-b
   `
 
-  return <div className="flex flex-col gap-2">
+  return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar">
     <div className="text-lg font-semibold leading-none text-slate-800">{title}</div>
     <div className="text-xs text-slate-500 leading-tight">{description}</div>
 
