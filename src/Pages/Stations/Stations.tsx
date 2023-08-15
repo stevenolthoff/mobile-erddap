@@ -6,8 +6,7 @@ import React, { type ReactElement, useState, useEffect } from 'react'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
 import { ClipLoader } from 'react-spinners'
 import { useSearchContext } from '../../Contexts/SearchContext'
-
-const SERVER = 'https://erddap.sensors.axds.co/erddap'
+import SearchService from '../../Services/Search'
 
 export default function Stations (): ReactElement {
   const [results, setResults] = useState<api.IErddapIndexResponse[]>([])
@@ -17,10 +16,14 @@ export default function Stations (): ReactElement {
   const [loading, setLoading] = useState(false)
   const { minTime, maxTime, minLatitude, minLongitude, maxLatitude, maxLongitude } = useSearchContext()
   const ITEMS_PER_PAGE = 10
-  console.log('DataService', DataService)
-  console.log('api', api)
-  const erddapApi = new api.ErddapApi(SERVER)
-  const getCatalogSearchUrl = (page?: number): string => {
+  const initialDataService = new DataService.DataService({ resultType: 'csv', url: '', type: '' })
+  const [dataService, setDataService] = useState(initialDataService)
+
+  const onSearchInput = (query: string): any => {
+    setQuery(query)
+  }
+
+  const getDatasets = async (page?: number): Promise<any> => {
     let searchFor = query
     if (query === '') {
       searchFor = 'all'
@@ -28,73 +31,16 @@ export default function Stations (): ReactElement {
     if (page === null || page === undefined) {
       page = 1
     }
-    return erddapApi.getUrl({
-      request: 'search/advanced',
-      constraints: [
-        {
-          name: 'searchFor',
-          operator: '=',
-          value: searchFor
-        },
-        {
-          name: 'itemsPerPage',
-          operator: '=',
-          value: ITEMS_PER_PAGE
-        },
-        {
-          name: 'page',
-          operator: '=',
-          value: page
-        },
-        {
-          name: 'minLatitude',
-          operator: '>=',
-          value: minLatitude
-        },
-        {
-          name: 'minLongitude',
-          operator: '>=',
-          value: minLongitude
-        },
-        {
-          name: 'maxLongitude',
-          operator: '<=',
-          value: maxLongitude
-        },
-        {
-          name: 'maxLatitude',
-          operator: '<=',
-          value: maxLatitude
-        },
-        {
-          name: 'minTime',
-          operator: '>=',
-          value: minTime
-        },
-        {
-          name: 'maxTime',
-          operator: '<=',
-          value: maxTime
-        }
-      ],
-      response: 'csv'
-    })
-  }
-  const getNewDataService = (): DataService.DataService => {
-    return new DataService.DataService({ type: '', resultType: 'csv', url: getCatalogSearchUrl() })
-  }
-  const [dataService, setNewDataService] = useState(getNewDataService())
-
-  const onSearchInput = (query: string): any => {
-    setQuery(query)
+    const search = new SearchService()
+    const dataService = search.getDataServiceForAdvancedSearch(searchFor, page, ITEMS_PER_PAGE, minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude)
+    setDataService(dataService)
+    return dataService.get()
   }
 
   const onSearch = (): void => {
     setLoading(true)
     setHasMore(true)
-    const newDataService = getNewDataService()
-    setNewDataService(newDataService)
-    newDataService.get().then(dataServiceResponse => {
+    getDatasets().then(dataServiceResponse => {
       setLoading(false)
       const newResults = dataServiceResponse.data as (api.IErddapIndexResponse[] | null)
       if (newResults === null) {
@@ -111,12 +57,10 @@ export default function Stations (): ReactElement {
   }
 
   const onScroll = (): void => {
-    console.log('scroll')
     setLoading(true)
     setHasMore(true)
     setPage(page + 1)
-    dataService.url = getCatalogSearchUrl(page + 1)
-    dataService.get().then(dataServiceResponse => {
+    getDatasets().then(dataServiceResponse => {
       setLoading(false)
       const newResults = dataServiceResponse.data as (api.IErddapIndexResponse[] | null)
       if (newResults === null) {
@@ -130,13 +74,15 @@ export default function Stations (): ReactElement {
   }
 
   const onQueryChanged = (): void => {
-    dataService.destroy()
-    setPage(0)
-    setResults([])
-    if (query.length === 0) {
-      setHasMore(false)
+    if (dataService !== null && dataService !== undefined) {
+      dataService.destroy()
+      setPage(0)
+      setResults([])
+      if (query.length === 0) {
+        setHasMore(false)
+      }
+      onSearch()
     }
-    onSearch()
   }
 
   useEffect(onQueryChanged, [query])

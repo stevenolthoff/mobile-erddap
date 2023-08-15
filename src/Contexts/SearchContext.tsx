@@ -1,3 +1,4 @@
+import { DataService } from '@axdspub/axiom-ui-data-services'
 import React, { createContext, useContext, useState } from 'react'
 
 // TODO Load defaults through env
@@ -7,7 +8,7 @@ const defaultState = {
   maxLatitude: 77,
   minLongitude: -171,
   maxLongitude: -136,
-  minLatitude: 42
+  minLatitude: 42,
 }
 
 export const SearchContext = createContext(defaultState)
