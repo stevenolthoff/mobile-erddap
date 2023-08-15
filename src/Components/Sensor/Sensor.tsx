@@ -32,7 +32,7 @@ export default function Sensor (props: ISensorProps): ReactElement {
     },
     style: {
       strokeColor: '#3b82f6ff',
-      strokeWidth: 1
+      strokeWidth: 2
     },
     type: EPlotTypes.line
   }

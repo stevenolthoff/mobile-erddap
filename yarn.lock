@@ -41,19 +41,6 @@
   dependencies:
     default-browser-id "3.0.0"
 
-"@axdspub/axiom-charts@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.npmjs.org/@axdspub/axiom-charts/-/axiom-charts-0.0.6.tgz"
-  integrity sha512-UnfFsAk2cwU5oeyk7uFB3qWsaKQBtz0fx4Jd3Atr4GB6mSGsxUu4CVnIvjA8iX0j/ia38zCyLMEawfNqX4tHCA==
-  dependencies:
-    "@axdspub/axiom-ui-data-services" "^0.0.4"
-    d3 "^7.8.4"
-    d3-axis "^3.0.0"
-    d3-dsv "^3.0.1"
-    react "^18.2.0"
-    react-dom "^18.2.0"
-    react-scripts "5.0.1"
-
 "@axdspub/axiom-maps@file:.yalc/@axdspub/axiom-maps":
   version "0.0.17"
   dependencies:
@@ -83,33 +70,10 @@
     typescript "^4.9.5"
     web-vitals "^2.1.4"
 
-"@axdspub/axiom-ui-data-services@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.npmjs.org/@axdspub/axiom-ui-data-services/-/axiom-ui-data-services-0.0.4.tgz"
-  integrity sha512-wpqQOSBw6ZznzZMb34Z8qAXx63RQbOpxZiM+ZbW5dKtnZr7xRbDAzQ8yBkZwCc6lOQO2Ntd8kGFRs+p0Ri56Iw==
-  dependencies:
-    "@observablehq/plot" "^0.6.6"
-    "@rollup/plugin-alias" "^5.0.0"
-    "@testing-library/jest-dom" "^5.16.5"
-    "@testing-library/react" "^13.4.0"
-    "@testing-library/user-event" "^13.5.0"
-    "@types/jest" "^27.5.2"
-    "@types/node" "^16.18.38"
-    "@types/react" "^18.2.15"
-    "@types/react-dom" "^18.2.7"
-    d3 "^7.8.4"
-    d3-dsv "^3.0.1"
-    react "^18.2.0"
-    react-dom "^18.2.0"
-    react-scripts "5.0.1"
-    typescript "^4.9.5"
-    vanilla-jsoneditor "^0.17.8"
-    web-vitals "^2.1.4"
-
-"@axdspub/axiom-ui-data-services@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@axdspub/axiom-ui-data-services/-/axiom-ui-data-services-0.0.6.tgz#21f76bcb8ecbfb768b500ddb05f9d0cab0ec7116"
-  integrity sha512-MSRAaq+AFyn4SVrYXbWwgC7VFkyJPaJo3O9Fb2SVcSmpdLJ0fXORtDa+TZYoWmjhu+i+Vi7RItcAla6BAmn9Mg==
+"@axdspub/axiom-ui-data-services@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.npmjs.org/@axdspub/axiom-ui-data-services/-/axiom-ui-data-services-0.0.7.tgz"
+  integrity sha512-uSrVNvBRaw42NrIFoo+IKZHsvmPeoQP95s808qSJ7aPhha509M281XTxgc5bQX3qd5Y6OAXSiahWItBjuEy71w==
   dependencies:
     "@axdspub/axiom-ui-utilities" "^0.0.1"
     "@observablehq/plot" "^0.6.6"
@@ -126,13 +90,10 @@
     react-dom "^18.2.0"
     react-scripts "5.0.1"
     typescript "^4.9.5"
-    vanilla-jsoneditor "^0.17.8"
     web-vitals "^2.1.4"
 
-"@axdspub/axiom-ui-data-services@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.npmjs.org/@axdspub/axiom-ui-data-services/-/axiom-ui-data-services-0.0.7.tgz"
-  integrity sha512-uSrVNvBRaw42NrIFoo+IKZHsvmPeoQP95s808qSJ7aPhha509M281XTxgc5bQX3qd5Y6OAXSiahWItBjuEy71w==
+"@axdspub/axiom-ui-data-services@file:.yalc/@axdspub/axiom-ui-data-services":
+  version "0.0.10"
   dependencies:
     "@axdspub/axiom-ui-utilities" "^0.0.1"
     "@observablehq/plot" "^0.6.6"
@@ -2620,13 +2581,6 @@
   version "1.8.0"
   resolved "https://registry.npmjs.org/@remix-run/router/-/router-1.8.0.tgz"
   integrity sha512-mrfKqIHnSZRyIzBcanNJmVQELTnX+qagEDlcKO90RgRBVOZGSGvZKeDihTRfWcqoDn5N/NkUcwWTccnpN18Tfg==
-
-"@rollup/plugin-alias@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/@rollup/plugin-alias/-/plugin-alias-5.0.0.tgz"
-  integrity sha512-l9hY5chSCjuFRPsnRm16twWBiSApl2uYFLsepQYwtBuAxNMQ/1dJqADld40P0Jkqm65GRTLy/AC6hnpVebtLsA==
-  dependencies:
-    slash "^4.0.0"
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -6757,9 +6711,9 @@ cyclist@^1.0.1:
   dependencies:
     internmap "1 - 2"
 
-d3-axis@3, d3-axis@^3.0.0:
+d3-axis@3:
   version "3.0.0"
-  resolved "https://registry.npmjs.org/d3-axis/-/d3-axis-3.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/d3-axis/-/d3-axis-3.0.0.tgz#c42a4a13e8131d637b745fc2973824cfeaf93322"
   integrity sha512-IH5tgjV4jE/GhHkRV0HiVYPDtvfjHQlQfJHs0usq7M30XcSBvOotpmH1IgkcXsO/5gEQZD43B//fc7SRT5S+xw==
 
 d3-brush@3:
@@ -14021,7 +13975,7 @@ slash@^3.0.0:
 
 slash@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.npmjs.org/slash/-/slash-4.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/slash/-/slash-4.0.0.tgz#2422372176c4c6c5addb5e2ada885af984b396a7"
   integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
 
 snapdragon-node@^2.0.1:

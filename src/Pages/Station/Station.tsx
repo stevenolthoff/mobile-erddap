@@ -6,6 +6,7 @@ import { parser as ErddapParser } from '@axdspub/erddap-service'
 import Sensor from '../../Components/Sensor/Sensor'
 import LatestMeasurements from '../../Components/LatestMeasurements/LatestMeasurements'
 import Tabs from '../../Components/Tabs/Tabs'
+import { ClipLoader } from 'react-spinners'
 
 const SERVER = 'https://erddap.sensors.axds.co/erddap'
 
@@ -15,6 +16,7 @@ export default function Station (): ReactElement {
   const [metadata, setMetadata] = useState<ErddapParser.IParsedDatasetMetadata>({ axes: {}, sensors: {}, station: {}, ncGlobal: {} })
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [loading, setLoading] = useState(true)
   const erddapApi = new ErddapService.ErddapApi(SERVER)
   const startDate: Date = getLastWeeksDate()
   const endDate: Date = new Date()
@@ -45,9 +47,9 @@ export default function Station (): ReactElement {
 
   useEffect(() => {
     getMetadata().then(dataResult => {
-      console.log(dataResult.data)
       const parsed = ErddapParser.parseDatasetMetadata(dataResult.data)
       setMetadata(parsed)
+      setLoading(false)
     }).catch(error => {
       console.error(error)
     })
@@ -58,10 +60,20 @@ export default function Station (): ReactElement {
     setDescription(getDescription())
   }, [metadata])
 
+  function loader () {
+    return <div className='w-full flex justify-center py-2'>
+      <ClipLoader color='#3b82f6' />
+    </div>
+  }
+
   function getSensors (): ReactElement {
+    if (loading) return loader()
     const { sensors } = metadata
     const listItems = Object.keys(sensors).map(key => {
-      console.log(key, sensors[key].units.Value, sensors[key].units['Variable Name'])
+      const sensor = sensors[key]
+      if (!sensor.units) {
+        return null
+      }
       const valueName = sensors[key].units['Variable Name']
       const valueUnits = sensors[key].units.Value
       return <div key={key}>
@@ -75,7 +87,7 @@ export default function Station (): ReactElement {
           endDate={endDate}
         />
       </div>
-    })
+    }).filter(item => item !== null)
     return <div>
       <div className='text-md text-slate-500 pb-2'>Past 7 Days</div>
       {getDate()}

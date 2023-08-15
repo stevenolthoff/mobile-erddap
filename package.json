@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@axdspub/axiom-charts": "^0.0.6",
+    "@axdspub/axiom-charts": "file:.yalc/@axdspub/axiom-charts",
     "@axdspub/axiom-maps": "file:.yalc/@axdspub/axiom-maps",
-    "@axdspub/axiom-ui-data-services": "^0.0.6",
+    "@axdspub/axiom-ui-data-services": "file:.yalc/@axdspub/axiom-ui-data-services",
     "@axdspub/erddap-service": "file:.yalc/@axdspub/erddap-service",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.0.2",
