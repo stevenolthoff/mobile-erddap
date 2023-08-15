@@ -62,10 +62,14 @@ export default function Map (): ReactElement {
 
   function getStationCard () {
     if (!activeStation) return <></>
+    const formatter = (date: string) => new Date(date).toLocaleDateString('en-us', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'}) 
+    const startDate = formatter(activeStation.minTime)
+    const endDate = formatter(activeStation.maxTime)
     return <a ref={ref} href={`/stations/${activeStation.datasetID}`}>
       <div className='absolute bg-slate-100 bottom-16 mx-4 my-4 p-3 left-0 right-0 rounded-md
         shadow-md leading-4 gap-2 flex flex-col active:bg-slate-300'>
         <div className='font-semibold uppercase text-slate-800'>{activeStation.title}</div>
+        <div className='text-sm leading-3 text-slate-500'>{startDate} to {endDate}</div>
         <div className='text-sm leading-3 text-slate-500'>{activeStation.summary}</div>
       </div>
     </a>

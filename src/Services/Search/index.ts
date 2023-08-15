@@ -30,45 +30,49 @@ export default class SearchService {
       allDatasets: true,
       response: 'csv',
       variables: this.COLUMN_NAMES,
-      constraints: this.getConstraints(minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude)
+      constraints: this.modifyConstraints(minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude)
     })
     const dataService = new DataService({ resultType: 'csv', url, type: '' })
     const results: { data: IDatasetOnMap[] } = await dataService.get()
-    console.log(results)
     return results.data
   }
 
-  private getConstraints (minTime: string, maxTime: string, minLatitude: number, maxLatitude: number, minLongitude: number, maxLongitude: number): IConstraint[] {
+  /**
+   * When using /allDatasets, spatial and temporal constraints must be modified to achieve expected behavior.
+   * Due to how /allDatasets is implemented, we must filter as such:
+   * dataset.maxTime >= minTime ^ dataset.minTime <= maxTime
+   */
+  private modifyConstraints (minTime: string, maxTime: string, minLatitude: number, maxLatitude: number, minLongitude: number, maxLongitude: number): IConstraint[] {
     return [
       {
         name: 'minLatitude',
-        operator: '>=',
-        value: minLatitude
-      },
-      {
-        name: 'minLongitude',
-        operator: '>=',
-        value: minLongitude
-      },
-      {
-        name: 'maxLongitude',
-        operator: '<=',
-        value: maxLongitude
-      },
-      {
-        name: 'maxLatitude',
         operator: '<=',
         value: maxLatitude
       },
       {
-        name: 'minTime',
+        name: 'minLongitude',
+        operator: '<=',
+        value: maxLongitude
+      },
+      {
+        name: 'maxLongitude',
         operator: '>=',
-        value: minTime
+        value: minLongitude
+      },
+      {
+        name: 'maxLatitude',
+        operator: '>=',
+        value: minLatitude
+      },
+      {
+        name: 'minTime',
+        operator: '<=',
+        value: maxTime
       },
       {
         name: 'maxTime',
-        operator: '<=',
-        value: maxTime
+        operator: '>=',
+        value: minTime
       }
     ]
   }
