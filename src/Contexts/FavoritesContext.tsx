@@ -1,10 +1,12 @@
 import { PropsWithChildren, createContext, useContext, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-interface IFavorite {
+export interface IFavorite {
   datasetId: string
   title: string
   summary: string
+  startDate: string
+  endDate: string
 }
 
 type DatasetId = string

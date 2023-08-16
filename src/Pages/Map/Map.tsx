@@ -64,11 +64,11 @@ export default function Map (): ReactElement {
   function getStationCard () {
     if (!activeStation) return <></>
     return (
-      <div ref={ref}>
+      <div ref={ref} className='absolute mx-4 bottom-20'>
         <StationCard
           datasetId={activeStation.datasetID}
-          startDate={new Date(activeStation.minTime)}
-          endDate={new Date(activeStation.maxTime)}
+          startDate={activeStation.minTime}
+          endDate={activeStation.maxTime}
           title={activeStation.title}
           summary={activeStation.summary}
         />

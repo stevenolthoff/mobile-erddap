@@ -139,7 +139,7 @@ export default function Stations (): ReactElement {
         type='search'
         onChange={event => onSearchInput(event.target.value)}
       />
-      <div className='overflow-y-scroll no-scrollbar'>
+      <div className='overflow-y-scroll no-scrollbar scrollbox'>
         {getCards()}
         {loader()}
         {endOfScroll()}
