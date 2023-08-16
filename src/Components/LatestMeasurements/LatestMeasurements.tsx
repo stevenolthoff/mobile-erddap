@@ -60,7 +60,12 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   }
 
   function getUnits (columnName: string): string {
-    return props.sensorMetadata[columnName].units.Value
+    const { units } = props.sensorMetadata[columnName]
+    if (units) {
+      return units.Value
+    } else {
+      return ''
+    }
   }
 
   function getPrettyName (columnName: string): string {
