@@ -9,12 +9,12 @@ interface IFavoriteButtonProps {
 
 export default function FavoriteButton (props: IFavoriteButtonProps): ReactElement {
   const { favorite, isFavorited } = props
-  const { addFavorite } = useFavoritesContext()
+  const { toggleFavorite } = useFavoritesContext()
   
   function onClickFavorite (event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.preventDefault()
     event.stopPropagation()
-    addFavorite(favorite)
+    toggleFavorite(favorite)
   }
 
   function getFilledIcon () {

@@ -14,7 +14,7 @@ interface StationCardProps {
 
 export default function StationCard (favorite: IFavorite): ReactElement {
   const { datasetId, startDate, endDate, title, summary } = favorite
-  const { favorites, addFavorite } = useFavoritesContext()
+  const { favorites, toggleFavorite, isFavorited } = useFavoritesContext()
   const navigate = useNavigate()
   const formatter = (date: string) => 
   new Date(date).toLocaleDateString('en-us', {
@@ -23,7 +23,7 @@ export default function StationCard (favorite: IFavorite): ReactElement {
   
   function onClickFavorite (event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation()
-    addFavorite({ datasetId, title, summary, startDate, endDate })
+    toggleFavorite({ datasetId, title, summary, startDate, endDate })
     console.log('favorites', favorites)
   }
 
@@ -34,7 +34,7 @@ export default function StationCard (favorite: IFavorite): ReactElement {
       shadow-md leading-4 gap-2 flex flex-col active:bg-slate-300'>
       <div className='flex justify-between'>
         <div className='font-semibold uppercase text-slate-800'>{title}</div>
-        <FavoriteButton favorite={favorite} isFavorited={false} />
+        <FavoriteButton favorite={favorite} isFavorited={isFavorited(favorite.datasetId)} />
       </div>
       <div className='text-sm leading-3 text-slate-500'>{formatter(startDate)} to {formatter(endDate)}</div>
       <div className='text-sm leading-3 text-slate-500'>{summary}</div>

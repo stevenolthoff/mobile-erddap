@@ -14,13 +14,32 @@ type Favorites = Record<DatasetId, IFavorite>
 
 interface IFavoritesContext {
   favorites: Favorites
-  addFavorite: (favorite: IFavorite) => void
+  toggleFavorite: (favorite: IFavorite) => void
+  isFavorited: (datasetId: DatasetId) => boolean
 }
 
 const FavoritesContext = createContext<IFavoritesContext | null>(null)
 
 export default function FavoritesContextProvider ({ children }: PropsWithChildren<{}>) {
   const [favorites, setFavorites] = useLocalStorage<Favorites>('favorites', {})
+
+  function isFavorited (datasetId: DatasetId) {
+    return Boolean(favorites[datasetId])
+  }
+
+  function toggleFavorite (favorite: IFavorite) {
+    if (favorites[favorite.datasetId]) {
+      removeFavorite(favorite.datasetId)
+    } else {
+      addFavorite(favorite)
+    }
+  }
+
+  function removeFavorite (datasetId: string) {
+    const newFavorites = favorites
+    delete newFavorites[datasetId]
+    setFavorites(newFavorites)
+  }
 
   function addFavorite (favorite: IFavorite): void {
     if (favorites) {
@@ -34,7 +53,8 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
     <FavoritesContext.Provider
       value={{
         favorites,
-        addFavorite
+        toggleFavorite,
+        isFavorited
       }}
     >
       {children}

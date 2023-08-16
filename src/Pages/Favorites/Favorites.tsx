@@ -1,11 +1,12 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { IFavorite, useFavoritesContext } from '../../Contexts/FavoritesContext'
 import StationsListItem from '../../Components/StationsListItem/StationsListItem'
 import { Link } from 'react-router-dom'
 import FavoriteButton from '../../Components/FavoriteButton/FavoriteButton'
 
 export default function Favorites (): ReactElement {
-  const { favorites, addFavorite } = useFavoritesContext()
+  const { favorites, isFavorited } = useFavoritesContext()
+  const [copiedFavorites] = useState(Object.assign({}, favorites))
 
   function getFavorite (favorite: IFavorite) {
     return (
@@ -20,7 +21,7 @@ export default function Favorites (): ReactElement {
         >
           <FavoriteButton
             favorite={favorite}
-            isFavorited={true}
+            isFavorited={isFavorited(favorite.datasetId)}
           />
         </StationsListItem>
       </Link>
@@ -28,17 +29,17 @@ export default function Favorites (): ReactElement {
   }
 
   function getFavorites () {
-    return Object.keys(favorites)
+    return Object.keys(copiedFavorites)
       .sort((a, b) => {
-        if (favorites[a].title < favorites[b].title) {
+        if (copiedFavorites[a].title < copiedFavorites[b].title) {
           return -1
-        } else if (favorites[a].title > favorites[b].title) {
+        } else if (copiedFavorites[a].title > copiedFavorites[b].title) {
           return 1
         } else {
           return 0
         }
       })
-      .map(datasetId => getFavorite(favorites[datasetId]))
+      .map(datasetId => getFavorite(copiedFavorites[datasetId]))
   }
 
   return (
