@@ -20,7 +20,8 @@ export default function NavBar (): ReactElement {
   function onPathChanged () {
     console.log(location)
     const tab = tabs.find(tab => tab.path === location.pathname)
-    setActiveTab(tab === undefined ? DEFAULT_PATH : tab.id)
+    if (tab === undefined) return
+    setActiveTab(tab.id)
   }
 
   useEffect(onPathChanged, [location])
