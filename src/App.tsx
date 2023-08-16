@@ -10,6 +10,7 @@ import {
 import Map from './Pages/Map/Map'
 import Stations from './Pages/Stations/Stations'
 import Station from './Pages/Station/Station'
+import Favorites from './Pages/Favorites/Favorites'
 import NavBar from './Components/NavBar/NavBar'
 import './App.css'
 
@@ -31,6 +32,10 @@ function App () {
               <Route
                 path='/stations/:datasetId'
                 element={<Station />}
+              />
+              <Route
+                path='/favorites'
+                element={<Favorites />}
               />
               <Route path="*" element={<Navigate to='/map' replace />} />
             </Routes>

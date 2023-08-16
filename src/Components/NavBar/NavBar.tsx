@@ -49,7 +49,7 @@ export default function NavBar (): ReactElement {
       id: 'favorites',
       label: 'Favorites',
       icon: <HeartIcon className='w-6 h-6' />,
-      path: '/'
+      path: '/favorites'
     },
     {
       id: 'settings',
