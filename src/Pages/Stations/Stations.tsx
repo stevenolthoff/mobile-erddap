@@ -119,7 +119,7 @@ export default function Stations (): ReactElement {
   const loader = (): JSX.Element => {
     if (loading || hasMore) {
       return <div className='w-full flex justify-center py-2' ref={sentryRef}>
-        <ClipLoader />
+        <ClipLoader color='#3b82f6' />
       </div>
     } else {
       return <></>

@@ -82,12 +82,12 @@ export default class SearchService {
         },
         {
           name: 'minTime',
-          operator: '>=',
+          operator: '=',
           value: minTime
         },
         {
           name: 'maxTime',
-          operator: '<=',
+          operator: '=',
           value: maxTime
         }
       ],

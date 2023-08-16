@@ -89,7 +89,7 @@ export default function Station (): ReactElement {
       </div>
     }).filter(item => item !== null)
     return <div>
-      <div className='text-md text-slate-500 pb-2'>Past 7 Days</div>
+      <div className='px-4 text-md text-slate-500 pb-2'>Past 7 Days</div>
       {getDate()}
       <div className='flex flex-col gap-8 divide-y'>
         {listItems}
@@ -111,7 +111,7 @@ export default function Station (): ReactElement {
   }
 
   function getDate (): ReactElement {
-    return <div className='uppercase text-xs font-semibold text-slate-800 w-full flex pb-2'>{startDate.toLocaleDateString('en-us', { dateStyle: 'medium' })} - {endDate.toLocaleDateString('en-us', { dateStyle: 'medium' })}</div>
+    return <div className='px-4 uppercase text-xs font-semibold text-slate-800 w-full flex pb-2'>{startDate.toLocaleDateString('en-us', { dateStyle: 'medium' })} - {endDate.toLocaleDateString('en-us', { dateStyle: 'medium' })}</div>
   }
 
   const tabTriggerClassName = `
@@ -128,8 +128,8 @@ export default function Station (): ReactElement {
   `
 
   return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar">
-    <div className="text-lg font-semibold leading-none text-slate-800">{title}</div>
-    <div className="text-xs text-slate-500 leading-tight">{description}</div>
+    <div className="pt-4 px-4 text-xl font-semibold leading-none text-slate-800">{title}</div>
+    <div className="px-4 text-xs text-slate-500 leading-tight">{description}</div>
 
     <Tabs tabs={[
       {

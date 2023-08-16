@@ -44,7 +44,7 @@ export default function Favorites (): ReactElement {
 
   return (
     <div className='max-h-full max-w-full overflow-scroll no-scrollbar scrollbox'>
-      <div className='px-4 pt-4 text-lg font-semibold text-slate-800'>Favorites</div>
+      <div className='px-4 pt-4 text-xl font-semibold text-slate-800'>Favorites</div>
       <div className='flex flex-col h-full truncate ... divide-y'>{getFavorites()}</div>
     </div>
   )

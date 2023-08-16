@@ -108,13 +108,13 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
     time = getPrettyTime(latest.time)
   }
 
-  const headerClassName = 'bg-slate-100 text-slate-500 px-2 md:px-4 font-semibold text-xs uppercase py-2 border-t-0'
+  const headerClassName = 'bg-slate-100 text-slate-500 px-2 md:px-4 font-semibold text-xs uppercase py-2 border-t'
   const loadingText = <div className="rounded-md bg-slate-100 h-4 w-32 animate-pulse"></div>
 
   return <div className='flex flex-col gap-2'>
-    <div className='text-md text-slate-500'>Latest Measurements</div>
-    <div className='uppercase text-xs font-semibold text-slate-800 w-full flex'>Recorded on&nbsp;{loading ? loadingText : time}</div>
-    <div className='grid grid-cols-2 divide-y'>
+    <div className='px-4 text-md text-slate-500'>Latest Measurements</div>
+    <div className='px-4 uppercase text-xs font-semibold text-slate-800 w-full flex'>Recorded on&nbsp;{loading ? loadingText : time}</div>
+    <div className='px-4 grid grid-cols-2 divide-y'>
       <div className={headerClassName}>Sensor</div><div className={headerClassName}>Measurement</div>
       {rows}
     </div>
