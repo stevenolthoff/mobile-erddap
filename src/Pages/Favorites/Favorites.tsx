@@ -24,10 +24,24 @@ export default function Favorites (): ReactElement {
     )
   }
 
+  function getFavorites () {
+    return Object.keys(favorites)
+      .sort((a, b) => {
+        if (favorites[a].title < favorites[b].title) {
+          return -1
+        } else if (favorites[a].title > favorites[b].title) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+      .map(datasetId => getFavorite(favorites[datasetId]))
+  }
+
   return (
     <div className='max-h-full max-w-full overflow-scroll no-scrollbar scrollbox'>
       <div className='p-4 text-lg font-semibold text-slate-800'>Favorites</div>
-      <div className='flex flex-col h-full truncate ...'>{Object.keys(favorites).map(datasetId => getFavorite(favorites[datasetId]))}</div>
+      <div className='flex flex-col h-full truncate ...'>{getFavorites()}</div>
     </div>
   )
 }
