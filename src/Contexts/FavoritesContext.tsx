@@ -1,4 +1,5 @@
 import { PropsWithChildren, createContext, useContext, useState } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
 
 interface IFavorite {
   datasetId: string
@@ -6,21 +7,24 @@ interface IFavorite {
   summary: string
 }
 
+type DatasetId = string
+type Favorites = Record<DatasetId, IFavorite>
+
 interface IFavoritesContext {
-  favorites: IFavorite[]
+  favorites: Favorites
   addFavorite: (favorite: IFavorite) => void
 }
 
 const FavoritesContext = createContext<IFavoritesContext | null>(null)
 
 export default function FavoritesContextProvider ({ children }: PropsWithChildren<{}>) {
-  // get from local storage
-  const [favorites, setFavorites] = useState<IFavorite[]>([])
+  const [favorites, setFavorites] = useLocalStorage<Favorites>('favorites', {})
 
   function addFavorite (favorite: IFavorite): void {
-    console.log('add')
     if (favorites) {
-      setFavorites([...favorites, favorite])
+      const newFavorites = favorites
+      favorites[favorite.datasetId] = favorite
+      setFavorites(newFavorites)
     }
   }
 

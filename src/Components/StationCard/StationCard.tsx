@@ -15,15 +15,15 @@ export default function StationCard (props: StationCardProps): ReactElement {
   const { datasetId, startDate, endDate, title, summary } = props
   const { favorites, addFavorite } = useFavoritesContext()
   const navigate = useNavigate()
-  console.log('favorites', favorites)
   const formatter = (date: Date) => 
-    date.toLocaleDateString('en-us', {
-      weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'
-    })
-
-  function onClickFavorite (event: React.MouseEvent<SVGElement, MouseEvent>) {
+  date.toLocaleDateString('en-us', {
+    weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'
+  })
+  
+  function onClickFavorite (event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation()
     addFavorite({ datasetId, title, summary })
+    console.log('favorites', favorites)
   }
 
   return (
@@ -33,7 +33,11 @@ export default function StationCard (props: StationCardProps): ReactElement {
       shadow-md leading-4 gap-2 flex flex-col active:bg-slate-300'>
       <div className='flex justify-between'>
         <div className='font-semibold uppercase text-slate-800'>{title}</div>
-        <BookmarkIcon onClick={event => onClickFavorite(event)}></BookmarkIcon>
+        <div
+          onClick={event => onClickFavorite(event)}
+          className='border border-slate-800 text-slate-800 rounded-full w-8 h-8 shrink-0 flex justify-center items-center hover:bg-slate-300 hover:text-white hover:border-white'>
+            <BookmarkIcon></BookmarkIcon>
+        </div>
       </div>
       <div className='text-sm leading-3 text-slate-500'>{formatter(startDate)} to {formatter(endDate)}</div>
       <div className='text-sm leading-3 text-slate-500'>{summary}</div>
