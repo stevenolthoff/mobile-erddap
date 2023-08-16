@@ -18,7 +18,10 @@ export default function Favorites (): ReactElement {
           title={favorite.title}
           summary={favorite.summary}
         >
-          <FavoriteButton favorite={favorite} />
+          <FavoriteButton
+            favorite={favorite}
+            isFavorited={true}
+          />
         </StationsListItem>
       </Link>
     )
@@ -40,8 +43,8 @@ export default function Favorites (): ReactElement {
 
   return (
     <div className='max-h-full max-w-full overflow-scroll no-scrollbar scrollbox'>
-      <div className='p-4 text-lg font-semibold text-slate-800'>Favorites</div>
-      <div className='flex flex-col h-full truncate ...'>{getFavorites()}</div>
+      <div className='px-4 pt-4 text-lg font-semibold text-slate-800'>Favorites</div>
+      <div className='flex flex-col h-full truncate ... divide-y'>{getFavorites()}</div>
     </div>
   )
 }

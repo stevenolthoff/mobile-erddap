@@ -140,7 +140,7 @@ export default function Stations (): ReactElement {
         onChange={event => onSearchInput(event.target.value)}
       />
       <div className='overflow-y-scroll no-scrollbar scrollbox'>
-        {getCards()}
+        <div className='flex flex-col divide-y'>{getCards()}</div>
         {loader()}
         {endOfScroll()}
       </div>

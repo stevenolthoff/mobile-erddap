@@ -34,7 +34,7 @@ export default function StationCard (favorite: IFavorite): ReactElement {
       shadow-md leading-4 gap-2 flex flex-col active:bg-slate-300'>
       <div className='flex justify-between'>
         <div className='font-semibold uppercase text-slate-800'>{title}</div>
-        <FavoriteButton favorite={favorite} />
+        <FavoriteButton favorite={favorite} isFavorited={false} />
       </div>
       <div className='text-sm leading-3 text-slate-500'>{formatter(startDate)} to {formatter(endDate)}</div>
       <div className='text-sm leading-3 text-slate-500'>{summary}</div>

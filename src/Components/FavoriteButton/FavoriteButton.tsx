@@ -1,8 +1,14 @@
 import React, { ReactElement } from 'react'
 import { IFavorite, useFavoritesContext } from '../../Contexts/FavoritesContext'
-import { BookmarkIcon } from '@radix-ui/react-icons'
+import { BookmarkIcon, BookmarkFilledIcon } from '@radix-ui/react-icons'
 
-export default function FavoriteButton ({ favorite }: { favorite: IFavorite}): ReactElement {
+interface IFavoriteButtonProps {
+  favorite: IFavorite
+  isFavorited: boolean
+}
+
+export default function FavoriteButton (props: IFavoriteButtonProps): ReactElement {
+  const { favorite, isFavorited } = props
   const { addFavorite } = useFavoritesContext()
   
   function onClickFavorite (event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -11,11 +17,41 @@ export default function FavoriteButton ({ favorite }: { favorite: IFavorite}): R
     addFavorite(favorite)
   }
 
+  function getFilledIcon () {
+    return (
+      <div
+        onClick={event => onClickFavorite(event)}
+        className='border border-blue-500 cursor-pointer rounded-full w-8 h-8 shrink-0 flex justify-center items-center'
+      >
+        <BookmarkFilledIcon className='text-blue-500' />
+      </div>
+    )
+  }
+
+  function getEmptyIcon () {
+    return (
+      <div
+        onClick={event => onClickFavorite(event)}
+        className='border border-slate-800 cursor-pointer text-slate-800 rounded-full w-8 h-8 shrink-0 flex justify-center items-center'
+      >
+        <BookmarkIcon />
+      </div>
+    )
+  }
+
+  function getIcon () {
+    if (isFavorited) {
+      return getFilledIcon()
+    } else {
+      return getEmptyIcon()
+    }
+  }
+
   return (
     <div
       onClick={event => onClickFavorite(event)}
-      className='border border-slate-800 text-slate-800 rounded-full w-8 h-8 shrink-0 flex justify-center items-center hover:bg-slate-300 hover:text-white hover:border-white'>
-        <BookmarkIcon></BookmarkIcon>
+    >
+        {getIcon()}
     </div>
   )
 }
