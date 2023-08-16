@@ -29,6 +29,9 @@ export default function Favorites (): ReactElement {
   }
 
   function getFavorites () {
+    if (Object.keys(copiedFavorites).length === 0) {
+      return <div className='p-4 italic text-slate-500 text-sm'>No Stations Saved</div>
+    }
     return Object.keys(copiedFavorites)
       .sort((a, b) => {
         if (copiedFavorites[a].title < copiedFavorites[b].title) {

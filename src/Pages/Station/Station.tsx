@@ -7,6 +7,8 @@ import Sensor from '../../Components/Sensor/Sensor'
 import LatestMeasurements from '../../Components/LatestMeasurements/LatestMeasurements'
 import Tabs from '../../Components/Tabs/Tabs'
 import { ClipLoader } from 'react-spinners'
+import FavoriteButton from '../../Components/FavoriteButton/FavoriteButton'
+import { useFavoritesContext } from '../../Contexts/FavoritesContext'
 
 const SERVER = 'https://erddap.sensors.axds.co/erddap'
 
@@ -17,6 +19,7 @@ export default function Station (): ReactElement {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(true)
+  const { isFavorited } = useFavoritesContext()
   const erddapApi = new ErddapService.ErddapApi(SERVER)
   const startDate: Date = getLastWeeksDate()
   const endDate: Date = new Date()
@@ -128,6 +131,12 @@ export default function Station (): ReactElement {
   `
 
   return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar">
+    <div className='w-full flex flex-row-reverse right-0 pt-4 px-4'>
+      <FavoriteButton
+        favorite={{ title, summary: description, datasetId, startDate: startDate.toDateString(), endDate: endDate.toDateString() }}
+        isFavorited={isFavorited(datasetId)}
+      />
+    </div>
     <div className="pt-4 px-4 text-xl font-semibold leading-none text-slate-800">{title}</div>
     <div className="px-4 text-xs text-slate-500 leading-tight">{description}</div>
 

@@ -64,7 +64,7 @@ export default function Map (): ReactElement {
   function getStationCard () {
     if (!activeStation) return <></>
     return (
-      <div ref={ref} className='absolute mx-4 bottom-20'>
+      <div ref={ref} className='absolute mx-4 bottom-20 left-0 right-0'>
         <StationCard
           datasetId={activeStation.datasetID}
           startDate={activeStation.minTime}
