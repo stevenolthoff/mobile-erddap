@@ -16,6 +16,7 @@ import NavBar from './Components/NavBar/NavBar'
 import './App.css'
 
 function App () {
+  console.log('ENV', process.env)
   return (
     <div className='grid grid-rows-[1fr_auto] h-screen overflow-y-hidden divide-y'>
       <BrowserRouter basename='/'>

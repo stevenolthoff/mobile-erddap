@@ -1,5 +1,5 @@
-import { DataService } from '@axdspub/axiom-ui-data-services'
 import React, { createContext, useContext, useState } from 'react'
+import { DateTime } from 'luxon'
 
 // TODO Load defaults through env
 const defaultState = {
@@ -9,6 +9,17 @@ const defaultState = {
   minLongitude: -171,
   maxLongitude: -136,
   minLatitude: 42,
+}
+
+function getDefaultStartDate () {
+  const ENV_DEFAULT_WEEKS: string | undefined = process.env.REACT_APP_DEFAULT_WEEKS
+  let weeks: number
+  if (ENV_DEFAULT_WEEKS === undefined) {
+    weeks = 1
+  } else {
+    weeks = Number(ENV_DEFAULT_WEEKS)
+  }
+  const dateTime = DateTime.now().endOf('day').minus({ weeks })
 }
 
 export const SearchContext = createContext(defaultState)

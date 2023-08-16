@@ -133,7 +133,7 @@ export default function Stations (): ReactElement {
         search-cancel:appearance-none search-cancel:w-4 search-cancel:h-4
         search-cancel:bg-[url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg)]
         search-cancel:cursor-pointer
-        active:outline-blue-800 focus:outline-blue-500'
+        active:outline-blue-800 focus:outline-blue-500 bg-slate-50'
         autoFocus
         placeholder='Search for stations'
         type='search'
