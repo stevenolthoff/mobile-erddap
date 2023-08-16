@@ -2,7 +2,7 @@ import React, { useState, type ReactElement, useEffect } from 'react'
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import * as Label from '@radix-ui/react-label'
 import { GlobeIcon, MagnifyingGlassIcon, Crosshair2Icon, HeartIcon, GearIcon } from '@radix-ui/react-icons'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 type ETab = 'map' | 'search' | 'sensors' | 'favorites' | 'settings'
 interface ITab {
@@ -16,6 +16,7 @@ export default function NavBar (): ReactElement {
   const DEFAULT_PATH: ETab = 'map'
   const [activeTab, setActiveTab] = useState<ETab>()
   const location = useLocation()
+  const navigate = useNavigate()
 
   function onPathChanged () {
     console.log(location)
@@ -68,13 +69,15 @@ export default function NavBar (): ReactElement {
     }
     return (
       <NavigationMenu.Item key={tab.id} onClick={() => { setActiveTab(tab.id) }}>
-        <NavigationMenu.Link href={tab.path} className={`${color} flex flex-col items-center cursor-pointer`}>
+        <div
+          className={`${color} flex flex-col items-center cursor-pointer`}
+          onClick={() => navigate(tab.path)}
+        >
           {tab.icon}
           <Label.Root className='cursor-pointer'>
             {tab.label}
           </Label.Root>
-        </NavigationMenu.Link>
-        {/* </NavigationMenu.Link> */}
+        </div>
       </NavigationMenu.Item>
     )
   })

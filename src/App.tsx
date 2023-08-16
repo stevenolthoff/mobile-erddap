@@ -1,5 +1,6 @@
 import React from 'react'
 import SearchContextProvider from './Contexts/SearchContext'
+import FavoritesContextProvider from './Contexts/FavoritesContext'
 import logo from './logo.svg'
 import {
   BrowserRouter,
@@ -20,25 +21,27 @@ function App () {
       <BrowserRouter basename='/'>
         <div className='max-h-full overflow-hidden'>       
           <SearchContextProvider>
-            <Routes>
-              <Route
-                path='/map'
-                element={<Map />}
-              />
-              <Route
-                path='/stations'
-                element={<Stations />}
-              />
-              <Route
-                path='/stations/:datasetId'
-                element={<Station />}
-              />
-              <Route
-                path='/favorites'
-                element={<Favorites />}
-              />
-              <Route path="*" element={<Navigate to='/map' replace />} />
-            </Routes>
+            <FavoritesContextProvider>
+              <Routes>
+                <Route
+                  path='/map'
+                  element={<Map />}
+                />
+                <Route
+                  path='/stations'
+                  element={<Stations />}
+                />
+                <Route
+                  path='/stations/:datasetId'
+                  element={<Station />}
+                />
+                <Route
+                  path='/favorites'
+                  element={<Favorites />}
+                />
+                <Route path="*" element={<Navigate to='/map' replace />} />
+              </Routes>
+            </FavoritesContextProvider>
           </SearchContextProvider>
         </div>
         <div className='z-10'>

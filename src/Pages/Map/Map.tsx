@@ -2,7 +2,7 @@ import React, { type ReactElement, useState, useEffect, useRef } from 'react'
 import { Map as AxiomMap, ILatLon, GeoJsonLayerType, GeoJsonElement } from '@axdspub/axiom-maps'
 import SearchService, { IDatasetOnMap } from '../../Services/Search/index'
 import { useOnClickOutside } from 'usehooks-ts'
-import { SearchContext, useSearchContext } from '../../Contexts/SearchContext'
+import { useSearchContext } from '../../Contexts/SearchContext'
 import StationCard from '../../Components/StationCard/StationCard'
 
 export default function Map (): ReactElement {
@@ -64,14 +64,15 @@ export default function Map (): ReactElement {
   function getStationCard () {
     if (!activeStation) return <></>
     return (
-      <a ref={ref} href={`/stations/${activeStation.datasetID}`}>
+      <div ref={ref}>
         <StationCard
+          datasetId={activeStation.datasetID}
           startDate={new Date(activeStation.minTime)}
           endDate={new Date(activeStation.maxTime)}
           title={activeStation.title}
           summary={activeStation.summary}
         />
-      </a>
+      </div>
     )
   }
 
