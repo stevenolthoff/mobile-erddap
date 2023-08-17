@@ -2,6 +2,7 @@ import React, { PropsWithChildren, createContext, useContext, useState } from 'r
 import { DateTime } from 'luxon'
 
 const DEFAULT_BOUNDS = getDefaultBounds()
+const DEFAULT_CENTER = getDefaultCenter()
 
 const defaultState = {
   minTime: getZuluDateString(getDefaultStartDate()),
@@ -9,7 +10,9 @@ const defaultState = {
   maxLatitude: DEFAULT_BOUNDS.maxLatitude,
   minLongitude: DEFAULT_BOUNDS.minLongitude,
   maxLongitude: DEFAULT_BOUNDS.maxLongitude,
-  minLatitude: DEFAULT_BOUNDS.minLatitude
+  minLatitude: DEFAULT_BOUNDS.minLatitude,
+  centerLatitude: DEFAULT_CENTER.centerLatitude,
+  centerLongitude: DEFAULT_CENTER.centerLongitude
 }
 
 function getDefaultStartDate () {
@@ -54,15 +57,32 @@ function getDefaultBounds () {
   }
 }
 
+function getDefaultCenter () {
+  const DEFAULT_CENTER_LATITUDE = 61.217381
+  const DEFAULT_CENTER_LONGITUDE = -149.86
+  let centerLatitude = Number(process.env.REACT_APP_MAP_CENTER_LATITUDE)
+  let centerLongitude = Number(process.env.REACT_APP_MAP_CENTER_LONGITUDE)
+  if (!centerLatitude || !centerLongitude) {
+    centerLatitude = DEFAULT_CENTER_LATITUDE
+    centerLongitude = DEFAULT_CENTER_LONGITUDE
+  }
+  return {
+    centerLatitude,
+    centerLongitude
+  }
+}
+
 export const SearchContext = createContext(defaultState)
 
 export default function SearchContextProvider ({ children }: PropsWithChildren) {
-  const [minTime, setMinTime] = useState(defaultState.minTime)
-  const [maxTime, setMaxTime] = useState(defaultState.maxTime)
-  const [maxLatitude, setMaxLatitude] = useState(defaultState.maxLatitude)
-  const [minLongitude, setMinLongitude] = useState(defaultState.minLongitude)
-  const [maxLongitude, setMaxLongitude] = useState(defaultState.maxLongitude)
-  const [minLatitude, setMinLatitude] = useState(defaultState.minLatitude)
+  const [minTime] = useState(defaultState.minTime)
+  const [maxTime] = useState(defaultState.maxTime)
+  const [maxLatitude] = useState(defaultState.maxLatitude)
+  const [minLongitude] = useState(defaultState.minLongitude)
+  const [maxLongitude] = useState(defaultState.maxLongitude)
+  const [minLatitude] = useState(defaultState.minLatitude)
+  const [centerLatitude] = useState(defaultState.centerLatitude)
+  const [centerLongitude] = useState(defaultState.centerLongitude)
 
   return (
     <SearchContext.Provider
@@ -72,7 +92,9 @@ export default function SearchContextProvider ({ children }: PropsWithChildren) 
         maxLatitude,
         minLongitude,
         maxLongitude,
-        minLatitude
+        minLatitude,
+        centerLatitude,
+        centerLongitude
       }}
     >{children}</SearchContext.Provider>
   )

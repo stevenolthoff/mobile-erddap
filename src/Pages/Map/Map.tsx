@@ -10,8 +10,17 @@ export default function Map (): ReactElement {
     lat: 61.217381,
     lon: -149.863129
   }
-  const { minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude } = useSearchContext()
-  console.log('minlat', minLatitude, 'maxlat', maxLatitude, 'minlon', minLongitude, 'maxlon', maxLongitude)
+  const {
+    minTime,
+    maxTime,
+    minLatitude,
+    maxLatitude,
+    minLongitude,
+    maxLongitude,
+    centerLatitude,
+    centerLongitude
+  } = useSearchContext()
+
   const [layer, setLayer] = useState<any>()
   const [activeStation, setActiveStation] = useState<IDatasetOnMap | null>(null)
   const ref = useRef(null)
@@ -104,7 +113,7 @@ export default function Map (): ReactElement {
           bottom: '0px',
           padding: '0'
         }}
-        center={DEFAULT_CENTER}
+        center={{ lat: centerLatitude, lon: centerLongitude }}
         zoom={5}
         layers={[layer]}
       />

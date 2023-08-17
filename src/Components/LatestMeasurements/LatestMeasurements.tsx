@@ -87,7 +87,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
       return <span className='text-xs text-slate-500'>-</span>
     } else {
       const dateTime = DateTime.fromISO(date)
-      return <div><div>{dateTime.toFormat('HH:mm:ss a')}</div><div className='text-slate-500 text-xs leading-none'>{dateTime.toFormat('D')}</div></div>
+      return <div><div>{dateTime.toFormat('hh:mm:ss a')}</div><div className='text-slate-500 text-xs leading-none'>{dateTime.toFormat('D')}</div></div>
     }
   }
 
