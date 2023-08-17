@@ -11,6 +11,7 @@ export default function Map (): ReactElement {
     lon: -149.863129
   }
   const { minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude } = useSearchContext()
+  console.log(minTime, maxTime)
   const [layer, setLayer] = useState<any>()
   const [activeStation, setActiveStation] = useState<IDatasetOnMap | null>(null)
   const ref = useRef(null)
@@ -107,7 +108,7 @@ export default function Map (): ReactElement {
         zoom={5}
         layers={[layer]}
       />
-      {getTimeFrameCard()}
+      {/* {getTimeFrameCard()} */}
       {getStationCard()}
     </div>
   )

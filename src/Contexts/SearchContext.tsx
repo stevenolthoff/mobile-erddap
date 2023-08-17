@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { PropsWithChildren, createContext, useContext, useState } from 'react'
 import { DateTime } from 'luxon'
 
 // TODO Load defaults through env
 const defaultState = {
-  minTime: '2023-01-01T00:00:00Z',
-  maxTime: '2023-08-01T00:00:00Z',
+  minTime: getZuluDateString(getDefaultStartDate()),
+  maxTime: getZuluDateString(getDefaultEndDate()),
   maxLatitude: 77,
   minLongitude: -171,
   maxLongitude: -136,
@@ -19,12 +19,20 @@ function getDefaultStartDate () {
   } else {
     weeks = Number(ENV_DEFAULT_WEEKS)
   }
-  const dateTime = DateTime.now().endOf('day').minus({ weeks })
+  return DateTime.now().endOf('day').minus({ weeks })
+}
+
+function getDefaultEndDate () {
+  return DateTime.now().endOf('day')
+}
+
+function getZuluDateString (dateTime: DateTime): string {
+  return dateTime.toUTC().toISO() as string
 }
 
 export const SearchContext = createContext(defaultState)
 
-export default function SearchContextProvider ({ children }: any) {
+export default function SearchContextProvider ({ children }: PropsWithChildren) {
   const [minTime, setMinTime] = useState(defaultState.minTime)
   const [maxTime, setMaxTime] = useState(defaultState.maxTime)
   const [maxLatitude, setMaxLatitude] = useState(defaultState.maxLatitude)

@@ -130,14 +130,14 @@ export default function Station (): ReactElement {
     border-solid border-b
   `
 
-  return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar">
+  return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar scrollbox">
     <div className='w-full flex flex-row-reverse right-0 pt-4 px-4'>
       <FavoriteButton
         favorite={{ title, summary: description, datasetId, startDate: startDate.toDateString(), endDate: endDate.toDateString() }}
         isFavorited={isFavorited(datasetId)}
       />
     </div>
-    <div className="pt-4 px-4 text-xl font-semibold leading-none text-slate-800">{title}</div>
+    <div className="px-4 text-xl font-semibold leading-none text-slate-800">{title}</div>
     <div className="px-4 text-xs text-slate-500 leading-tight">{description}</div>
 
     <Tabs tabs={[
