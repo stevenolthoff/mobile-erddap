@@ -140,7 +140,7 @@ export default function Station (): ReactElement {
     <div className="px-4 text-xl font-semibold leading-none text-slate-800">{title}</div>
     <div className="px-4 text-xs text-slate-500 leading-tight">{description}</div>
 
-    <Tabs tabs={[
+    <Tabs className='mb-16' tabs={[
       {
         id: 'charts',
         label: 'Charts',

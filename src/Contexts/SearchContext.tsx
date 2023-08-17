@@ -1,14 +1,15 @@
 import React, { PropsWithChildren, createContext, useContext, useState } from 'react'
 import { DateTime } from 'luxon'
 
-// TODO Load defaults through env
+const DEFAULT_BOUNDS = getDefaultBounds()
+
 const defaultState = {
   minTime: getZuluDateString(getDefaultStartDate()),
   maxTime: getZuluDateString(getDefaultEndDate()),
-  maxLatitude: 77,
-  minLongitude: -171,
-  maxLongitude: -136,
-  minLatitude: 42,
+  maxLatitude: DEFAULT_BOUNDS.maxLatitude,
+  minLongitude: DEFAULT_BOUNDS.minLongitude,
+  maxLongitude: DEFAULT_BOUNDS.maxLongitude,
+  minLatitude: DEFAULT_BOUNDS.minLatitude
 }
 
 function getDefaultStartDate () {
@@ -28,6 +29,29 @@ function getDefaultEndDate () {
 
 function getZuluDateString (dateTime: DateTime): string {
   return dateTime.toUTC().toISO() as string
+}
+
+function getDefaultBounds () {
+  const DEFAULT_MIN_LONGITUDE = -136
+  const DEFAULT_MAX_LONGITUDE = -171
+  const DEFAULT_MIN_LATITUDE = 42
+  const DEFAULT_MAX_LATITUDE = 77
+  let minLongitude = Number(process.env.REACT_APP_MIN_LONGITUDE)
+  let maxLongitude = Number(process.env.REACT_APP_MAX_LONGITUDE)
+  let minLatitude = Number(process.env.REACT_APP_MIN_LATITUDE)
+  let maxLatitude = Number(process.env.REACT_APP_MAX_LATITUDE)
+  if (!minLongitude || !maxLongitude || !minLatitude || !maxLatitude) {
+    minLongitude = DEFAULT_MIN_LONGITUDE
+    maxLongitude = DEFAULT_MAX_LONGITUDE
+    minLatitude = DEFAULT_MIN_LATITUDE
+    maxLatitude = DEFAULT_MAX_LATITUDE
+  }
+  return {
+    minLongitude,
+    maxLongitude,
+    minLatitude,
+    maxLatitude
+  }
 }
 
 export const SearchContext = createContext(defaultState)
