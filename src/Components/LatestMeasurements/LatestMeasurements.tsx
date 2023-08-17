@@ -1,5 +1,6 @@
 import { DataService, type IDataResult } from '@axdspub/axiom-ui-data-services'
 import { api, parser } from '@axdspub/erddap-service'
+import { DateTime } from 'luxon'
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { ClipLoader } from 'react-spinners'
 
@@ -12,6 +13,7 @@ interface ILatestMeasurementsProps {
 type ColumnName = string
 type Measurement = string
 type LatestMeasurement = Record<ColumnName, Measurement>
+type Row = { sensor: string, measurement: string, date: string }
 
 export default function LatestMeasurements (props: ILatestMeasurementsProps): ReactElement {
   const SERVER = 'https://erddap.sensors.axds.co/erddap'
@@ -72,16 +74,20 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
     return props.sensorMetadata[columnName].long_name.Value
   }
 
-  function getPrettyTime (time: string): string {
-    const date = new Date(time)
-    return `${date.toLocaleDateString('en-us', { dateStyle: 'long' })} ${date.toLocaleTimeString('en-us', { timeStyle: 'long' })}`
-  }
-
-  function getPrettyValue (columnName: string, latest: Record<string, string>): ReactElement {
-    if (latest[columnName] === 'NaN') {
+  function getPrettyValue (columnName: string, value: string): ReactElement {
+    if (value === 'NaN') {
       return <i className='text-xs uppercase text-slate-500'>No Measurement Found</i>
     } else {
-      return <span>{Number(latest[columnName]).toFixed(2)} <span className='text-xs'>{getUnits(columnName)}</span></span>
+      return <span>{Number(value).toFixed(2)} <span className='text-xs'>{getUnits(columnName)}</span></span>
+    }
+  }
+
+  function getPrettyDate (date: string) {
+    if (date === '-') {
+      return <span className='text-xs text-slate-500'>-</span>
+    } else {
+      const dateTime = DateTime.fromISO(date)
+      return <div><div>{dateTime.toFormat('HH:mm:ss a')}</div><div className='text-slate-500 text-xs leading-none'>{dateTime.toFormat('D')}</div></div>
     }
   }
 
@@ -95,28 +101,46 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
     }
   }
 
-  let latest: LatestMeasurement
-  const rows: ReactElement[] = []
-  let time = ''
-  if (data !== null && data !== undefined) {
-    latest = data[data.length - 1]
-    const rowClassName = 'text-slate-800 px-2 md:px-4 py-2 text-sm'
-    Object.keys(props.sensorMetadata).forEach(key => {
-      rows.push(<div key={`name-${key}`} className={rowClassName}>{getPrettyName(key)}</div>)
-      rows.push(<div key={`value-${key}`} className={rowClassName}>{getPrettyValue(key, latest)}</div>)
+  function getRows (): Row[] {
+    if (!data) return []
+    const measurements = data.slice(1).reverse()
+    return Object.keys(props.sensorMetadata).map(sensor => {
+      const latest = measurements.find(measurement => measurement[sensor] !== 'NaN')
+      return {
+        sensor,
+        measurement: latest ? latest[sensor] : 'NaN',
+        date: latest ? latest.time : '-'
+      }
     })
-    time = getPrettyTime(latest.time)
   }
 
-  const headerClassName = 'bg-slate-100 text-slate-500 px-2 md:px-4 font-semibold text-xs uppercase py-2 border-t'
+  function getRowElements (rows: Row[]): JSX.Element[] {
+    const rowElements: JSX.Element[] = []
+    const rowClassName = 'text-slate-800 px-0 md:px-4 py-2 text-sm'
+    rows.forEach(row => {
+      const { sensor, measurement, date } = row
+      const sensorColumn = <div key={`sensor-${sensor}`} className={rowClassName}>{getPrettyName(sensor)}</div>
+      const measurementColumn = <div key={`measurement-${measurement}`} className={rowClassName}>{getPrettyValue(sensor, measurement)}</div>
+      const dateColumn = <div key={`date-${sensor}`} className={rowClassName}>{getPrettyDate(date)}</div>
+      rowElements.push(...[sensorColumn, measurementColumn, dateColumn])
+    })
+    return rowElements
+  }
+
+  function getTableRows () {
+    return getRowElements(getRows())
+  }
+
+  const headerClassName = 'bg-slate-100 text-slate-500 px-0 md:px-4 font-semibold text-xs uppercase py-2 border-t'
   const loadingText = <div className="rounded-md bg-slate-100 h-4 w-32 animate-pulse"></div>
 
   return <div className='flex flex-col gap-2'>
     <div className='px-4 text-md text-slate-500'>Latest Measurements</div>
-    <div className='px-4 uppercase text-xs font-semibold text-slate-800 w-full flex'>Recorded on&nbsp;{loading ? loadingText : time}</div>
-    <div className='px-4 grid grid-cols-2 divide-y'>
-      <div className={headerClassName}>Sensor</div><div className={headerClassName}>Measurement</div>
-      {rows}
+    <div className='px-4 grid grid-cols-3 divide-y'>
+      <div className={headerClassName}>Sensor</div>
+      <div className={headerClassName}>Measurement</div>
+      <div className={headerClassName}>Time</div>
+      {getTableRows()}
     </div>
     {getLoader()}
   </div>
