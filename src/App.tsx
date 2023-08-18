@@ -1,19 +1,18 @@
 import React from 'react'
-import SearchContextProvider from './Contexts/SearchContext'
-import FavoritesContextProvider from './Contexts/FavoritesContext'
-import logo from './logo.svg'
+import SearchContextProvider from '@/Contexts/SearchContext'
+import FavoritesContextProvider from '@/Contexts/FavoritesContext'
 import {
   BrowserRouter,
   Routes,
   Route,
   Navigate
 } from 'react-router-dom'
-import Map from './Pages/Map/Map'
-import Stations from './Pages/Stations/Stations'
-import Station from './Pages/Station/Station'
-import Favorites from './Pages/Favorites/Favorites'
-import NavBar from './Components/NavBar/NavBar'
-import './App.css'
+import Map from '@/Pages/Map/Map'
+import Stations from '@/Pages/Stations/Stations'
+import Station from '@/Pages/Station/Station'
+import Favorites from '@/Pages/Favorites/Favorites'
+import NavBar from '@/Components/NavBar/NavBar'
+import '@/App.css'
 
 function App () {
   console.log('ENV', process.env)

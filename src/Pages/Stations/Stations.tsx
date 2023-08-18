@@ -1,12 +1,12 @@
-import StationsListItem from '../../Components/StationsListItem/StationsListItem'
+import StationsListItem from '@/Components/StationsListItem/StationsListItem'
 import * as DataService from '@axdspub/axiom-ui-data-services'
 import { api } from '@axdspub/erddap-service'
 import { Link } from 'react-router-dom'
 import React, { type ReactElement, useState, useEffect } from 'react'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
 import { ClipLoader } from 'react-spinners'
-import { useSearchContext } from '../../Contexts/SearchContext'
-import SearchService from '../../Services/Search'
+import { useSearchContext } from '@/Contexts/SearchContext'
+import SearchService from '@/Services/Search'
 
 export default function Stations (): ReactElement {
   const [results, setResults] = useState<api.IErddapIndexResponse[]>([])

@@ -1,9 +1,9 @@
 import React, { type ReactElement, useState, useEffect, useRef } from 'react'
 import { Map as AxiomMap, ILatLon, GeoJsonLayerType, GeoJsonElement } from '@axdspub/axiom-maps'
-import SearchService, { IDatasetOnMap } from '../../Services/Search/index'
+import SearchService, { IDatasetOnMap } from '@/Services/Search/index'
 import { useOnClickOutside } from 'usehooks-ts'
-import { useSearchContext } from '../../Contexts/SearchContext'
-import StationCard from '../../Components/StationCard/StationCard'
+import { useSearchContext } from '@/Contexts/SearchContext'
+import StationCard from '@/Components/StationCard/StationCard'
 
 export default function Map (): ReactElement {
   const DEFAULT_CENTER: ILatLon = {

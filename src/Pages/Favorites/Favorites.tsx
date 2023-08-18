@@ -1,8 +1,8 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-import { IFavorite, useFavoritesContext } from '../../Contexts/FavoritesContext'
-import StationsListItem from '../../Components/StationsListItem/StationsListItem'
+import { IFavorite, useFavoritesContext } from '@/Contexts/FavoritesContext'
+import StationsListItem from '@/Components/StationsListItem/StationsListItem'
 import { Link } from 'react-router-dom'
-import FavoriteButton from '../../Components/FavoriteButton/FavoriteButton'
+import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 
 export default function Favorites (): ReactElement {
   const { favorites, isFavorited } = useFavoritesContext()
