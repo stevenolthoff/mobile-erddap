@@ -6,7 +6,7 @@
     "@axdspub/axiom-charts": "^0.0.9",
     "@axdspub/axiom-maps": "^0.0.9",
     "@axdspub/axiom-ui-data-services": "^0.0.8",
-    "@axdspub/erddap-service": "^0.1.4",
+    "@axdspub/erddap-service": "^0.2.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-navigation-menu": "^1.1.3",
