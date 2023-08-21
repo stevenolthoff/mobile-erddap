@@ -120,7 +120,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
     rows.forEach(row => {
       const { sensor, measurement, date } = row
       const sensorColumn = <div key={`sensor-${sensor}`} className={rowClassName}>{getPrettyName(sensor)}</div>
-      const measurementColumn = <div key={`measurement-${measurement}`} className={rowClassName}>{getPrettyValue(sensor, measurement)}</div>
+      const measurementColumn = <div key={`sensor-measurement-${sensor}`} className={rowClassName}>{getPrettyValue(sensor, measurement)}</div>
       const dateColumn = <div key={`date-${sensor}`} className={rowClassName}>{getPrettyDate(date)}</div>
       rowElements.push(...[sensorColumn, measurementColumn, dateColumn])
     })
