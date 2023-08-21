@@ -1,6 +1,6 @@
 import useMetadata from '@/Hooks/useMetadata'
 import { DataService, type IDataResult } from '@axdspub/axiom-ui-data-services'
-import { api, parser } from '@axdspub/erddap-service'
+import { api } from '@axdspub/erddap-service'
 import { VariableToAttribute } from '@axdspub/erddap-service/lib/parser'
 import { DateTime } from 'luxon'
 import React, { type ReactElement, useState, useEffect } from 'react'
@@ -20,14 +20,15 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   const erddapApi = new api.ErddapApi(SERVER)
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<LatestMeasurement[]>()
-  const metadata = useMetadata(props.datasetId)
+  const [metadata, metadataLoading] = useMetadata(props.datasetId)
   const [columnNames, setColumnNames] = useState<string[]>([])
   const [sensorMetadata, setSensorMetadata] = useState<VariableToAttribute>({})
 
   useEffect(() => {
+    if (metadataLoading) return
     setColumnNames(Object.keys(metadata.sensors))
     setSensorMetadata(metadata.sensors)
-  }, [metadata])
+  }, [metadataLoading])
 
   async function getData (): Promise<IDataResult> {
     const variables = ['time', ...columnNames]
@@ -54,6 +55,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   }
 
   useEffect(() => {
+    if (metadataLoading && columnNames.length > 0) return
     getData().then(result => {
       console.log(result.data)
       setData(result.data)
@@ -62,7 +64,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
     }).catch(error => {
       console.error(error)
     })
-  }, [])
+  }, [columnNames])
 
   function getStartDate (): Date {
     const now = new Date()
@@ -140,15 +142,13 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   }
 
   const headerClassName = 'bg-slate-100 text-slate-500 px-0 md:px-4 font-semibold text-xs uppercase py-2 border-t'
-  const loadingText = <div className="rounded-md bg-slate-100 h-4 w-32 animate-pulse"></div>
 
   return <div className='flex flex-col gap-2'>
-    <div className='px-4 text-md text-slate-500'>Latest Measurements</div>
-    <div className='px-4 grid grid-cols-3 divide-y'>
+    <div className='grid grid-cols-3 divide-y'>
       <div className={headerClassName}>Sensor</div>
       <div className={headerClassName}>Measurement</div>
       <div className={headerClassName}>Time</div>
-      {metadata ? getTableRows() : getLoader()}
+      {loading ? <></> : getTableRows() }
     </div>
     {getLoader()}
   </div>

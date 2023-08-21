@@ -3,13 +3,9 @@ import { Map as AxiomMap, ILatLon, GeoJsonLayerType, GeoJsonElement } from '@axd
 import SearchService, { IDatasetOnMap } from '@/Services/Search/index'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useSearchContext } from '@/Contexts/SearchContext'
-import StationCard from '@/Components/StationCard/StationCard'
+import StationPreview from '@/Components/StationPreview/StationPreview'
 
 export default function Map (): ReactElement {
-  const DEFAULT_CENTER: ILatLon = {
-    lat: 61.217381,
-    lon: -149.863129
-  }
   const {
     minTime,
     maxTime,
@@ -74,8 +70,10 @@ export default function Map (): ReactElement {
   function getStationCard () {
     if (!activeStation) return <></>
     return (
-      <div ref={ref} className='absolute mx-4 bottom-20 left-0 right-0'>
-        <StationCard
+      <div
+        ref={ref}
+      >
+        <StationPreview
           datasetId={activeStation.datasetID}
           startDate={activeStation.minTime}
           endDate={activeStation.maxTime}
@@ -84,15 +82,6 @@ export default function Map (): ReactElement {
         />
       </div>
     )
-  }
-
-  function getTimeFrameCard () {
-    const formatter = (date: string) => new Date(date).toLocaleDateString('en-us', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'}) 
-    const prettyMinTime = formatter(minTime)
-    const prettyMaxTime = formatter(maxTime)
-    return <div className='absolute bg-slate-100 top-0 p-3 left-0 right-0'>
-      {prettyMinTime} to {prettyMaxTime}
-    </div>
   }
 
   if (layer === null || layer == undefined) {
@@ -117,7 +106,6 @@ export default function Map (): ReactElement {
         zoom={5}
         layers={[layer]}
       />
-      {/* {getTimeFrameCard()} */}
       {getStationCard()}
     </div>
   )
