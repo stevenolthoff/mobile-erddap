@@ -14,12 +14,8 @@ export interface IDatasetOnMap {
 }
 
 export default class SearchService {
-  SERVER = 'https://erddap.sensors.axds.co/erddap'
+  SERVER = process.env.REACT_APP_SERVER || 'https://erddap.sensors.axds.co/erddap'
   erddapApi = new ErddapApi(this.SERVER)
-  MAX_LATITUDE = 77
-  MIN_LONGITUDE = -171
-  MAX_LONGITUDE = -136
-  MIN_LATITUDE = 42
   COLUMN_NAMES = ['datasetID', 'title', 'minLongitude', 'maxLongitude', 'minLatitude', 'maxLatitude', 'minTime', 'maxTime', 'summary']
   constructor () {
     console.log('SearchService')

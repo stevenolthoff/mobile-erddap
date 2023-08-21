@@ -1,14 +1,13 @@
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { DataService, type IDataResult } from '@axdspub/axiom-ui-data-services'
-import { api as ErddapService } from '@axdspub/erddap-service'
-import { parser as ErddapParser } from '@axdspub/erddap-service'
+import { api as ErddapService, parser as ErddapParser } from '@axdspub/erddap-service'
 import Sensor from '@/Components/Sensor/Sensor'
 import LatestMeasurements from '@/Components/LatestMeasurements/LatestMeasurements'
 import Tabs from '@/Components/Tabs/Tabs'
 import { ClipLoader } from 'react-spinners'
 import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 import { useFavoritesContext } from '@/Contexts/FavoritesContext'
+import MetadataService from '@/Services/Metadata'
 
 const SERVER = 'https://erddap.sensors.axds.co/erddap'
 
@@ -20,15 +19,8 @@ export default function Station (): ReactElement {
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(true)
   const { isFavorited } = useFavoritesContext()
-  const erddapApi = new ErddapService.ErddapApi(SERVER)
   const startDate: Date = getLastWeeksDate()
   const endDate: Date = new Date()
-
-  async function getMetadata (): Promise<IDataResult> {
-    const url = erddapApi.getUrl({ request: 'info', response: 'csv', dataset_id: datasetId })
-    const dataService = new DataService({ type: '', resultType: 'csv', url })
-    return await dataService.get()
-  }
 
   function getStationName (): string {
     if ('platform_name' in metadata.ncGlobal) {
@@ -49,9 +41,8 @@ export default function Station (): ReactElement {
   }
 
   useEffect(() => {
-    getMetadata().then(dataResult => {
-      const parsed = ErddapParser.parseDatasetMetadata(dataResult.data)
-      setMetadata(parsed)
+    MetadataService.getParsedMetadata(datasetId).then(parsedMetadata => {
+      setMetadata(parsedMetadata)
       setLoading(false)
     }).catch(error => {
       console.error(error)
