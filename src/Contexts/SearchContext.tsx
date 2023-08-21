@@ -35,8 +35,8 @@ function getZuluDateString (dateTime: DateTime): string {
 }
 
 function getDefaultBounds () {
-  const DEFAULT_MIN_LONGITUDE = -136
-  const DEFAULT_MAX_LONGITUDE = -171
+  const DEFAULT_MIN_LONGITUDE = -171
+  const DEFAULT_MAX_LONGITUDE = -136
   const DEFAULT_MIN_LATITUDE = 42
   const DEFAULT_MAX_LATITUDE = 77
   let minLongitude = Number(process.env.REACT_APP_MIN_LONGITUDE)
