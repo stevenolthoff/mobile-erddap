@@ -17,7 +17,7 @@ export default function StationPreview (favorite: IFavorite): ReactElement {
     <div
       onClick={() => navigate(`/stations/${datasetId}`)}
       className='absolute bottom-20 mx-4 bg-slate-100 p-3 rounded-md no-scrollbar
-      shadow-md leading-4 gap-2 flex flex-col active:bg-slate-300 min-h-[30vh] max-h-[30vh] overflow-y-scroll'>
+      shadow-md leading-4 gap-2 flex flex-col min-h-[30vh] max-h-[30vh] overflow-y-scroll'>
       <div className='flex justify-between'>
         <div className='font-semibold uppercase text-slate-800'>{title}</div>
         <FavoriteButton favorite={favorite} isFavorited={isFavorited(favorite.datasetId)} />

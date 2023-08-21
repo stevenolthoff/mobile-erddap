@@ -141,7 +141,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
     return getRowElements(getRows())
   }
 
-  const headerClassName = 'bg-slate-100 text-slate-500 px-0 md:px-4 font-semibold text-xs uppercase py-2 border-t'
+  const headerClassName = 'text-slate-500 px-0 md:px-4 font-semibold text-xs uppercase py-2 border-t'
 
   return <div className='flex flex-col gap-2'>
     <div className='grid grid-cols-3 divide-y'>
