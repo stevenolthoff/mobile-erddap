@@ -91,11 +91,7 @@ export default function Station (): ReactElement {
   }
 
   function getLatest (): ReactElement {
-    return <LatestMeasurements
-      datasetId={datasetId}
-      columnNames={Object.keys(metadata.sensors)}
-      sensorMetadata={metadata.sensors}
-    />
+    return <LatestMeasurements datasetId={datasetId} />
   }
 
   function getDate (): ReactElement {

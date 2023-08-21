@@ -1,13 +1,13 @@
+import useMetadata from '@/Hooks/useMetadata'
 import { DataService, type IDataResult } from '@axdspub/axiom-ui-data-services'
 import { api, parser } from '@axdspub/erddap-service'
+import { VariableToAttribute } from '@axdspub/erddap-service/lib/parser'
 import { DateTime } from 'luxon'
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { ClipLoader } from 'react-spinners'
 
 interface ILatestMeasurementsProps {
   datasetId: string
-  columnNames: string[]
-  sensorMetadata: parser.VariableToAttribute
 }
 
 type ColumnName = string
@@ -20,9 +20,17 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   const erddapApi = new api.ErddapApi(SERVER)
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<LatestMeasurement[]>()
+  const metadata = useMetadata(props.datasetId)
+  const [columnNames, setColumnNames] = useState<string[]>([])
+  const [sensorMetadata, setSensorMetadata] = useState<VariableToAttribute>({})
+
+  useEffect(() => {
+    setColumnNames(Object.keys(metadata.sensors))
+    setSensorMetadata(metadata.sensors)
+  }, [metadata])
 
   async function getData (): Promise<IDataResult> {
-    const variables = ['time', ...props.columnNames]
+    const variables = ['time', ...columnNames]
     const url = erddapApi.getUrl({
       protocol: 'tabledap',
       response: 'csv',
@@ -62,7 +70,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   }
 
   function getUnits (columnName: string): string {
-    const { units } = props.sensorMetadata[columnName]
+    const { units } = sensorMetadata[columnName]
     if (units) {
       return units.Value
     } else {
@@ -71,7 +79,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   }
 
   function getPrettyName (columnName: string): string {
-    return props.sensorMetadata[columnName].long_name.Value
+    return sensorMetadata[columnName].long_name.Value
   }
 
   function getPrettyValue (columnName: string, value: string): ReactElement {
@@ -104,7 +112,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   function getRows (): Row[] {
     if (!data) return []
     const measurements = data.slice(1).reverse()
-    return Object.keys(props.sensorMetadata).map(sensor => {
+    return Object.keys(sensorMetadata).map(sensor => {
       const latest = measurements.find(measurement => measurement[sensor] !== 'NaN')
       return {
         sensor,
@@ -140,7 +148,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
       <div className={headerClassName}>Sensor</div>
       <div className={headerClassName}>Measurement</div>
       <div className={headerClassName}>Time</div>
-      {getTableRows()}
+      {metadata ? getTableRows() : getLoader()}
     </div>
     {getLoader()}
   </div>
