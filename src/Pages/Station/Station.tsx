@@ -1,20 +1,19 @@
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { api as ErddapService, parser as ErddapParser } from '@axdspub/erddap-service'
 import Sensor from '@/Components/Sensor/Sensor'
 import LatestMeasurements from '@/Components/LatestMeasurements/LatestMeasurements'
 import Tabs from '@/Components/Tabs/Tabs'
 import { ClipLoader } from 'react-spinners'
 import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 import { useFavoritesContext } from '@/Contexts/FavoritesContext'
-import MetadataService from '@/Services/Metadata'
+import useMetadata from '@/Hooks/useMetadata'
 
 const SERVER = 'https://erddap.sensors.axds.co/erddap'
 
 export default function Station (): ReactElement {
   const params = useParams()
   const datasetId = params.datasetId as string
-  const [metadata, setMetadata] = useState<ErddapParser.IParsedDatasetMetadata>({ axes: {}, sensors: {}, station: {}, ncGlobal: {} })
+  const metadata = useMetadata(datasetId)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(true)
@@ -41,13 +40,8 @@ export default function Station (): ReactElement {
   }
 
   useEffect(() => {
-    MetadataService.getParsedMetadata(datasetId).then(parsedMetadata => {
-      setMetadata(parsedMetadata)
-      setLoading(false)
-    }).catch(error => {
-      console.error(error)
-    })
-  }, [])
+    setLoading(false)
+  }, [metadata])
 
   useEffect(() => {
     setTitle(getStationName())
