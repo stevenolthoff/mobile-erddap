@@ -83,7 +83,7 @@ export default function NavBar (): ReactElement {
   })
   console.log(activeTab)
   return (
-    <NavigationMenu.Root className="bg-slate-100 px-2 py-2 text-xs">
+    <NavigationMenu.Root className="bg-slate-100 px-4 py-2 text-xs">
       <NavigationMenu.List className="flex justify-between">
         {tabElements}
       </NavigationMenu.List>

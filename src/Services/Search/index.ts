@@ -37,56 +37,75 @@ export default class SearchService {
    * 
    * @returns A cancellable DataService for making /search/advanced requests.
    */
-  public getDataServiceForAdvancedSearch (searchFor: string, page: number, itemsPerPage: number, minTime: string, maxTime: string, minLatitude: number, maxLatitude: number, minLongitude: number, maxLongitude: number) {
+  public getDataServiceForAdvancedSearch (
+    searchFor: string,
+    page: number,
+    itemsPerPage: number,
+    minTime: string,
+    maxTime: string,
+    minLatitude: number,
+    maxLatitude: number,
+    minLongitude: number,
+    maxLongitude: number,
+    standardName?: string
+  ) {
+    const constraints: IConstraint[] = [
+      {
+        name: 'searchFor',
+        operator: '=',
+        value: searchFor
+      },
+      {
+        name: 'itemsPerPage',
+        operator: '=',
+        value: itemsPerPage
+      },
+      {
+        name: 'page',
+        operator: '=',
+        value: page
+      },
+      {
+        name: 'minLatitude',
+        operator: '>=',
+        value: minLatitude
+      },
+      {
+        name: 'minLongitude',
+        operator: '>=',
+        value: minLongitude
+      },
+      {
+        name: 'maxLongitude',
+        operator: '<=',
+        value: maxLongitude
+      },
+      {
+        name: 'maxLatitude',
+        operator: '<=',
+        value: maxLatitude
+      },
+      {
+        name: 'minTime',
+        operator: '=',
+        value: minTime
+      },
+      {
+        name: 'maxTime',
+        operator: '=',
+        value: maxTime
+      }
+    ]
+    if (standardName) {
+      constraints.push({
+        name: 'standard_name',
+        operator: '=',
+        value: standardName
+      })
+    }
     const url = this.erddapApi.getUrl({
       request: 'search/advanced',
-      constraints: [
-        {
-          name: 'searchFor',
-          operator: '=',
-          value: searchFor
-        },
-        {
-          name: 'itemsPerPage',
-          operator: '=',
-          value: itemsPerPage
-        },
-        {
-          name: 'page',
-          operator: '=',
-          value: page
-        },
-        {
-          name: 'minLatitude',
-          operator: '>=',
-          value: minLatitude
-        },
-        {
-          name: 'minLongitude',
-          operator: '>=',
-          value: minLongitude
-        },
-        {
-          name: 'maxLongitude',
-          operator: '<=',
-          value: maxLongitude
-        },
-        {
-          name: 'maxLatitude',
-          operator: '<=',
-          value: maxLatitude
-        },
-        {
-          name: 'minTime',
-          operator: '=',
-          value: minTime
-        },
-        {
-          name: 'maxTime',
-          operator: '=',
-          value: maxTime
-        }
-      ],
+      constraints,
       response: 'csv'
     })
     return new DataService({ resultType: 'csv', url, type: '' })

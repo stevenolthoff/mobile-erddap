@@ -19,6 +19,12 @@ export default function Stations (): ReactElement {
   const ITEMS_PER_PAGE = 10
   const initialDataService = new DataService.DataService({ resultType: 'csv', url: '', type: '' })
   const [dataService, setDataService] = useState(initialDataService)
+  const [sensor, setSensor] = useState<string | undefined>()
+
+  const onSensorChange = (selected: string | undefined) => {
+    console.log('SENSOR CHANGED', selected)
+    setSensor(selected)
+  }
 
   const onSearchInput = (query: string): any => {
     setQuery(query)
@@ -33,7 +39,18 @@ export default function Stations (): ReactElement {
       page = 1
     }
     const search = new SearchService()
-    const dataService = search.getDataServiceForAdvancedSearch(searchFor, page, ITEMS_PER_PAGE, minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude)
+    const dataService = search.getDataServiceForAdvancedSearch(
+      searchFor,
+      page,
+      ITEMS_PER_PAGE,
+      minTime,
+      maxTime,
+      minLatitude,
+      maxLatitude,
+      minLongitude,
+      maxLongitude,
+      sensor
+    )
     setDataService(dataService)
     return dataService.get()
   }
@@ -86,7 +103,7 @@ export default function Stations (): ReactElement {
     }
   }
 
-  useEffect(onQueryChanged, [query])
+  useEffect(onQueryChanged, [query, sensor])
 
   const getCards = (): ReactElement[] => {
     return results.map((catalogItem, i) => (
@@ -140,7 +157,9 @@ export default function Stations (): ReactElement {
         type='search'
         onChange={event => onSearchInput(event.target.value)}
       />
-      <SensorDropdown></SensorDropdown>
+      <div className='px-4 py-4'>
+        <SensorDropdown onChange={onSensorChange}></SensorDropdown>
+      </div>
       <div className='overflow-y-scroll no-scrollbar scrollbox'>
         <div className='flex flex-col divide-y'>{getCards()}</div>
         {loader()}

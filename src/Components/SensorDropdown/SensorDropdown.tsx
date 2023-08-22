@@ -2,7 +2,7 @@ import MetadataService from '@/Services/Metadata'
 import { ParsedCategory } from '@axdspub/erddap-service/lib/parser'
 import React, { useEffect, useState } from 'react'
 import SelectSearch, { SelectSearchOption } from 'react-select-search'
-import 'react-select-search/style.css'
+import './SensorDropdown.css'
 
 function useSensors (): [ParsedCategory[], boolean] {
   const [sensors, setSensors] = useState<ParsedCategory[]>([])
@@ -19,14 +19,30 @@ function useSensors (): [ParsedCategory[], boolean] {
   return [sensors, loading]
 }
 
-export default function SensorDropdown () {
-  const [selected, setSelected] = useState('')
+interface ISensorDropdownProps {
+  onChange: (selected: string | undefined) => void
+}
+
+export default function SensorDropdown (props: ISensorDropdownProps) {
+  const [selected, setSelected] = useState<string | undefined>()
   const [sensors, loading] = useSensors()
   const [options, setOptions] = useState<SelectSearchOption[]>([])
 
   useEffect(() => {
     setOptions(sensors.map(sensor => ({ name: sensor.category, value: sensor.category })))
   }, [sensors, loading])
+
+  useEffect(() => {
+    props.onChange(selected)
+  }, [selected])
+
+  const onChange = (selected: string) => {
+    setSelected(selected)
+  }
+
+  const clear = () => {
+    setSelected(undefined)
+  }
 
   return (
     <div>
@@ -36,9 +52,11 @@ export default function SensorDropdown () {
         options={options}
         value={selected}
         autoComplete='on'
-        onChange={option => setSelected(String(option))}
+        onChange={option => onChange(String(option))}
         placeholder='Sensors'
+        emptyMessage='Sensor Not Found'
       />
+      <button onClick={clear}>X</button>
     </div>
   )  
 }
