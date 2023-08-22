@@ -22,7 +22,6 @@ export default function Stations (): ReactElement {
   const [sensor, setSensor] = useState<string | undefined>()
 
   const onSensorChange = (selected: string | undefined) => {
-    console.log('SENSOR CHANGED', selected)
     setSensor(selected)
   }
 
@@ -157,8 +156,9 @@ export default function Stations (): ReactElement {
         type='search'
         onChange={event => onSearchInput(event.target.value)}
       />
-      <div className='px-4 py-4'>
+      <div className='px-4 py-4 flex justify-between'>
         <SensorDropdown onChange={onSensorChange}></SensorDropdown>
+        <div>Other Filters</div>
       </div>
       <div className='overflow-y-scroll no-scrollbar scrollbox'>
         <div className='flex flex-col divide-y'>{getCards()}</div>
