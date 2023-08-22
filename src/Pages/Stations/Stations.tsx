@@ -7,6 +7,7 @@ import useInfiniteScroll from 'react-infinite-scroll-hook'
 import { ClipLoader } from 'react-spinners'
 import { useSearchContext } from '@/Contexts/SearchContext'
 import SearchService from '@/Services/Search'
+import SensorDropdown from '@/Components/SensorDropdown/SensorDropdown'
 
 export default function Stations (): ReactElement {
   const [results, setResults] = useState<api.IErddapIndexResponse[]>([])
@@ -139,6 +140,7 @@ export default function Stations (): ReactElement {
         type='search'
         onChange={event => onSearchInput(event.target.value)}
       />
+      <SensorDropdown></SensorDropdown>
       <div className='overflow-y-scroll no-scrollbar scrollbox'>
         <div className='flex flex-col divide-y'>{getCards()}</div>
         {loader()}

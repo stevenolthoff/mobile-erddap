@@ -16,4 +16,15 @@ export default class MetadataService {
     const dataService = new DataService({ type: '', resultType: 'csv', url })
     return await dataService.get()
   }
+
+  public static async getParsedSensors (): Promise<ErddapParser.ParsedCategory[]> {
+    const result = await this.getSensors()
+    return ErddapParser.parseCategories(result.data)
+  }
+
+  public static async getSensors (): Promise<IDataResult> {
+    const url = this.erddapApi.getUrl({ request: 'categorize', attribute: 'standard_name', response: 'json' })
+    const dataService = new DataService({ type: '', resultType: 'json', url })
+    return await dataService.get()
+  }
 }
