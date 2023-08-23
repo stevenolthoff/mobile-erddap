@@ -1,7 +1,7 @@
 import MetadataService from '@/Services/Metadata'
 import { ParsedCategory } from '@axdspub/erddap-service/lib/parser'
 import React, { useEffect, useState } from 'react'
-import { CaretDownIcon, CaretUpIcon } from '@radix-ui/react-icons'
+import { CaretDownIcon, CaretUpIcon, Cross1Icon } from '@radix-ui/react-icons'
 import { MobileDialog as Dialog } from '@axdspub/axiom-ui-utilities'
 
 function useSensors (): [ParsedCategory[], boolean] {
@@ -31,13 +31,17 @@ type Option = {
 export default function SensorDropdown (props: ISensorDropdownProps) {
   const [options, setOptions] = useState<Option[]>([])
   const [filteredOptions, setFilteredOptions] = useState<Option[]>([])
-  const [selected, setSelected] = useState<Option | Option[] | null>(null)
+  const [selected, setSelected] = useState<Option | null>(null)
   const [sensors, loading] = useSensors()
   const [open, setOpen] = useState(false)
   const [sensorQuery, setSensorQuery] = useState<string>()
 
-  const onChange = (selected: Option | Option[] | null) => {
-    setSelected(selected)
+  const onChange = (selected: Option | null) => {
+    if (!selected || selected.value === 'all-sensors') {
+      setSelected(null)
+    } else {
+      setSelected(selected)
+    }
     setOpen(false)
     setSensorQuery(undefined)
   }
@@ -52,7 +56,9 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
   }, [selected])
 
   useEffect(() => {
-    setOptions(sensors.map(sensor => ({ label: sensor.category, value: sensor.category })))
+    let options = [{ label: 'All Sensors', value: 'all-sensors' }]
+    options = options.concat(...sensors.map(sensor => ({ label: sensor.category, value: sensor.category })))
+    setOptions(options)
   }, [sensors, loading])
 
   useEffect(() => {
@@ -76,15 +82,20 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
     setOpen(false)
   }
 
+  const onClickTriggerCross = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    onChange(null)
+  }
+
   const trigger = (
     <div className='border px-4 py-2 rounded-md border-slate-500 text-xs
       gap-4 font-semibold hover:cursor-pointer active:text-blue-500
       active:border-blue-500 hover:text-blue-500 hover:border-blue-500
       flex max-w-[20rem] min-w-[20rem] justify-between'
     >
-      <div className='overflow-x-hidden'>{selected ? (selected as Option).label : 'Sensor Type'}</div>
-      <div>{open ? <CaretUpIcon /> : <></>}</div>
-      <div>{open ? <></> : <CaretDownIcon />}</div>
+      <div className='overflow-x-hidden'>{selected ? (selected as Option).label : 'All Sensors'}</div>
+      <div>{selected ? <Cross1Icon onClick={event => onClickTriggerCross(event)} /> : <CaretDownIcon />}</div>
     </div>
   )
 
