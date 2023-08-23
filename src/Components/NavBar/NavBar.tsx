@@ -1,10 +1,10 @@
 import React, { useState, type ReactElement, useEffect } from 'react'
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import * as Label from '@radix-ui/react-label'
-import { GlobeIcon, MagnifyingGlassIcon, Crosshair2Icon, HeartIcon, GearIcon } from '@radix-ui/react-icons'
+import { GlobeIcon, MagnifyingGlassIcon, HeartIcon, GearIcon } from '@radix-ui/react-icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-type ETab = 'map' | 'search' | 'sensors' | 'favorites' | 'settings'
+type ETab = 'map' | 'search' | 'favorites' | 'settings'
 interface ITab {
   id: ETab
   label: string
@@ -39,12 +39,6 @@ export default function NavBar (): ReactElement {
       label: 'Search',
       icon: <MagnifyingGlassIcon className='w-6 h-6' />,
       path: '/stations'
-    },
-    {
-      id: 'sensors',
-      label: 'Sensors',
-      icon: <Crosshair2Icon className='w-6 h-6' />,
-      path: '/'
     },
     {
       id: 'favorites',
