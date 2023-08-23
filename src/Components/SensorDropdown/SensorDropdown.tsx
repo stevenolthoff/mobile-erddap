@@ -1,9 +1,8 @@
 import MetadataService from '@/Services/Metadata'
 import { ParsedCategory } from '@axdspub/erddap-service/lib/parser'
 import React, { useEffect, useState } from 'react'
-import Select from 'react-tailwindcss-select'
 import { CaretDownIcon, CaretUpIcon } from '@radix-ui/react-icons'
-import Dialog from '@/Components/Dialog/Dialog'
+import { MobileDialog as Dialog } from '@axdspub/axiom-ui-utilities'
 
 function useSensors (): [ParsedCategory[], boolean] {
   const [sensors, setSensors] = useState<ParsedCategory[]>([])
@@ -132,26 +131,6 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
         title='Filter By Sensor'
         body={body}
       />
-      {/* <Select
-        value={selected}
-        onChange={onChange}
-        options={options}
-        primaryColor='blue'
-        isSearchable
-        isDisabled={loading}
-        isClearable
-        placeholder='Sensor Type'
-        noOptionsMessage='No matching sensors'
-        classNames={{
-          menuButton: () => `w-48 border border-slate-800 rounded-md flex px-4
-            text-xs cursor-pointer truncate ... overflow-auto`,
-          menu: `z-30 border fixed bg-slate-100 top-0 right-0 bottom-0 left-0
-            overflow-y-scroll`,
-          list: 'text-sm no-scrollbar',
-          searchBox: 'px-4 py-2 w-full',
-          searchIcon: 'w-0'
-        }}
-      /> */}
     </div>
   )  
 }
