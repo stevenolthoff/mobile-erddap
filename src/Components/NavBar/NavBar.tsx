@@ -53,7 +53,7 @@ export default function NavBar (): ReactElement {
       id: 'settings',
       label: 'Settings',
       icon: <GearIcon className='w-6 h-6' />,
-      path: '/'
+      path: '/settings'
     }
   ]
 

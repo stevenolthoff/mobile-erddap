@@ -13,6 +13,7 @@ import Station from '@/Pages/Station/Station'
 import Favorites from '@/Pages/Favorites/Favorites'
 import NavBar from '@/Components/NavBar/NavBar'
 import '@/App.css'
+import Settings from '@/Pages/Settings/Settings'
 
 function App () {
   console.log('ENV', process.env)
@@ -38,6 +39,10 @@ function App () {
                 <Route
                   path='/favorites'
                   element={<Favorites />}
+                />
+                <Route
+                  path='/settings'
+                  element={<Settings />}
                 />
                 <Route path="*" element={<Navigate to='/map' replace />} />
               </Routes>

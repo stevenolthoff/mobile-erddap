@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom'
 
-interface IBounds {
+export interface IBounds {
   minLatitude: number
   maxLatitude: number
   minLongitude: number
