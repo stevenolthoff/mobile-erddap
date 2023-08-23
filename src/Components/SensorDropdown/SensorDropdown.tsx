@@ -78,20 +78,21 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
   }
 
   const trigger = (
-    <div className='border px-4 py-2 rounded-md border-slate-500 text-xs flex
+    <div className='border px-4 py-2 rounded-md border-slate-500 text-xs
       gap-4 font-semibold hover:cursor-pointer active:text-blue-500
-      active:border-blue-500 max-w-[12rem]'
+      active:border-blue-500 hover:text-blue-500 hover:border-blue-500
+      flex max-w-[20rem] min-w-[20rem] justify-between'
     >
-      {selected ? (selected as Option).label : 'Sensor Type'}
-      {open ? <CaretUpIcon /> : <></>}
-      {open ? <></> : <CaretDownIcon />}
+      <div className='overflow-x-hidden'>{selected ? (selected as Option).label : 'Sensor Type'}</div>
+      <div>{open ? <CaretUpIcon /> : <></>}</div>
+      <div>{open ? <></> : <CaretDownIcon />}</div>
     </div>
   )
 
   const optionsElements = filteredOptions.map((option: Option) =>
     <li
       key={option.value}
-      className='px-4 py-2 active:text-blue-500'
+      className='px-4 py-2 active:text-blue-500 hover:text-blue-500'
       onClick={() => onChange(option)}
     >
       {option.label}
