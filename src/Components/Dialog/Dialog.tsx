@@ -27,14 +27,14 @@ export default (props: IDialogProps) => {
       <RadixDialog.Trigger onClick={onClickTrigger}>
         {trigger}
       </RadixDialog.Trigger>
-      <RadixDialog.Portal>
-        <RadixDialog.Overlay className='z-30 fixed top-0 right-0 bottom-0 left-0 bg-slate-200'>
+      <RadixDialog.Portal className='max-h-full'>
+        <RadixDialog.Overlay className='z-30 fixed top-0 right-0 bottom-0 left-0 bg-slate-200 max-h-full'>
           <RadixDialog.Content
-            className='flex flex-col divide-y divide-slate-300 h-full'
+            className='flex flex-col divide-y divide-slate-300 h-full max-h-full'
             onEscapeKeyDown={onEscapeKeyDown}
           >
-            <div className='font-semibold uppercase text-slate-500 flex pr-4 py-2'>
-              <div className='w-full text-center pl-6'>{title}</div>
+            <div className='text-sm font-semibold uppercase text-slate-500 flex pr-4 py-2'>
+              <div className='w-full text-center pl-6 self-center'>{title}</div>
               <Cross2Icon
                 className='self-center w-6 h-6 hover:cursor-pointer'
                 onClick={onClickClose}
