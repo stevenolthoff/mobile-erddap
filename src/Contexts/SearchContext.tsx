@@ -1,16 +1,16 @@
 import React, { PropsWithChildren, createContext, useContext, useState } from 'react'
 import { DateTime } from 'luxon'
+import useBounds from '@/Hooks/useBounds'
 
-const DEFAULT_BOUNDS = getDefaultBounds()
 const DEFAULT_CENTER = getDefaultCenter()
 
 const defaultState = {
   minTime: getZuluDateString(getDefaultStartDate()),
   maxTime: getZuluDateString(getDefaultEndDate()),
-  maxLatitude: DEFAULT_BOUNDS.maxLatitude,
-  minLongitude: DEFAULT_BOUNDS.minLongitude,
-  maxLongitude: DEFAULT_BOUNDS.maxLongitude,
-  minLatitude: DEFAULT_BOUNDS.minLatitude,
+  maxLatitude: 0,
+  minLongitude: 0,
+  maxLongitude: 0,
+  minLatitude: 0,
   centerLatitude: DEFAULT_CENTER.centerLatitude,
   centerLongitude: DEFAULT_CENTER.centerLongitude
 }
@@ -34,29 +34,6 @@ function getZuluDateString (dateTime: DateTime): string {
   return dateTime.toUTC().toISO() as string
 }
 
-function getDefaultBounds () {
-  const DEFAULT_MIN_LONGITUDE = -171
-  const DEFAULT_MAX_LONGITUDE = -136
-  const DEFAULT_MIN_LATITUDE = 42
-  const DEFAULT_MAX_LATITUDE = 77
-  let minLongitude = Number(process.env.REACT_APP_MIN_LONGITUDE)
-  let maxLongitude = Number(process.env.REACT_APP_MAX_LONGITUDE)
-  let minLatitude = Number(process.env.REACT_APP_MIN_LATITUDE)
-  let maxLatitude = Number(process.env.REACT_APP_MAX_LATITUDE)
-  if (!minLongitude || !maxLongitude || !minLatitude || !maxLatitude) {
-    minLongitude = DEFAULT_MIN_LONGITUDE
-    maxLongitude = DEFAULT_MAX_LONGITUDE
-    minLatitude = DEFAULT_MIN_LATITUDE
-    maxLatitude = DEFAULT_MAX_LATITUDE
-  }
-  return {
-    minLongitude,
-    maxLongitude,
-    minLatitude,
-    maxLatitude
-  }
-}
-
 function getDefaultCenter () {
   const DEFAULT_CENTER_LATITUDE = 61.217381
   const DEFAULT_CENTER_LONGITUDE = -149.86
@@ -77,10 +54,8 @@ export const SearchContext = createContext(defaultState)
 export default function SearchContextProvider ({ children }: PropsWithChildren) {
   const [minTime] = useState(defaultState.minTime)
   const [maxTime] = useState(defaultState.maxTime)
-  const [maxLatitude] = useState(defaultState.maxLatitude)
-  const [minLongitude] = useState(defaultState.minLongitude)
-  const [maxLongitude] = useState(defaultState.maxLongitude)
-  const [minLatitude] = useState(defaultState.minLatitude)
+  const [bounds, setBounds] = useBounds()
+  const { minLatitude, maxLatitude, minLongitude, maxLongitude } = bounds
   const [centerLatitude] = useState(defaultState.centerLatitude)
   const [centerLongitude] = useState(defaultState.centerLongitude)
 

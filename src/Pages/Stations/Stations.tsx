@@ -1,7 +1,7 @@
 import StationsListItem from '@/Components/StationsListItem/StationsListItem'
 import * as DataService from '@axdspub/axiom-ui-data-services'
 import { api } from '@axdspub/erddap-service'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import React, { type ReactElement, useState, useEffect } from 'react'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
 import { ClipLoader } from 'react-spinners'
@@ -20,6 +20,7 @@ export default function Stations (): ReactElement {
   const initialDataService = new DataService.DataService({ resultType: 'csv', url: '', type: '' })
   const [dataService, setDataService] = useState(initialDataService)
   const [sensor, setSensor] = useState<string | undefined>()
+  const { search } = useLocation()
 
   const onSensorChange = (selected: string | undefined) => {
     setSensor(selected)
@@ -108,7 +109,7 @@ export default function Stations (): ReactElement {
     return results.map((catalogItem, i) => (
       <Link
         key={`${catalogItem.Title}-${i}`}
-        to={`/stations/${catalogItem['Dataset ID']}`}
+        to={`/stations/${catalogItem['Dataset ID']}${search}`}
       >
         <StationsListItem
           title={catalogItem.Title}

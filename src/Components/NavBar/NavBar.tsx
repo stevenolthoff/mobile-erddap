@@ -17,6 +17,7 @@ export default function NavBar (): ReactElement {
   const DEFAULT_PATH: ETab = 'map'
   const [activeTab, setActiveTab] = useState<ETab>()
   const location = useLocation()
+  const { search } = location
   const navigate = useNavigate()
 
   function onPathChanged () {
@@ -67,7 +68,7 @@ export default function NavBar (): ReactElement {
       <NavigationMenu.Item key={tab.id} onClick={() => { setActiveTab(tab.id) }}>
         <div
           className={`${color} flex flex-col items-center cursor-pointer`}
-          onClick={() => navigate(tab.path)}
+          onClick={() => navigate({ pathname: tab.path, search })}
         >
           {tab.id === activeTab && tab.activeIcon ? tab.activeIcon : tab.icon}
           <Label.Root className='cursor-pointer'>

@@ -31,7 +31,7 @@ export default function Map (): ReactElement {
   async function loadStations (): Promise<any> {
     const search = new SearchService()
     const datasets = await search.getAllDatasets(minTime, maxTime, minLatitude, maxLatitude, minLongitude, maxLongitude)
-    return datasets
+    return datasets || []
   }
 
   function createGeoJsonLayer (datasets: IDatasetOnMap[]): GeoJsonLayerType {

@@ -1,18 +1,19 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { IFavorite, useFavoritesContext } from '@/Contexts/FavoritesContext'
 import StationsListItem from '@/Components/StationsListItem/StationsListItem'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 
 export default function Favorites (): ReactElement {
   const { favorites, isFavorited } = useFavoritesContext()
   const [copiedFavorites] = useState(Object.assign({}, favorites))
+  const { search } = useLocation()
 
   function getFavorite (favorite: IFavorite) {
     return (
       <Link
         key={favorite.datasetId}
-        to={`/stations/${favorite.datasetId}`}
+        to={`/stations/${favorite.datasetId}${search}`}
         className='flex'
       >
         <StationsListItem
