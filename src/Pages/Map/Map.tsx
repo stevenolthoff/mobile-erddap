@@ -92,7 +92,6 @@ export default function Map (): ReactElement {
       <AxiomMap
         baseLayerKey='hybrid'
         mapLibraryKey='leaflet'
-        tools={{ draw: { enabled: true } }}
         height=''
         style={{
           position: 'fixed',

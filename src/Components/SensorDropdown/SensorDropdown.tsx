@@ -2,6 +2,9 @@ import MetadataService from '@/Services/Metadata'
 import { ParsedCategory } from '@axdspub/erddap-service/lib/parser'
 import React, { useEffect, useState } from 'react'
 import Select from 'react-tailwindcss-select'
+// import * as Dialog from '@radix-ui/react-dialog'
+import { CaretDownIcon, CaretUpIcon, Cross2Icon } from '@radix-ui/react-icons'
+import Dialog from '@/Components/Dialog/Dialog'
 
 function useSensors (): [ParsedCategory[], boolean] {
   const [sensors, setSensors] = useState<ParsedCategory[]>([])
@@ -31,6 +34,7 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
   const [options, setOptions] = useState<Option[]>([])
   const [selected, setSelected] = useState<Option | Option[] | null>(null)
   const [sensors, loading] = useSensors()
+  const [open, setOpen] = useState(false)
 
   const onChange = (selected: Option | Option[] | null) => {
     setSelected(selected)
@@ -49,9 +53,68 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
     setOptions(sensors.map(sensor => ({ label: sensor.category, value: sensor.category })))
   }, [sensors, loading])
 
+  const onClickTrigger = () => {
+    setOpen(!open)
+  }
+
+  const onClickClose = () => {
+    setOpen(false)
+  }
+
+  const trigger = (
+    <div className='border px-4 py-2 rounded-md border-slate-500 text-xs flex gap-4 font-semibold hover:cursor-pointer'>
+      Sensor Type
+      {open ? <CaretUpIcon /> : <></>}
+      {open ? <></> : <CaretDownIcon />}
+    </div>
+  )
+
+  const body = (
+    <div>
+      Body
+    </div>
+  )
+
   return (
     <div>
-      <Select
+      <Dialog
+        open={open}
+        onClickTrigger={onClickTrigger}
+        onEscapeKeyDown={onClickClose}
+        onClickClose={onClickClose}
+        trigger={trigger}
+        title='Header'
+        body={body}
+      />
+      {/* <Dialog.Root open={open}>
+        <Dialog.Trigger onClick={onClickTrigger}>
+          <div className='border px-4 py-2 rounded-md border-slate-500 text-xs flex gap-4 font-semibold hover:cursor-pointer'>
+            Sensor Type
+            {open ? <CaretUpIcon /> : <></>}
+            {open ? <></> : <CaretDownIcon />}
+          </div>
+        </Dialog.Trigger>
+        <Dialog.Portal>
+          <Dialog.Overlay className='z-30 fixed top-0 right-0 bottom-0 left-0 bg-slate-200'>
+            <Dialog.Content
+              className='flex flex-col divide-y divide-slate-300 h-full'
+              onEscapeKeyDown={onClickClose}
+            >
+              <div className='font-semibold uppercase text-slate-500 flex pr-4 py-2'>
+                <div className='w-full text-center pl-6'>Header</div>
+                <Cross2Icon
+                  className='self-center w-6 h-6 hover:cursor-pointer'
+                  onClick={onClickClose}
+                />
+              </div>
+              <div>
+                Body
+              </div>
+            </Dialog.Content>
+          </Dialog.Overlay>
+        </Dialog.Portal>
+      </Dialog.Root> */}
+      {/* <Select
         value={selected}
         onChange={onChange}
         options={options}
@@ -70,7 +133,7 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
           searchBox: 'px-4 py-2 w-full',
           searchIcon: 'w-0'
         }}
-      />
+      /> */}
     </div>
   )  
 }
