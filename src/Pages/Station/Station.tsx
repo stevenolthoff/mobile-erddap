@@ -1,15 +1,12 @@
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import Sensor from '@/Components/Sensor/Sensor'
 import LatestMeasurements from '@/Components/LatestMeasurements/LatestMeasurements'
 import Tabs from '@/Components/Tabs/Tabs'
-import { ClipLoader } from 'react-spinners'
 import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 import { useFavoritesContext } from '@/Contexts/FavoritesContext'
 import useMetadata from '@/Hooks/useMetadata'
 import Sensors from '@/Components/Sensors/Sensors'
-
-const SERVER = 'https://erddap.sensors.axds.co/erddap'
+import StationMap from '@/Components/StationMap/StationMap'
 
 export default function Station (): ReactElement {
   const params = useParams()
@@ -17,7 +14,6 @@ export default function Station (): ReactElement {
   const [metadata, metadataLoading] = useMetadata(datasetId)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [loading, setLoading] = useState(true)
   const { isFavorited } = useFavoritesContext()
   const startDate: Date = getLastWeeksDate()
   const endDate: Date = new Date()
@@ -39,10 +35,6 @@ export default function Station (): ReactElement {
       return ''
     }
   }
-
-  useEffect(() => {
-    setLoading(metadataLoading)
-  }, [metadataLoading])
 
   useEffect(() => {
     if (metadataLoading) return
@@ -100,7 +92,7 @@ export default function Station (): ReactElement {
     </div>
     <div className="px-4 text-xl font-semibold leading-none text-slate-800">{title}</div>
     <div className="px-4 text-xs text-slate-500 leading-tight">{description}</div>
-
+    <StationMap datasetId={datasetId} />
     <Tabs className='mb-16' tabs={[
       {
         id: 'charts',

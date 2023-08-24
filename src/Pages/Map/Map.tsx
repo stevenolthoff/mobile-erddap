@@ -1,5 +1,5 @@
 import React, { type ReactElement, useState, useEffect, useRef } from 'react'
-import { Map as AxiomMap, ILatLon, GeoJsonLayerType, GeoJsonElement } from '@axdspub/axiom-maps'
+import { Map as AxiomMap, GeoJsonLayerType, GeoJsonElement } from '@axdspub/axiom-maps'
 import SearchService, { IDatasetOnMap } from '@/Services/Search/index'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useSearchContext } from '@/Contexts/SearchContext'
