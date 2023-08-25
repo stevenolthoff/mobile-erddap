@@ -23,6 +23,7 @@ export interface ISensor extends Favorite {
   valueUnits: string
   timeFrame: ETimeFrame
   type: 'sensor'
+  station: IStation
 }
 
 type DatasetId = string

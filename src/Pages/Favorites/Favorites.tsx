@@ -53,7 +53,12 @@ const FavoriteSensors = (): ReactElement => {
 
   function getFavoriteSensors () {
     return Object.entries(copied).map(([id, sensor]) => (
-      <Sensor {...sensor}></Sensor>
+      <div key={id}>
+        <div>
+          {sensor.datasetId}
+        </div>
+        <Sensor {...sensor}></Sensor>
+      </div>
     ))
   }
 

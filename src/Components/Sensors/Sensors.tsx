@@ -1,15 +1,17 @@
-import Sensor from "@/Components/Sensor/Sensor"
-import { ReactElement } from "react"
-import useMetadata from "@/Hooks/useMetadata"
-import TimeFrameService from "@/Services/TimeFrame"
+import Sensor from '@/Components/Sensor/Sensor'
+import { ReactElement } from 'react'
+import useMetadata from '@/Hooks/useMetadata'
+import TimeFrameService from '@/Services/TimeFrame'
+import { IStation } from '@/Contexts/FavoritesContext'
 
 interface ISensorsProps {
-  datasetId: string
+  station: IStation
 }
 
 export default function Sensors (props: ISensorsProps) {
-  const { datasetId } = props
-  const [metadata, metadataLoading] = useMetadata(props.datasetId)
+  const { station } = props
+  const { datasetId } = station
+  const [metadata, metadataLoading] = useMetadata(datasetId)
   const { sensors } = metadata
   const { start, end } = TimeFrameService.getTimeFrame('past-week')
 
@@ -35,6 +37,7 @@ export default function Sensors (props: ISensorsProps) {
         valueName={valueName}
         valueUnits={valueUnits}
         timeFrame='past-week'
+        station={station}
       />
     </div>
   }).filter(item => item !== null)
