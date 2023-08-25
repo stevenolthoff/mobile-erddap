@@ -54,7 +54,7 @@ const StationMap = ({ datasetId }: IStationMapProps) => {
   }, [latLon, geoJsonLayer])
   
   const mapHeight = Math.min(Math.floor(windowSize.height ? windowSize.height * 0.25 : 20), 240)
-  console.log(mapHeight)
+
   return (
     <div>
       {
