@@ -5,9 +5,11 @@ import { VariableToAttribute } from '@axdspub/erddap-service/lib/parser'
 import { DateTime } from 'luxon'
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { ClipLoader } from 'react-spinners'
+import FavoriteButton from '../FavoriteButton/FavoriteButton'
+import { ILatestMeasurement, IStation } from '@/Contexts/FavoritesContext'
 
-interface ILatestMeasurementsProps {
-  datasetId: string
+interface ILatestMeasurementsProps extends Omit<ILatestMeasurement, 'type'> {
+  hideFavoriteButton?: boolean
 }
 
 type ColumnName = string
@@ -144,6 +146,18 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   const headerClassName = 'text-slate-500 px-0 md:px-4 font-semibold text-xs uppercase py-2 border-t'
 
   return <div className='flex flex-col gap-2'>
+    {
+      props.hideFavoriteButton ? 
+      <></> :
+      <div className='w-full flex flex-row-reverse'>
+        <FavoriteButton
+          favorite={{
+            ...props,
+            type: 'latest-measurements'
+          }}
+        />
+      </div>
+    }
     <div className='grid grid-cols-3 divide-y'>
       <div className={headerClassName}>Sensor</div>
       <div className={headerClassName}>Measurement</div>

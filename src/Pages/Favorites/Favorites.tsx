@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react'
 import MobileTabs from '@/Components/MobileTabs/MobileTabs'
 import FavoriteStations from '@/Components/FavoriteStations/FavoriteStations'
 import FavoriteSensors from '@/Components/FavoriteSensors/FavoriteSensors'
+import FavoriteLatestTables from '@/Components/FavoriteLatestTables/FavoriteLatestTables'
 
 export default function Favorites (): ReactElement {
 
@@ -19,6 +20,11 @@ export default function Favorites (): ReactElement {
             id: 'sensors',
             label: 'Sensors',
             content: <FavoriteSensors />
+          },
+          {
+            id: 'latest-measurements',
+            label: 'Charts',
+            content: <FavoriteLatestTables />
           }
         ]}
       />

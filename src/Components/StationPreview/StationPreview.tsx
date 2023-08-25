@@ -27,7 +27,7 @@ export default function StationPreview (favorite: IStationPreviewProps): ReactEl
           }}
         />
       </div>
-      <LatestMeasurements datasetId={datasetId} />
+      <LatestMeasurements datasetId={datasetId} station={favorite} hideFavoriteButton={true} />
     </div>
   )
 }

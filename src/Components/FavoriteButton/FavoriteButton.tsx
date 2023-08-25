@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react'
-import { ISensor, IStation, useFavoritesContext } from '@/Contexts/FavoritesContext'
+import { ILatestMeasurement, ISensor, IStation, useFavoritesContext } from '@/Contexts/FavoritesContext'
 import { HeartIcon, HeartFilledIcon } from '@radix-ui/react-icons'
 
 interface IFavoriteButtonProps {
-  favorite: IStation | ISensor
+  favorite: IStation | ISensor | ILatestMeasurement
 }
 
 export default function FavoriteButton ({ favorite }: IFavoriteButtonProps): ReactElement {

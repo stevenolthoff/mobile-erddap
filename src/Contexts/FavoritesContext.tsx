@@ -1,9 +1,9 @@
-import getSensorId from '@/Services/SensorId'
+import { getSensorId, getLatestMeasurementsId } from '@/Services/FavoriteId'
 import { ETimeFrame } from '@/Services/TimeFrame'
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-type TypeOfFavorite = 'station' | 'sensor'
+type TypeOfFavorite = 'station' | 'sensor' | 'latest-measurements'
 
 interface Favorite {
   type: TypeOfFavorite
@@ -23,7 +23,13 @@ export interface ISensor extends Favorite {
   valueUnits: string
   timeFrame: ETimeFrame
   type: 'sensor'
-  station: IStation
+  station: Omit<IStation, 'type'>
+}
+
+export interface ILatestMeasurement extends Favorite {
+  datasetId: string
+  type: 'latest-measurements'
+  station: Omit<IStation, 'type'>
 }
 
 type DatasetId = string
@@ -32,11 +38,15 @@ type Stations = Record<DatasetId, IStation>
 type SensorId = string
 type Sensors = Record<SensorId, ISensor>
 
+type LatestMeasurementId = string
+type LatestMeasurements = Record<LatestMeasurementId, ILatestMeasurement>
+
 interface IFavoritesContext {
   stations: Stations
   sensors: Sensors
-  toggleFavorite: (favorite: IStation | ISensor) => void
-  isFavorited: (favorite: IStation | ISensor) => boolean
+  latestMeasurements: LatestMeasurements
+  toggleFavorite: (favorite: IStation | ISensor | ILatestMeasurement) => void
+  isFavorited: (favorite: IStation | ISensor | ILatestMeasurement) => boolean
 }
 
 const FavoritesContext = createContext<IFavoritesContext | null>(null)
@@ -44,22 +54,27 @@ const FavoritesContext = createContext<IFavoritesContext | null>(null)
 export default function FavoritesContextProvider ({ children }: PropsWithChildren<{}>) {
   const [stations, setStations] = useLocalStorage<Stations>('favoriteStations', {})
   const [sensors, setSensors] = useLocalStorage<Sensors>('favoriteSensors', {})
+  const [latestMeasurements, setLatestMeasurements] = useLocalStorage<LatestMeasurements>('favoriteLatestMeasurements', {})
 
-  function isFavorited (favorite: IStation | ISensor) {
+  function isFavorited (favorite: IStation | ISensor | ILatestMeasurement) {
     if (favorite.type === 'station') {
       return Boolean(stations[favorite.datasetId])
     } else if (favorite.type === 'sensor') {
       return Boolean(sensors[getSensorId(favorite)])
+    } else if (favorite.type === 'latest-measurements') {
+      return Boolean(latestMeasurements[getLatestMeasurementsId(favorite)])
     } else {
       return false
     }
   }
 
-  function toggleFavorite (favorite: IStation | ISensor) {
+  function toggleFavorite (favorite: IStation | ISensor | ILatestMeasurement) {
     if (favorite.type === 'station') {
       _toggleStation(favorite)
     } else if (favorite.type === 'sensor') {
       _toggleSensor(favorite)
+    } else if (favorite.type === 'latest-measurements') {
+      _toggleLatestMeasurement(favorite)
     }
   }
 
@@ -67,6 +82,18 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
     const newFavorites = stations
     delete newFavorites[datasetId]
     setStations(newFavorites)
+  }
+
+  function _removeSensor (sensorId: string) {
+    const newFavorites = sensors
+    delete newFavorites[sensorId]
+    setSensors(newFavorites)
+  }
+
+  function _removeLatestMeasurement (id: string) {
+    const newFavorites = latestMeasurements
+    delete newFavorites[id]
+    setLatestMeasurements(newFavorites)
   }
 
   function _addStation (station: IStation): void {
@@ -77,12 +104,6 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
     }
   }
 
-  function _removeSensor (sensorId: string) {
-    const newFavorites = sensors
-    delete newFavorites[sensorId]
-    setSensors(newFavorites)
-  }
-
   function _addSensor (sensor: ISensor): void {
     if (sensors) {
       const newFavorites = sensors
@@ -90,6 +111,15 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
       setSensors(newFavorites)
     }
   }
+
+  function _addLatestMeasurement (latestMeasurement: ILatestMeasurement): void {
+    if (latestMeasurements) {
+      const newFavorites = latestMeasurements
+      latestMeasurements[getLatestMeasurementsId(latestMeasurement)] = latestMeasurement
+      setLatestMeasurements(newFavorites)
+    }
+  }
+
 
   function _toggleStation (station: IStation) {
     if (stations[station.datasetId]) {
@@ -107,11 +137,20 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
     }
   }
 
+  function _toggleLatestMeasurement (latestMeasurement: ILatestMeasurement) {
+    if (latestMeasurements[getLatestMeasurementsId(latestMeasurement)]) {
+      _removeLatestMeasurement(getLatestMeasurementsId(latestMeasurement))
+    } else {
+      _addLatestMeasurement(latestMeasurement)
+    }
+  }
+
   return (
     <FavoritesContext.Provider
       value={{
         stations,
         sensors,
+        latestMeasurements,
         toggleFavorite,
         isFavorited
       }}

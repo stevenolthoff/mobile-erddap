@@ -62,7 +62,7 @@ export default function Station (): ReactElement {
         <div>
           <div className={headerClassName}>Latest Measurements</div>
           <div className='px-4'>
-            <LatestMeasurements datasetId={datasetId} />
+            <LatestMeasurements datasetId={datasetId} station={getStation()} />
           </div>
         </div>
       )

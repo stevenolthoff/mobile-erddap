@@ -9,7 +9,7 @@ interface IMobileTabsProps {
 const MobileTabs = ({ tabs }: IMobileTabsProps) => {
   const className = `
     text-xs
-    w-1/2
+    w-1/${tabs.length}
     px-4 py-4
     text-slate-500
     data-[state=active]:text-blue-500
@@ -21,7 +21,7 @@ const MobileTabs = ({ tabs }: IMobileTabsProps) => {
     border-solid border-b
   `
   return (
-    <AxiomTabs tabs={tabs.map(tab => ({ ...tab, className }))} />
+    <AxiomTabs className='w-full' tabs={tabs.map(tab => ({ ...tab, className }))} />
   )
 }
 
