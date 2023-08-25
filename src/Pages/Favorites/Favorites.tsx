@@ -3,10 +3,12 @@ import { IStation, useFavoritesContext } from '@/Contexts/FavoritesContext'
 import StationsListItem from '@/Components/StationsListItem/StationsListItem'
 import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 import MobileTabs from '@/Components/MobileTabs/MobileTabs'
+import Sensor from '@/Components/Sensor/Sensor'
 
-export default function Favorites (): ReactElement {
+const FavoriteStations = (): ReactElement => {
   const { stations } = useFavoritesContext()
-
+  const [copied] = useState(Object.assign({}, stations))
+  
   function getFavoriteStation (favorite: IStation) {
     return (
       <StationsListItem
@@ -20,29 +22,47 @@ export default function Favorites (): ReactElement {
       </StationsListItem>
     )
   }
-
+  
   function getFavoriteStations () {
-    if (Object.keys(stations).length === 0) {
+    if (Object.keys(copied).length === 0) {
       return <div className='p-4 italic text-slate-500 text-sm'>No Stations Saved</div>
     }
-    return (
-      <div className='flex flex-col h-full truncate ... divide-y'>
-      {
-        Object.keys(stations)
-        .sort((a, b) => {
-          if (stations[a].title < stations[b].title) {
-            return -1
-          } else if (stations[a].title > stations[b].title) {
-            return 1
-          } else {
-            return 0
-          }
-        })
-        .map(datasetId => getFavoriteStation(stations[datasetId]))
-      }
-      </div>
-    )
+    return Object.keys(copied)
+      .sort((a, b) => {
+        if (copied[a].title < copied[b].title) {
+          return -1
+        } else if (copied[a].title > copied[b].title) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+      .map(datasetId => getFavoriteStation(copied[datasetId]))
   }
+
+  return (
+    <div className='flex flex-col h-full truncate ... divide-y'>
+      {getFavoriteStations()}
+    </div>
+  )
+}
+
+const FavoriteSensors = (): ReactElement => {
+  const { sensors } = useFavoritesContext()
+  const [copied] = useState(Object.assign({}, sensors))
+
+  function getFavoriteSensors () {
+    return Object.entries(copied).map(([id, sensor]) => (
+      <Sensor {...sensor}></Sensor>
+    ))
+  }
+
+  return <div>
+    {getFavoriteSensors()}
+  </div>
+}
+
+export default function Favorites (): ReactElement {
 
   return (
     <div className='max-h-full max-w-full overflow-scroll no-scrollbar scrollbox'>
@@ -52,11 +72,12 @@ export default function Favorites (): ReactElement {
           {
             id: 'stations',
             label: 'Stations',
-            content: getFavoriteStations()
+            content: <FavoriteStations />
           },
           {
             id: 'sensors',
-            label: 'Sensors'
+            label: 'Sensors',
+            content: <FavoriteSensors />
           }
         ]}
       />

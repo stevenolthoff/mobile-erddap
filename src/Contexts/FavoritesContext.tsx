@@ -33,6 +33,7 @@ type Sensors = Record<SensorId, ISensor>
 
 interface IFavoritesContext {
   stations: Stations
+  sensors: Sensors
   toggleFavorite: (favorite: IStation | ISensor) => void
   isFavorited: (favorite: IStation | ISensor) => boolean
 }
@@ -109,6 +110,7 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
     <FavoritesContext.Provider
       value={{
         stations,
+        sensors,
         toggleFavorite,
         isFavorited
       }}
