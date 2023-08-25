@@ -155,7 +155,6 @@ export default function Stations (): ReactElement {
       />
       <div className='px-4 py-4 flex justify-between'>
         <SensorDropdown onChange={onSensorChange}></SensorDropdown>
-        <div>Other Filters</div>
       </div>
       <div className='overflow-y-scroll no-scrollbar scrollbox'>
         <div className='flex flex-col divide-y'>{getCards()}</div>
