@@ -1,12 +1,13 @@
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import LatestMeasurements from '@/Components/LatestMeasurements/LatestMeasurements'
-import Tabs from '@/Components/Tabs/Tabs'
+import { Tabs } from '@axdspub/axiom-ui-utilities'
 import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 import { useFavoritesContext } from '@/Contexts/FavoritesContext'
 import useMetadata from '@/Hooks/useMetadata'
 import Sensors from '@/Components/Sensors/Sensors'
 import StationMap from '@/Components/StationMap/StationMap'
+import MobileTabs from '@/Components/MobileTabs/MobileTabs'
 
 export default function Station (): ReactElement {
   const params = useParams()
@@ -70,19 +71,6 @@ export default function Station (): ReactElement {
     }
   }
 
-  const tabTriggerClassName = `
-    text-xs
-    w-1/2
-    px-4 py-4
-    text-slate-500
-    data-[state=active]:text-blue-500
-    data-[state=active]:border-blue-500
-    data-[state=active]:font-light
-    hover:bg-blue-100
-    rounded-t-md
-    border-solid border-b
-  `
-
   return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar scrollbox bg-slate-100">
     <div className='w-full flex flex-row-reverse right-0 pt-4 px-4'>
       <FavoriteButton
@@ -93,19 +81,19 @@ export default function Station (): ReactElement {
     <div className="px-4 text-xl font-semibold leading-none text-slate-800">{title}</div>
     <div className="px-4 text-xs text-slate-500 leading-tight">{description}</div>
     <div className='py-2'><StationMap datasetId={datasetId} /></div>
-    <Tabs className='mb-16' tabs={[
-      {
-        id: 'charts',
-        label: 'Charts',
-        content: getTabPage('charts'),
-        className: tabTriggerClassName
-      },
-      {
-        id: 'latest',
-        label: 'Latest',
-        content: getTabPage('latest'),
-        className: tabTriggerClassName
-      }
-    ]} />
+    <MobileTabs
+      tabs={[
+        {
+          id: 'charts',
+          label: 'Charts',
+          content: getTabPage('charts')
+        },
+        {
+          id: 'latest',
+          label: 'Latest',
+          content: getTabPage('latest')
+        }
+      ]}
+    />
   </div>
 }
