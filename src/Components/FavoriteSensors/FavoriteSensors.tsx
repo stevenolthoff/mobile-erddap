@@ -7,6 +7,9 @@ const FavoriteSensors = (): ReactElement => {
   const [copied] = useState(Object.assign({}, sensors))
 
   function getFavoriteSensors () {
+    if (Object.keys(copied).length === 0) {
+      return <div className='p-4 italic text-slate-500 text-sm'>No Sensors Saved</div>
+    }
     return Object.entries(copied)
       .sort(([idA, sensorA], [idB, sensorB]) => {
         if (sensorA.station.title < sensorB.station.title) {
