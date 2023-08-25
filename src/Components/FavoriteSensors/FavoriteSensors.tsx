@@ -7,10 +7,20 @@ const FavoriteSensors = (): ReactElement => {
   const [copied] = useState(Object.assign({}, sensors))
 
   function getFavoriteSensors () {
-    return Object.entries(copied).map(([id, sensor]) => <FavoriteSensor id={id} sensor={sensor} />)
+    return Object.entries(copied)
+      .sort(([idA, sensorA], [idB, sensorB]) => {
+        if (sensorA.station.title < sensorB.station.title) {
+          return -1
+        } else if (sensorA.station.title > sensorB.station.title) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+      .map(([id, sensor]) => <FavoriteSensor id={id} sensor={sensor} />)
   }
 
-  return <div>
+  return <div className='flex flex-col gap-4 divide-y divide-slate-300'>
     {getFavoriteSensors()}
   </div>
 }
