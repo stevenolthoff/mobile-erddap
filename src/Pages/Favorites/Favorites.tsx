@@ -16,7 +16,6 @@ export default function Favorites (): ReactElement {
       >
         <FavoriteButton
           favorite={favorite}
-          typeOfFavorite='station'
         />
       </StationsListItem>
     )

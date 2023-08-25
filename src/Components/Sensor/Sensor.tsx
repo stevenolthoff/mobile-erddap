@@ -83,7 +83,6 @@ export default function Sensor (props: ISensorProps): ReactElement {
               ...props,
               type: 'sensor'
             }}
-            typeOfFavorite='sensor'
           />
         </div>
         <Chart
