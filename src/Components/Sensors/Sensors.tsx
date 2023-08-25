@@ -2,20 +2,24 @@ import { IParsedDatasetMetadata } from "@axdspub/erddap-service/lib/parser"
 import Sensor from "@/Components/Sensor/Sensor"
 import { ReactElement } from "react"
 import useMetadata from "@/Hooks/useMetadata"
+import TimeFrameService from "@/Services/TimeFrame"
 
 interface ISensorsProps {
   datasetId: string
-  startDate: Date
-  endDate: Date
 }
 
 export default function Sensors (props: ISensorsProps) {
-  const { datasetId, startDate, endDate } = props
+  const { datasetId } = props
   const [metadata, metadataLoading] = useMetadata(props.datasetId)
   const { sensors } = metadata
+  const { start, end } = TimeFrameService.getTimeFrame('past-week')
 
   function getDate (): ReactElement {
-    return <div className='px-4 uppercase text-xs font-semibold text-slate-800 w-full flex pb-2'>{startDate.toLocaleDateString('en-us', { dateStyle: 'medium' })} - {endDate.toLocaleDateString('en-us', { dateStyle: 'medium' })}</div>
+    return (
+      <div className='px-4 uppercase text-xs font-semibold text-slate-800 w-full flex pb-2'>
+        {start.toLocaleDateString('en-us', { dateStyle: 'medium' })} - {end.toLocaleDateString('en-us', { dateStyle: 'medium' })}
+      </div>
+    )
   }
   console.log('sensors', metadata)
   const listItems = Object.keys(sensors).map(key => {
@@ -32,8 +36,7 @@ export default function Sensors (props: ISensorsProps) {
         datasetId={datasetId}
         valueName={valueName}
         valueUnits={valueUnits}
-        startDate={startDate}
-        endDate={endDate}
+        timeFrame='past-week'
       />
     </div>
   }).filter(item => item !== null)

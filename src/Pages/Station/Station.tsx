@@ -13,8 +13,8 @@ export default function Station (): ReactElement {
   const [metadata, metadataLoading] = useMetadata(datasetId)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const startDate: Date = getLastWeeksDate()
-  const endDate: Date = new Date()
+  // const startDate: Date = getLastWeeksDate()
+  // const endDate: Date = new Date()
 
   function getStationName (): string {
     if ('platform_name' in metadata.ncGlobal) {
@@ -40,18 +40,13 @@ export default function Station (): ReactElement {
     setDescription(getDescription())
   }, [metadataLoading])
 
-  function getLastWeeksDate (): Date {
-    const now = new Date()
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)
-  }
-
   function getTabPage (tabId: string): ReactElement {
     const headerClassName = 'px-4 text-md text-slate-500 pb-2'
     if (tabId === 'charts') {
       return (
         <div className='overflow-y-scroll max-h-full max-w-full no-scrollbar'>
           <div className={headerClassName}>Past 7 Days</div>
-          <Sensors datasetId={datasetId} startDate={startDate} endDate={endDate} />
+          <Sensors datasetId={datasetId} />
         </div>
       )
     } else if (tabId === 'latest') {
@@ -71,7 +66,7 @@ export default function Station (): ReactElement {
   return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar scrollbox bg-slate-100">
     <div className='w-full flex flex-row-reverse right-0 pt-4 px-4'>
       <FavoriteButton
-        favorite={{ title, summary: description, datasetId, startDate: startDate.toDateString(), endDate: endDate.toDateString() }}
+        favorite={{ title, summary: description, datasetId }}
         typeOfFavorite='station'
       />
     </div>

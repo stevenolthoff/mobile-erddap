@@ -1,33 +1,44 @@
-import { PropsWithChildren, createContext, useContext, useState } from 'react'
+import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
 type TypeOfFavorite = 'station' | 'sensor'
 
-export interface IFavorite {
+export interface IStations {
   datasetId: string
   title: string
   summary: string
-  startDate: string
-  endDate: string
 }
 
 type DatasetId = string
-type Favorites = Record<DatasetId, IFavorite>
+type Stations = Record<DatasetId, IStations>
+
+type Favorites = {
+  stations: Stations
+  sensors: any
+}
 
 interface IFavoritesContext {
   favorites: Favorites
-  toggleFavorite: (favorite: IFavorite) => void
+  toggleFavorite: (favorite: IStations) => void
   isFavorited: (typeOfFavorite: TypeOfFavorite, datasetId: DatasetId) => boolean
 }
 
 const FavoritesContext = createContext<IFavoritesContext | null>(null)
 
 export default function FavoritesContextProvider ({ children }: PropsWithChildren<{}>) {
-  const [favorites, setFavorites] = useLocalStorage<Favorites>('favoriteStations', {})
+  const [stations, setStations] = useLocalStorage<Stations>('favoriteStations', {})
+  const [favorites, setFavorites] = useState<Favorites>({ stations: {}, sensors: {} })
+
+  useEffect(() => {
+    setFavorites({
+      stations: stations,
+      sensors: null
+    })
+  }, [stations])
 
   function isFavorited (typeOfFavorite: TypeOfFavorite, datasetId: DatasetId) {
     if (typeOfFavorite === 'station') {
-      return Boolean(favorites[datasetId])
+      return Boolean(stations[datasetId])
     } else if (typeOfFavorite === 'sensor') {
       return false
     } else {
@@ -36,8 +47,8 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
     }
   }
 
-  function toggleFavorite (favorite: IFavorite) {
-    if (favorites[favorite.datasetId]) {
+  function toggleFavorite (favorite: IStations) {
+    if (stations[favorite.datasetId]) {
       removeFavorite(favorite.datasetId)
     } else {
       addFavorite(favorite)
@@ -45,16 +56,16 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
   }
 
   function removeFavorite (datasetId: string) {
-    const newFavorites = favorites
+    const newFavorites = stations
     delete newFavorites[datasetId]
-    setFavorites(newFavorites)
+    setStations(newFavorites)
   }
 
-  function addFavorite (favorite: IFavorite): void {
-    if (favorites) {
-      const newFavorites = favorites
-      favorites[favorite.datasetId] = favorite
-      setFavorites(newFavorites)
+  function addFavorite (favorite: IStations): void {
+    if (stations) {
+      const newFavorites = stations
+      stations[favorite.datasetId] = favorite
+      setStations(newFavorites)
     }
   }
 

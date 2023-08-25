@@ -4,6 +4,7 @@ import React, { type ReactElement, useState, useEffect } from 'react'
 import { api } from '@axdspub/erddap-service'
 import { Chart, EPlotTypes, type IPlot } from '@axdspub/axiom-charts'
 import FavoriteButton from '../FavoriteButton/FavoriteButton'
+import TimeFrameService, { ETimeFrame } from '@/Services/TimeFrame'
 const SERVER = 'https://erddap.sensors.axds.co/erddap'
 
 interface ISensorProps {
@@ -11,15 +12,16 @@ interface ISensorProps {
   datasetId: string
   valueName: string
   valueUnits: string
-  startDate: Date
-  endDate: Date
+  timeFrame: ETimeFrame
+  // startDate: Date
+  // endDate: Date
 }
 
 // load from app-level config
 const TIME_PROP = 'time (UTC)'
 
 export default function Sensor (props: ISensorProps): ReactElement {
-  // return <div>sensor</div>
+  const timeFrame = TimeFrameService.getTimeFrame(props.timeFrame)
   const erddapApi = new api.ErddapApi(SERVER)
   const emptyPlot: IPlot = {
     id: `${props.datasetId}.${props.name}.line`,
@@ -51,12 +53,12 @@ export default function Sensor (props: ISensorProps): ReactElement {
         {
           name: 'time',
           operator: '>=',
-          value: props.startDate
+          value: timeFrame.start
         },
         {
           name: 'time',
           operator: '<=',
-          value: props.endDate
+          value: timeFrame.end
         }
       ]
     })
@@ -83,7 +85,6 @@ export default function Sensor (props: ISensorProps): ReactElement {
       <div>
         {/* <FavoriteButton
           favorite={props}
-          isFavorited={false}
           typeOfFavorite='sensor'
         /> */}
         <Chart
