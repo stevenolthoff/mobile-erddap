@@ -1,14 +1,13 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-import { IStations, useFavoritesContext } from '@/Contexts/FavoritesContext'
+import { IStation, useFavoritesContext } from '@/Contexts/FavoritesContext'
 import StationsListItem from '@/Components/StationsListItem/StationsListItem'
-import { Link, useLocation } from 'react-router-dom'
 import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 import MobileTabs from '@/Components/MobileTabs/MobileTabs'
 
 export default function Favorites (): ReactElement {
   const { stations } = useFavoritesContext()
 
-  function getFavoriteStation (favorite: IStations) {
+  function getFavoriteStation (favorite: IStation) {
     return (
       <StationsListItem
         datasetId={favorite.datasetId}

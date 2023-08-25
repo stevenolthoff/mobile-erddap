@@ -5,20 +5,13 @@ import { api } from '@axdspub/erddap-service'
 import { Chart, EPlotTypes, type IPlot } from '@axdspub/axiom-charts'
 import FavoriteButton from '../FavoriteButton/FavoriteButton'
 import TimeFrameService, { ETimeFrame } from '@/Services/TimeFrame'
+import { ISensor } from '@/Contexts/FavoritesContext'
 const SERVER = 'https://erddap.sensors.axds.co/erddap'
-
-interface ISensorProps {
-  name: string
-  datasetId: string
-  valueName: string
-  valueUnits: string
-  timeFrame: ETimeFrame
-  // startDate: Date
-  // endDate: Date
-}
 
 // load from app-level config
 const TIME_PROP = 'time (UTC)'
+
+interface ISensorProps extends Omit<ISensor, 'type'> {}
 
 export default function Sensor (props: ISensorProps): ReactElement {
   const timeFrame = TimeFrameService.getTimeFrame(props.timeFrame)

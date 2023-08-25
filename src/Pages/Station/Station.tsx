@@ -66,7 +66,7 @@ export default function Station (): ReactElement {
   return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar scrollbox bg-slate-100">
     <div className='w-full flex flex-row-reverse right-0 pt-4 px-4'>
       <FavoriteButton
-        favorite={{ title, summary: description, datasetId }}
+        favorite={{ title, summary: description, datasetId, type: 'station' }}
         typeOfFavorite='station'
       />
     </div>

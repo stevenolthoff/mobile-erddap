@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react'
-import { IStations, useFavoritesContext } from '@/Contexts/FavoritesContext'
+import { ISensor, IStation, useFavoritesContext } from '@/Contexts/FavoritesContext'
 import { HeartIcon, HeartFilledIcon } from '@radix-ui/react-icons'
 
 interface IFavoriteButtonProps {
-  favorite: IStations
+  favorite: IStation // | ISensor
   typeOfFavorite: 'station' | 'sensor'
 }
 

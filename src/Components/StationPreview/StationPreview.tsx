@@ -1,10 +1,12 @@
 import React, { type ReactElement } from 'react'
-import { IStations } from '../../Contexts/FavoritesContext'
+import { IStation } from '@/Contexts/FavoritesContext'
 import { useNavigate } from 'react-router-dom'
-import FavoriteButton from '../FavoriteButton/FavoriteButton'
+import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 import LatestMeasurements from '@/Components/LatestMeasurements/LatestMeasurements'
 
-export default function StationPreview (favorite: IStations): ReactElement {
+interface IStationPreviewProps extends Omit<IStation, 'type'> {}
+
+export default function StationPreview (favorite: IStationPreviewProps): ReactElement {
   const { datasetId, title, summary } = favorite
   const navigate = useNavigate()
 
@@ -19,7 +21,10 @@ export default function StationPreview (favorite: IStations): ReactElement {
           <div className='pb-2 text-sm leading-3 text-slate-500'>{summary}</div>
         </div>
         <FavoriteButton
-          favorite={favorite}
+          favorite={{
+            ...favorite,
+            type: 'station'
+          }}
           typeOfFavorite='station'
         />
       </div>
