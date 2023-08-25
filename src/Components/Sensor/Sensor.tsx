@@ -76,10 +76,16 @@ export default function Sensor (props: ISensorProps): ReactElement {
   if (plots.length > 0) {
     return (
       <div>
-        {/* <FavoriteButton
-          favorite={props}
-          typeOfFavorite='sensor'
-        /> */}
+        <div className='flex justify-between pr-4 pt-4'>
+          <div className='text-xs uppercase font-semibold text-slate-500 px-4 pt-4'>{props.valueName}</div>
+          <FavoriteButton
+            favorite={{
+              ...props,
+              type: 'sensor'
+            }}
+            typeOfFavorite='sensor'
+          />
+        </div>
         <Chart
           // TODO: How to ensure that y axis labels are not cut off?
           settings={{ width: 'auto', height: 500, margin: { left: 30, right: 10, bottom: 30, top: 10 } }}

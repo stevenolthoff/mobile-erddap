@@ -29,7 +29,6 @@ export default function Sensors (props: ISensorsProps) {
     const valueName = sensors[key].units['Variable Name']
     const valueUnits = sensors[key].units.Value
     return <div key={key}>
-      <div className='text-xs uppercase font-semibold text-slate-500 px-4 pt-4'>{valueName}</div>
       <Sensor
         name={key}
         datasetId={datasetId}

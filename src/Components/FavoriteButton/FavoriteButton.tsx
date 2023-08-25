@@ -3,7 +3,7 @@ import { ISensor, IStation, useFavoritesContext } from '@/Contexts/FavoritesCont
 import { HeartIcon, HeartFilledIcon } from '@radix-ui/react-icons'
 
 interface IFavoriteButtonProps {
-  favorite: IStation // | ISensor
+  favorite: IStation | ISensor
   typeOfFavorite: 'station' | 'sensor'
 }
 

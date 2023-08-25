@@ -32,7 +32,7 @@ type Sensors = Record<SensorId, ISensor>
 
 interface IFavoritesContext {
   stations: Stations
-  toggleFavorite: (favorite: IStation) => void
+  toggleFavorite: (favorite: IStation | ISensor) => void
   isFavorited: (typeOfFavorite: TypeOfFavorite, datasetId: DatasetId) => boolean
 }
 
@@ -52,40 +52,37 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
     }
   }
 
-  function toggleFavorite (favorite: IStation/* | ISensor */) {
-    // if (favorite.type === 'station') {
-
-    // } else if (favorite.type === 'sensor') {
+  function toggleFavorite (favorite: IStation | ISensor) {
+    if (favorite.type === 'station') {
+      _toggleStation(favorite)
+    } else if (favorite.type === 'sensor') {
       
-    // } else {
-    //   console.error(`Unrecognized type of favorite ${favorite.type}`)
-    // }
-    if (stations[favorite.datasetId]) {
-      removeFavorite(favorite.datasetId)
-    } else {
-      addFavorite(favorite)
     }
   }
 
-  function removeFavorite (datasetId: string) {
+  function _removeStation (datasetId: string) {
     const newFavorites = stations
     delete newFavorites[datasetId]
     setStations(newFavorites)
   }
 
-  function addFavorite (favorite: IStation): void {
+  function _addStation (station: IStation): void {
     if (stations) {
       const newFavorites = stations
-      stations[favorite.datasetId] = favorite
+      stations[station.datasetId] = station
       setStations(newFavorites)
     }
   }
 
-  function _toggleFavoriteStation () {
-
+  function _toggleStation (station: IStation) {
+    if (stations[station.datasetId]) {
+      _removeStation(station.datasetId)
+    } else {
+      _addStation(station)
+    }
   }
 
-  function _toggleFavoriteSensor () {
+  function _toggleSensor () {
 
   }
 
