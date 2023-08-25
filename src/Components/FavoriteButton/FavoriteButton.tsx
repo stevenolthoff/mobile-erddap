@@ -38,7 +38,7 @@ export default function FavoriteButton ({ favorite }: IFavoriteButtonProps): Rea
   }
 
   function getIcon () {
-    if (isFavorited(favorite.type, favorite.datasetId)) {
+    if (isFavorited(favorite)) {
       return getFilledIcon()
     } else {
       return getEmptyIcon()
