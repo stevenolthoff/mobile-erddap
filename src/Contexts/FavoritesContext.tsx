@@ -12,13 +12,8 @@ export interface IStations {
 type DatasetId = string
 type Stations = Record<DatasetId, IStations>
 
-type Favorites = {
-  stations: Stations
-  sensors: any
-}
-
 interface IFavoritesContext {
-  favorites: Favorites
+  stations: Stations
   toggleFavorite: (favorite: IStations) => void
   isFavorited: (typeOfFavorite: TypeOfFavorite, datasetId: DatasetId) => boolean
 }
@@ -27,14 +22,6 @@ const FavoritesContext = createContext<IFavoritesContext | null>(null)
 
 export default function FavoritesContextProvider ({ children }: PropsWithChildren<{}>) {
   const [stations, setStations] = useLocalStorage<Stations>('favoriteStations', {})
-  const [favorites, setFavorites] = useState<Favorites>({ stations: {}, sensors: {} })
-
-  useEffect(() => {
-    setFavorites({
-      stations: stations,
-      sensors: null
-    })
-  }, [stations])
 
   function isFavorited (typeOfFavorite: TypeOfFavorite, datasetId: DatasetId) {
     if (typeOfFavorite === 'station') {
@@ -72,7 +59,7 @@ export default function FavoritesContextProvider ({ children }: PropsWithChildre
   return (
     <FavoritesContext.Provider
       value={{
-        favorites,
+        stations,
         toggleFavorite,
         isFavorited
       }}

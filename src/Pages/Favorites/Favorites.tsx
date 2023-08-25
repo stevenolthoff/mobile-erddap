@@ -6,9 +6,7 @@ import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 import MobileTabs from '@/Components/MobileTabs/MobileTabs'
 
 export default function Favorites (): ReactElement {
-  const { favorites } = useFavoritesContext()
-  const [stations] = useState(Object.assign({}, favorites.stations))
-  const { search } = useLocation()
+  const { stations } = useFavoritesContext()
 
   function getFavoriteStation (favorite: IStations) {
     return (

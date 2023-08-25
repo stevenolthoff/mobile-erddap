@@ -1,7 +1,8 @@
+import { IStations } from '@/Contexts/FavoritesContext'
 import React, { type ReactElement } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
-interface IStationListItemProps {
+interface IStationListItemProps extends IStations {
   datasetId: string
   title: string
   summary: string

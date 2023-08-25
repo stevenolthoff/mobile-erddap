@@ -1,4 +1,3 @@
-import { IParsedDatasetMetadata } from "@axdspub/erddap-service/lib/parser"
 import Sensor from "@/Components/Sensor/Sensor"
 import { ReactElement } from "react"
 import useMetadata from "@/Hooks/useMetadata"
@@ -21,7 +20,7 @@ export default function Sensors (props: ISensorsProps) {
       </div>
     )
   }
-  console.log('sensors', metadata)
+
   const listItems = Object.keys(sensors).map(key => {
     const sensor = sensors[key]
     if (!sensor.units) {
