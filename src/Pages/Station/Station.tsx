@@ -79,6 +79,7 @@ export default function Station (): ReactElement {
     <div className="px-4 text-xs text-slate-500 leading-tight">{description}</div>
     <div className='py-2'><StationMap datasetId={datasetId} /></div>
     <MobileTabs
+      className='w-1/2'
       tabs={[
         {
           id: 'charts',

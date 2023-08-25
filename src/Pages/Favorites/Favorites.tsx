@@ -10,6 +10,7 @@ export default function Favorites (): ReactElement {
     <div className='max-h-full max-w-full overflow-scroll no-scrollbar scrollbox'>
       <div className='px-4 pt-4 text-xl font-semibold text-slate-800'>Favorites</div>
       <MobileTabs
+        className='w-1/3'
         tabs={[
           {
             id: 'stations',
