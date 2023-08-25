@@ -12,21 +12,16 @@ export default function Favorites (): ReactElement {
 
   function getFavoriteStation (favorite: IStations) {
     return (
-      <Link
-        key={favorite.datasetId}
-        to={`/stations/${favorite.datasetId}${search}`}
-        className='flex'
+      <StationsListItem
+        datasetId={favorite.datasetId}
+        title={favorite.title}
+        summary={favorite.summary}
       >
-        <StationsListItem
-          title={favorite.title}
-          summary={favorite.summary}
-        >
-          <FavoriteButton
-            favorite={favorite}
-            typeOfFavorite='station'
-          />
-        </StationsListItem>
-      </Link>
+        <FavoriteButton
+          favorite={favorite}
+          typeOfFavorite='station'
+        />
+      </StationsListItem>
     )
   }
 

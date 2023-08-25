@@ -107,14 +107,10 @@ export default function Stations (): ReactElement {
 
   const getCards = (): ReactElement[] => {
     return results.map((catalogItem, i) => (
-      <Link
-        key={`${catalogItem.Title}-${i}`}
-        to={`/stations/${catalogItem['Dataset ID']}${search}`}
-      >
-        <StationsListItem
-          title={catalogItem.Title}
-          summary={catalogItem.Summary} />
-      </Link>
+      <StationsListItem
+        datasetId={catalogItem['Dataset ID']}
+        title={catalogItem.Title}
+        summary={catalogItem.Summary} />
     ))
   }
 
