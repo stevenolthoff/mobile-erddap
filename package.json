@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@axdspub/axiom-charts": "^0.0.9",
-    "@axdspub/axiom-maps": "^0.0.9",
+    "@axdspub/axiom-maps": "^0.1.2",
     "@axdspub/axiom-ui-data-services": "^0.0.8",
     "@axdspub/axiom-ui-utilities": "^0.0.11",
     "@axdspub/erddap-service": "^0.3.0",
@@ -23,6 +23,7 @@
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
+    "@uidotdev/usehooks": "^2.1.1",
     "@use-gesture/react": "^10.2.27",
     "dotenv": "^16.3.1",
     "luxon": "^3.4.0",

@@ -83,7 +83,7 @@ export default function Station (): ReactElement {
     border-solid border-b
   `
 
-  return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar scrollbox">
+  return <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden max-h-full no-scrollbar scrollbox bg-slate-100">
     <div className='w-full flex flex-row-reverse right-0 pt-4 px-4'>
       <FavoriteButton
         favorite={{ title, summary: description, datasetId, startDate: startDate.toDateString(), endDate: endDate.toDateString() }}
@@ -92,7 +92,7 @@ export default function Station (): ReactElement {
     </div>
     <div className="px-4 text-xl font-semibold leading-none text-slate-800">{title}</div>
     <div className="px-4 text-xs text-slate-500 leading-tight">{description}</div>
-    <StationMap datasetId={datasetId} />
+    <div className='py-2'><StationMap datasetId={datasetId} /></div>
     <Tabs className='mb-16' tabs={[
       {
         id: 'charts',
