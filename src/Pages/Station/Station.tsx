@@ -42,8 +42,11 @@ export default function Station (): ReactElement {
     if (metadataLoading) return
     setTitle(getStationName())
     setDescription(getDescription())
-    setStation(getStation())
   }, [metadataLoading])
+  
+  useEffect(() => {
+    setStation(getStation())
+  }, [title, description])
 
   function getTabPage (tabId: string): ReactElement {
     const headerClassName = 'px-4 text-md text-slate-500 pb-2'
