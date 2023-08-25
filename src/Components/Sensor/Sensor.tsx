@@ -3,6 +3,7 @@
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { api } from '@axdspub/erddap-service'
 import { Chart, EPlotTypes, type IPlot } from '@axdspub/axiom-charts'
+import FavoriteButton from '../FavoriteButton/FavoriteButton'
 const SERVER = 'https://erddap.sensors.axds.co/erddap'
 
 interface ISensorProps {
@@ -78,11 +79,20 @@ export default function Sensor (props: ISensorProps): ReactElement {
   useEffect(getData, [])
 
   if (plots.length > 0) {
-    return <Chart
-      // TODO: How to ensure that y axis labels are not cut off?
-      settings={{ width: 'auto', height: 500, margin: { left: 30, right: 10, bottom: 30, top: 10 } }}
-      plots={plots}
-    />
+    return (
+      <div>
+        {/* <FavoriteButton
+          favorite={props}
+          isFavorited={false}
+          typeOfFavorite='sensor'
+        /> */}
+        <Chart
+          // TODO: How to ensure that y axis labels are not cut off?
+          settings={{ width: 'auto', height: 500, margin: { left: 30, right: 10, bottom: 30, top: 10 } }}
+          plots={plots}
+        />
+      </div>
+    )
   } else {
     return <div>loading</div>
   }

@@ -4,12 +4,11 @@ import { HeartIcon, HeartFilledIcon } from '@radix-ui/react-icons'
 
 interface IFavoriteButtonProps {
   favorite: IFavorite
-  isFavorited: boolean
+  typeOfFavorite: 'station' | 'sensor'
 }
 
-export default function FavoriteButton (props: IFavoriteButtonProps): ReactElement {
-  const { favorite, isFavorited } = props
-  const { toggleFavorite } = useFavoritesContext()
+export default function FavoriteButton ({ favorite, typeOfFavorite }: IFavoriteButtonProps): ReactElement {
+  const { toggleFavorite, isFavorited } = useFavoritesContext()
   
   function onClickFavorite (event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.preventDefault()
@@ -40,7 +39,7 @@ export default function FavoriteButton (props: IFavoriteButtonProps): ReactEleme
   }
 
   function getIcon () {
-    if (isFavorited) {
+    if (isFavorited(typeOfFavorite, favorite.datasetId)) {
       return getFilledIcon()
     } else {
       return getEmptyIcon()

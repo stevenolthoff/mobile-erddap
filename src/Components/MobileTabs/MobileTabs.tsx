@@ -1,5 +1,6 @@
 import React from 'react'
 import { Tabs as AxiomTabs, ITab } from '@axdspub/axiom-ui-utilities'
+import './MobileTabs.css'
 
 interface IMobileTabsProps {
   tabs: ITab[]
@@ -15,11 +16,12 @@ const MobileTabs = ({ tabs }: IMobileTabsProps) => {
     data-[state=active]:border-blue-500
     data-[state=active]:font-light
     hover:bg-blue-100
+    hover:text-blue-500
     rounded-t-md
     border-solid border-b
   `
   return (
-    <AxiomTabs className='mb-16' tabs={tabs.map(tab => ({ ...tab, className }))} />
+    <AxiomTabs tabs={tabs.map(tab => ({ ...tab, className }))} />
   )
 }
 

@@ -1,6 +1,8 @@
 import { PropsWithChildren, createContext, useContext, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
+type TypeOfFavorite = 'station' | 'sensor'
+
 export interface IFavorite {
   datasetId: string
   title: string
@@ -15,16 +17,23 @@ type Favorites = Record<DatasetId, IFavorite>
 interface IFavoritesContext {
   favorites: Favorites
   toggleFavorite: (favorite: IFavorite) => void
-  isFavorited: (datasetId: DatasetId) => boolean
+  isFavorited: (typeOfFavorite: TypeOfFavorite, datasetId: DatasetId) => boolean
 }
 
 const FavoritesContext = createContext<IFavoritesContext | null>(null)
 
 export default function FavoritesContextProvider ({ children }: PropsWithChildren<{}>) {
-  const [favorites, setFavorites] = useLocalStorage<Favorites>('favorites', {})
+  const [favorites, setFavorites] = useLocalStorage<Favorites>('favoriteStations', {})
 
-  function isFavorited (datasetId: DatasetId) {
-    return Boolean(favorites[datasetId])
+  function isFavorited (typeOfFavorite: TypeOfFavorite, datasetId: DatasetId) {
+    if (typeOfFavorite === 'station') {
+      return Boolean(favorites[datasetId])
+    } else if (typeOfFavorite === 'sensor') {
+      return false
+    } else {
+      console.error(`Unrecognized type of favorite ${typeOfFavorite}`)
+      return false
+    }
   }
 
   function toggleFavorite (favorite: IFavorite) {
