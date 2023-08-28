@@ -1,12 +1,11 @@
 import useMetadata from '@/Hooks/useMetadata'
-import { DataService, type IDataResult } from '@axdspub/axiom-ui-data-services'
-import { api } from '@axdspub/erddap-service'
 import { VariableToAttribute } from '@axdspub/erddap-service/lib/parser'
 import { DateTime } from 'luxon'
 import React, { type ReactElement, useState, useEffect } from 'react'
 import { ClipLoader } from 'react-spinners'
 import FavoriteButton from '../FavoriteButton/FavoriteButton'
-import { ILatestMeasurement, IStation } from '@/Contexts/FavoritesContext'
+import { ILatestMeasurement } from '@/Contexts/FavoritesContext'
+import SensorService from '@/Services/Sensor'
 
 interface ILatestMeasurementsProps extends Omit<ILatestMeasurement, 'type'> {
   hideFavoriteButton?: boolean
@@ -18,8 +17,6 @@ type LatestMeasurement = Record<ColumnName, Measurement>
 type Row = { sensor: string, measurement: string, date: string }
 
 export default function LatestMeasurements (props: ILatestMeasurementsProps): ReactElement {
-  const SERVER = 'https://erddap.sensors.axds.co/erddap'
-  const erddapApi = new api.ErddapApi(SERVER)
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<LatestMeasurement[]>()
   const [metadata, metadataLoading] = useMetadata(props.datasetId)
@@ -32,46 +29,15 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
     setSensorMetadata(metadata.sensors)
   }, [metadataLoading])
 
-  async function getData (): Promise<IDataResult> {
-    const variables = ['time', ...columnNames]
-    const url = erddapApi.getUrl({
-      protocol: 'tabledap',
-      response: 'csv',
-      dataset_id: props.datasetId,
-      variables,
-      constraints: [
-        {
-          name: 'time',
-          operator: '>=',
-          value: getStartDate()
-        },
-        {
-          name: 'time',
-          operator: '<=',
-          value: new Date()
-        }
-      ]
-    })
-    const dataService = new DataService({ type: '', resultType: 'csv', url })
-    return await dataService.get()
-  }
-
   useEffect(() => {
     if (metadataLoading && columnNames.length > 0) return
-    getData().then(result => {
-      console.log(result.data)
+    SensorService.getLatestMeasurementsData(props.datasetId, columnNames).then(result => {
       setData(result.data)
       setLoading(false)
-      console.log(data)
     }).catch(error => {
       console.error(error)
     })
   }, [columnNames])
-
-  function getStartDate (): Date {
-    const now = new Date()
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
-  }
 
   function getUnits (columnName: string): string {
     const { units } = sensorMetadata[columnName]
