@@ -18,9 +18,9 @@ import Settings from '@/Pages/Settings/Settings'
 function App () {
   console.log('ENV', process.env)
   return (
-    <div className='grid grid-rows-[1fr_auto] h-screen overflow-y-hidden divide-y'>
+    <div className='h-screen overflow-y-hidden divide-y'>
       <BrowserRouter basename='/'>
-        <div className='max-h-full overflow-hidden'>       
+        <div className='h-[calc(100vh-72px)] overflow-hidden'>       
           <SearchContextProvider>
             <FavoritesContextProvider>
               <Routes>
@@ -49,7 +49,7 @@ function App () {
             </FavoritesContextProvider>
           </SearchContextProvider>
         </div>
-        <div className='z-50'>
+        <div className='z-50 h-[72px] absolute bottom-0 w-full'>
           <NavBar />
         </div>
       </BrowserRouter >

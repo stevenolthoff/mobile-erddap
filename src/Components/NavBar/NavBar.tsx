@@ -33,26 +33,26 @@ export default function NavBar (): ReactElement {
     {
       id: 'map',
       label: 'Map',
-      icon: <GlobeIcon className='w-6 h-6' />,
+      icon: <GlobeIcon className='w-8 h-8' />,
       path: '/map'
     },
     {
       id: 'search',
       label: 'Search',
-      icon: <MagnifyingGlassIcon className='w-6 h-6' />,
+      icon: <MagnifyingGlassIcon className='w-8 h-8' />,
       path: '/stations'
     },
     {
       id: 'favorites',
       label: 'Favorites',
-      icon: <HeartIcon className='w-6 h-6' />,
+      icon: <HeartIcon className='w-8 h-8' />,
       path: '/favorites',
-      activeIcon: <HeartFilledIcon className='w-6 h-6' />
+      activeIcon: <HeartFilledIcon className='w-8 h-8' />
     },
     {
       id: 'settings',
       label: 'Settings',
-      icon: <GearIcon className='w-6 h-6' />,
+      icon: <GearIcon className='w-8 h-8' />,
       path: '/settings'
     }
   ]
@@ -78,8 +78,8 @@ export default function NavBar (): ReactElement {
   })
 
   return (
-    <NavigationMenu.Root className="bg-slate-100 px-4 py-2 text-xs">
-      <NavigationMenu.List className="flex justify-between">
+    <NavigationMenu.Root className="bg-slate-100 px-6 py-3 text-xs h-full">
+      <NavigationMenu.List className="flex justify-between h-full">
         {tabElements}
       </NavigationMenu.List>
     </NavigationMenu.Root>
