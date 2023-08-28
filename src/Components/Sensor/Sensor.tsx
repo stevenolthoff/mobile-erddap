@@ -39,7 +39,7 @@ export default function Sensor (props: ISensorProps): ReactElement {
     return (
       <div>
         <div className='flex justify-between pr-4 pt-4'>
-          <div className='text-xs uppercase font-semibold text-slate-500 px-4 pt-4 break-words max-w-[calc(100vw-32px-8px)]'>{props.valueName}</div>
+          <div className='text-xs uppercase font-semibold text-slate-500 px-4 pt-4 break-words max-w-[calc(100vw-32px-8px)]'>{props.valueName} ({props.valueUnits})</div>
           <FavoriteButton
             favorite={{
               ...props,
@@ -49,7 +49,7 @@ export default function Sensor (props: ISensorProps): ReactElement {
         </div>
         <Chart
           // TODO: How to ensure that y axis labels are not cut off?
-          settings={{ width: 'auto', height: 500, margin: { left: 30, right: 10, bottom: 30, top: 10 } }}
+          settings={{ width: 'auto', height: 300, margin: { left: 40, right: 40, bottom: 30, top: 10 } }}
           plots={plots}
         />
       </div>

@@ -49,7 +49,7 @@ function App () {
             </FavoritesContextProvider>
           </SearchContextProvider>
         </div>
-        <div className='z-10'>
+        <div className='z-50'>
           <NavBar />
         </div>
       </BrowserRouter >
