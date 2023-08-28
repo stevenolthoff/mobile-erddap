@@ -6,16 +6,15 @@ import { Chart, EPlotTypes, type IPlot } from '@axdspub/axiom-charts'
 import FavoriteButton from '../FavoriteButton/FavoriteButton'
 import TimeFrameService, { ETimeFrame } from '@/Services/TimeFrame'
 import { ISensor } from '@/Contexts/FavoritesContext'
+import SensorService from '@/Services/Sensor'
 const SERVER = 'https://erddap.sensors.axds.co/erddap'
 
 // load from app-level config
 const TIME_PROP = 'time (UTC)'
 
-interface ISensorProps extends Omit<ISensor, 'type'> {}
+export interface ISensorProps extends Omit<ISensor, 'type'> {}
 
 export default function Sensor (props: ISensorProps): ReactElement {
-  const timeFrame = TimeFrameService.getTimeFrame(props.timeFrame)
-  const erddapApi = new api.ErddapApi(SERVER)
   const emptyPlot: IPlot = {
     id: `${props.datasetId}.${props.name}.line`,
     dimensions: {
@@ -35,39 +34,8 @@ export default function Sensor (props: ISensorProps): ReactElement {
   const [plots, setPlots] = useState<IPlot[]>([])
 
   function getData (): void {
-    console.log(props)
-    const variables = ['time', props.name]
-    const url = erddapApi.getUrl({
-      protocol: 'tabledap',
-      response: 'csvp',
-      dataset_id: props.datasetId,
-      variables,
-      constraints: [
-        {
-          name: 'time',
-          operator: '>=',
-          value: timeFrame.start
-        },
-        {
-          name: 'time',
-          operator: '<=',
-          value: timeFrame.end
-        }
-      ]
-    })
     const newPlot = Object.assign({}, emptyPlot)
-    newPlot.dataService = {
-      resultType: 'csv',
-      type: '',
-      url,
-      parser: {
-        type: 'erddapTimeSeries',
-        args: {
-          valueProp: `${props.valueName} (${props.valueUnits})`,
-          timeProp: TIME_PROP
-        }
-      }
-    }
+    newPlot.dataService = SensorService.getDataService(props)
     setPlots([newPlot])
   }
 
