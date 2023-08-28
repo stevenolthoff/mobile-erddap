@@ -18,9 +18,9 @@ import Settings from '@/Pages/Settings/Settings'
 function App () {
   console.log('ENV', process.env)
   return (
-    <div className='h-screen overflow-y-hidden divide-y'>
+    <div className='h-[100dvh] overflow-y-hidden divide-y'>
       <BrowserRouter basename='/'>
-        <div className='h-[calc(100vh-72px)] overflow-hidden'>       
+        <div className='h-[calc(100%-72px)] overflow-hidden'>       
           <SearchContextProvider>
             <FavoritesContextProvider>
               <Routes>
