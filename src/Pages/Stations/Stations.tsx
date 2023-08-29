@@ -8,6 +8,7 @@ import { ClipLoader } from 'react-spinners'
 import { useSearchContext } from '@/Contexts/SearchContext'
 import SearchService from '@/Services/Search'
 import SensorDropdown from '@/Components/SensorDropdown/SensorDropdown'
+import { Cross1Icon } from '@radix-ui/react-icons'
 
 export default function Stations (): ReactElement {
   const [results, setResults] = useState<api.IErddapIndexResponse[]>([])
@@ -164,18 +165,21 @@ export default function Stations (): ReactElement {
 
   return (
     <div className='flex flex-col max-h-full'>
-      <input
-        className='top-0 left-0 right-0 grow border border-slate-300 px-4 py-6 mr-4 w-full
-        search-cancel:appearance-none search-cancel:w-4 search-cancel:h-4
-        search-cancel:bg-[url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg)]
-        search-cancel:cursor-pointer
-        active:outline-blue-800 focus:outline-blue-500 bg-slate-50'
-        autoFocus
-        placeholder='Search for stations'
-        type='search'
-        onChange={event => onSearchInput(event.target.value)}
-        value={query}
-      />
+      <div className='w-full h-full relative'>
+        <input
+          className='border border-slate-300 px-4 py-6 w-full
+          search-cancel:appearance-none search-cancel:w-4 search-cancel:h-4
+          search-cancel:cursor-pointer
+          active:outline-blue-800 focus:outline-blue-500 bg-slate-50'
+          autoFocus
+          placeholder='Search for stations'
+          onChange={event => onSearchInput(event.target.value)}
+          value={query}
+        />
+        <div className='absolute right-0 top-1/3 mr-4 active:text-blue-500' onClick={() => onSearchInput('')}>
+          <Cross1Icon className='w-6 h-6' />
+        </div>
+      </div>
       <div className='px-4 py-4 flex justify-between'>
         <SensorDropdown onChange={onSensorChange}></SensorDropdown>
       </div>
