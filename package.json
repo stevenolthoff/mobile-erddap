@@ -27,6 +27,7 @@
     "@use-gesture/react": "^10.2.27",
     "dotenv": "^16.3.1",
     "luxon": "^3.4.0",
+    "react-fade-in": "^2.0.1",
     "react-infinite-scroll-hook": "^4.1.1",
     "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",

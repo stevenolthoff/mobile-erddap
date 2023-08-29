@@ -4,6 +4,8 @@ import SearchService, { IDatasetOnMap } from '@/Services/Search/index'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useSearchContext } from '@/Contexts/SearchContext'
 import StationPreview from '@/Components/StationPreview/StationPreview'
+import Loader from '@/Components/Loader/Loader'
+import FadeIn from 'react-fade-in'
 
 export default function Map (): ReactElement {
   const {
@@ -83,27 +85,34 @@ export default function Map (): ReactElement {
   }
 
   if (layer === null || layer == undefined) {
-    return <div>loading</div>
-  } else
-  return (
-    <div>
-      <AxiomMap
-        baseLayerKey='hybrid'
-        mapLibraryKey='leaflet'
-        height=''
-        style={{
-          position: 'fixed',
-          left: '0px',
-          top: '0px',
-          right: '0px',
-          bottom: '0px',
-          padding: '0'
-        }}
-        center={{ lat: centerLatitude, lon: centerLongitude }}
-        zoom={5}
-        layers={[layer]}
-      />
-      {getStationCard()}
-    </div>
-  )
+    return (
+      <FadeIn>
+        <div className='w-screen h-screen flex justify-center items-center bg-slate-200'>
+          <Loader />
+        </div>
+      </FadeIn>
+    )
+  } else {
+    return (
+      <div>
+        <AxiomMap
+          baseLayerKey='hybrid'
+          mapLibraryKey='leaflet'
+          height=''
+          style={{
+            position: 'fixed',
+            left: '0px',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            padding: '0'
+          }}
+          center={{ lat: centerLatitude, lon: centerLongitude }}
+          zoom={5}
+          layers={[layer]}
+        />
+        {getStationCard()}
+      </div>
+    )
+  }
 }
