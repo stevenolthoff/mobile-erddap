@@ -5,7 +5,6 @@ import { useOnClickOutside } from 'usehooks-ts'
 import { useSearchContext } from '@/Contexts/SearchContext'
 import StationPreview from '@/Components/StationPreview/StationPreview'
 import Loader from '@/Components/Loader/Loader'
-import FadeIn from 'react-fade-in'
 
 export default function Map (): ReactElement {
   const {
@@ -86,11 +85,9 @@ export default function Map (): ReactElement {
 
   if (layer === null || layer == undefined) {
     return (
-      <FadeIn>
-        <div className='w-screen h-screen flex justify-center items-center bg-slate-200'>
-          <Loader />
-        </div>
-      </FadeIn>
+      <div className='w-screen h-screen flex justify-center items-center bg-slate-200'>
+        <Loader />
+      </div>
     )
   } else {
     return (
