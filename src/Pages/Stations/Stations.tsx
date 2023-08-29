@@ -1,6 +1,7 @@
 import StationsListItem from '@/Components/StationsListItem/StationsListItem'
 import * as DataService from '@axdspub/axiom-ui-data-services'
 import { api } from '@axdspub/erddap-service'
+import { useSearchParams } from 'react-router-dom'
 import React, { type ReactElement, useState, useEffect } from 'react'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
 import { ClipLoader } from 'react-spinners'
@@ -19,6 +20,8 @@ export default function Stations (): ReactElement {
   const initialDataService = new DataService.DataService({ resultType: 'csv', url: '', type: '' })
   const [dataService, setDataService] = useState(initialDataService)
   const [sensor, setSensor] = useState<string | undefined>()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [initiallyCheckedParams, setInitiallyCheckedParams] = useState(false)
 
   const onSensorChange = (selected: string | undefined) => {
     setSensor(selected)
@@ -27,6 +30,26 @@ export default function Stations (): ReactElement {
   const onSearchInput = (query: string): any => {
     setQuery(query)
   }
+
+  const updateSearchParams = () => {
+    if (!initiallyCheckedParams) return
+    if (query) {
+      searchParams.set('text', query)
+    } else if (query === '') {
+      searchParams.delete('text')
+    }
+    setSearchParams(searchParams)
+  }
+
+  useEffect(updateSearchParams, [query])
+
+  const setQueryFromParams = () => {
+    const param = searchParams.get('text')
+    if (param) onSearchInput(param)
+    setInitiallyCheckedParams(true)
+  }
+
+  useEffect(setQueryFromParams, [])
 
   const getDatasets = async (page?: number): Promise<any> => {
     let searchFor = query
@@ -151,6 +174,7 @@ export default function Stations (): ReactElement {
         placeholder='Search for stations'
         type='search'
         onChange={event => onSearchInput(event.target.value)}
+        value={query}
       />
       <div className='px-4 py-4 flex justify-between'>
         <SensorDropdown onChange={onSensorChange}></SensorDropdown>
