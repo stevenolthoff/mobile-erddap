@@ -3,6 +3,7 @@ import { ParsedCategory } from '@axdspub/erddap-service/lib/parser'
 import React, { useEffect, useState } from 'react'
 import { CaretDownIcon, Cross1Icon } from '@radix-ui/react-icons'
 import { MobileDialog as Dialog } from '@axdspub/axiom-ui-utilities'
+import { useSearchParams } from 'react-router-dom'
 
 function useSensors (): [ParsedCategory[], boolean] {
   const [sensors, setSensors] = useState<ParsedCategory[]>([])
@@ -32,9 +33,22 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
   const [options, setOptions] = useState<Option[]>([])
   const [filteredOptions, setFilteredOptions] = useState<Option[]>([])
   const [selected, setSelected] = useState<Option | null>(null)
-  const [sensors, loading] = useSensors()
+  const [sensors, sensorsLoadingFromApi] = useSensors()
   const [open, setOpen] = useState(false)
   const [sensorQuery, setSensorQuery] = useState<string>()
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const setOptionFromParams = () => {
+    if (options.length === 0) return
+    const paramValue = searchParams.get('sensor')
+    if (paramValue) {
+      const option = options.find(option => option.value === paramValue)
+      if (!option) return
+      onChange(option)
+    }
+  }
+
+  useEffect(setOptionFromParams, [options])
 
   const onChange = (selected: Option | null) => {
     if (!selected || selected.value === 'all-sensors') {
@@ -42,8 +56,18 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
     } else {
       setSelected(selected)
     }
+    updateSearchParams(selected)
     setOpen(false)
     setSensorQuery(undefined)
+  }
+
+  const updateSearchParams = (selected: Option | null) => {
+    if (selected) {
+      searchParams.set('sensor', selected.value)
+    } else {
+      searchParams.delete('sensor')
+    }
+    setSearchParams(searchParams)
   }
 
   useEffect(() => {
@@ -59,7 +83,7 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
     let options = [{ label: 'All Sensors', value: 'all-sensors' }]
     options = options.concat(...sensors.map(sensor => ({ label: sensor.category, value: sensor.category })))
     setOptions(options)
-  }, [sensors, loading])
+  }, [sensors, sensorsLoadingFromApi])
 
   useEffect(() => {
     setFilteredOptions(options)
@@ -99,7 +123,7 @@ export default function SensorDropdown (props: ISensorDropdownProps) {
       active:border-blue-500 hover:text-blue-500 hover:border-blue-500
       flex justify-between items-center w-full'
     >
-      <div className='overflow-x-hidden'>{selected ? (selected as Option).label : 'All Sensors'}</div>
+      <div className='overflow-x-hidden capitalize'>{selected ? getPrettyLabel((selected as Option).label) : 'All Sensors'}</div>
       <div>{selected ? <Cross1Icon className='w-6 h-6' onClick={event => onClickTriggerCross(event)} /> : <CaretDownIcon className='w-6 h-6' />}</div>
     </div>
   )
