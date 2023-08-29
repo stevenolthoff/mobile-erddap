@@ -108,6 +108,7 @@ export default function Stations (): ReactElement {
   const getCards = (): ReactElement[] => {
     return results.map((catalogItem, i) => (
       <StationsListItem
+        key={`station-${catalogItem['Dataset ID']}-${i}`}
         datasetId={catalogItem['Dataset ID']}
         title={catalogItem.Title}
         summary={catalogItem.Summary} />
@@ -143,7 +144,7 @@ export default function Stations (): ReactElement {
   return (
     <div className='flex flex-col max-h-full'>
       <input
-        className='top-0 left-0 right-0 h-14 grow border border-slate-300 px-4 py-4 mr-4 w-full
+        className='top-0 left-0 right-0 grow border border-slate-300 px-4 py-6 mr-4 w-full
         search-cancel:appearance-none search-cancel:w-4 search-cancel:h-4
         search-cancel:bg-[url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg)]
         search-cancel:cursor-pointer

@@ -49,7 +49,7 @@ function App () {
             </FavoritesContextProvider>
           </SearchContextProvider>
         </div>
-        <div className='z-50 h-[72px] absolute bottom-0 w-full'>
+        <div className='z-20 h-[72px] absolute bottom-0 w-full'>
           <NavBar />
         </div>
       </BrowserRouter >

@@ -20,7 +20,7 @@ const FavoriteStations = (): ReactElement => {
           return 0
         }
       })
-      .map(datasetId => <FavoriteStation favorite={copied[datasetId]} />)
+      .map(datasetId => <FavoriteStation key={`station-${datasetId}`} favorite={copied[datasetId]} />)
   }
 
   return (
