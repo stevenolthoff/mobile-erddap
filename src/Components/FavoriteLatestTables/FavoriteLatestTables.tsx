@@ -5,7 +5,9 @@ import FavoriteLatestTable from '@/Components/FavoriteLatestTable/FavoriteLatest
 const FavoriteLatestTables = (): ReactElement => {
   const { latestMeasurements } = useFavoritesContext()
   const [copied] = useState(Object.assign({}, latestMeasurements))
-
+  if (Object.keys(copied).length === 0) {
+    return <div className='p-4 italic text-slate-500 text-sm'>No Tables Saved</div>
+  }
   return <div className='divide-y flex flex-col divide-slate-300'>
     {Object.entries(copied)
       .sort(([idA, sensorA], [idB, sensorB]) => {

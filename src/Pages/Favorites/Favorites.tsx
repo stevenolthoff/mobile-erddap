@@ -24,7 +24,7 @@ export default function Favorites (): ReactElement {
           },
           {
             id: 'latest-measurements',
-            label: 'Charts',
+            label: 'Tables',
             content: <FavoriteLatestTables />
           }
         ]}

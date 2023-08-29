@@ -75,8 +75,6 @@ export default function Map (): ReactElement {
       >
         <StationPreview
           datasetId={activeStation.datasetID}
-          // startDate={activeStation.minTime}
-          // endDate={activeStation.maxTime}
           title={activeStation.title}
           summary={activeStation.summary}
         />

@@ -49,7 +49,7 @@ export default function Station (): ReactElement {
   }, [title, description])
 
   function getTabPage (tabId: string): ReactElement {
-    const headerClassName = 'px-4 text-md text-slate-500 pb-2'
+    const headerClassName = 'px-4 text-xl text-slate-500 pb-2'
     if (tabId === 'charts') {
       return (
         <div className='overflow-y-scroll max-h-full max-w-full no-scrollbar'>
@@ -76,7 +76,7 @@ export default function Station (): ReactElement {
       { station ? <FavoriteButton favorite={station} /> : <div className='w-[32px] h-[32px] bg-slate-300 rounded-full'></div> }
     </div>
     <div className="px-4 text-xl font-semibold leading-none text-slate-800">{title}</div>
-    <div className="px-4 text-xs text-slate-500 leading-tight">{description}</div>
+    <div className="px-4 text-md text-slate-500 leading-tight">{description}</div>
     <div className='py-2'><StationMap datasetId={datasetId} /></div>
     <MobileTabs
       className='w-1/2'

@@ -19,9 +19,9 @@ export default function FavoriteButton ({ favorite }: IFavoriteButtonProps): Rea
     return (
       <div
         onClick={event => onClickFavorite(event)}
-        className='border border-blue-500 cursor-pointer rounded-full w-10 h-10 shrink-0 flex justify-center items-center'
+        className='border border-blue-500 cursor-pointer rounded-full w-12 h-12 shrink-0 flex justify-center items-center'
       >
-        <HeartFilledIcon className='text-blue-500' />
+        <HeartFilledIcon className='text-blue-500 w-6 h-6' />
       </div>
     )
   }
@@ -30,9 +30,9 @@ export default function FavoriteButton ({ favorite }: IFavoriteButtonProps): Rea
     return (
       <div
         onClick={event => onClickFavorite(event)}
-        className='border border-slate-800 cursor-pointer text-slate-800 rounded-full w-10 h-10 shrink-0 flex justify-center items-center'
+        className='border border-slate-800 cursor-pointer text-slate-800 rounded-full w-12 h-12 shrink-0 flex justify-center items-center'
       >
-        <HeartIcon />
+        <HeartIcon className='w-6 h-6' />
       </div>
     )
   }

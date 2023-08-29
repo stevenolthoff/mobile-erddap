@@ -10,7 +10,7 @@ interface IMobileTabsProps {
 
 const MobileTabs = ({ tabs, className }: IMobileTabsProps) => {
   const baseClassName = `
-    text-xs
+    text-md
     px-4 py-4
     text-slate-500
     data-[state=active]:text-blue-500

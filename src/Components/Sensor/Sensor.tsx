@@ -39,7 +39,7 @@ export default function Sensor (props: ISensorProps): ReactElement {
     return (
       <div>
         <div className='flex justify-between pr-4 pt-4'>
-          <div className='text-xs uppercase font-semibold text-slate-500 px-4 pt-4 break-words max-w-[calc(100vw-32px-8px)]'>{props.valueName} ({props.valueUnits})</div>
+          <div className='text-md uppercase font-semibold text-slate-500 px-4 pt-4 break-words max-w-[calc(100vw-32px-8px)]'>{props.valueName} ({props.valueUnits})</div>
           <FavoriteButton
             favorite={{
               ...props,

@@ -15,12 +15,12 @@ export default function StationPreview (favorite: IStationPreviewProps): ReactEl
   return (
     <div
       onClick={() => navigate({ pathname: `/stations/${datasetId}`, search })}
-      className='absolute left-0 right-0 bottom-20 mx-4 bg-slate-100 p-3 rounded-md no-scrollbar
-      shadow-md leading-4 gap-2 flex flex-col min-h-[30vh] max-h-[30vh] overflow-y-scroll'>
+      className='absolute left-0 right-0 bottom-20 mx-5 my-3.5 bg-slate-100 p-3 rounded-md no-scrollbar
+      shadow-md leading-4 gap-2 flex flex-col min-h-[30vh] max-h-[40vh] overflow-y-scroll'>
       <div className='flex justify-between'>
         <div>
-          <div className='pb-2 font-semibold uppercase text-slate-800'>{title}</div>
-          <div className='pb-2 text-sm leading-3 text-slate-500'>{summary}</div>
+          <div className='pb-2 text-xl font-semibold uppercase text-slate-800'>{title}</div>
+          <div className='pb-2 text-md leading-4 text-slate-500'>{summary}</div>
         </div>
         <FavoriteButton
           favorite={{
