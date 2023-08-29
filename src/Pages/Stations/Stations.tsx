@@ -167,7 +167,7 @@ export default function Stations (): ReactElement {
     <div className='flex flex-col max-h-full'>
       <div className='w-full h-full relative'>
         <input
-          className='border border-slate-300 px-4 py-6 w-full
+          className='border border-slate-300 px-4 py-6 w-full pr-12
           search-cancel:appearance-none search-cancel:w-4 search-cancel:h-4
           search-cancel:cursor-pointer
           active:outline-blue-800 focus:outline-blue-500 bg-slate-50'

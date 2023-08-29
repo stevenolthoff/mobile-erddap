@@ -14,7 +14,6 @@ interface ITab {
 }
 
 export default function NavBar (): ReactElement {
-  const DEFAULT_PATH: ETab = 'map'
   const [activeTab, setActiveTab] = useState<ETab>()
   const location = useLocation()
   const { search } = location

@@ -44,7 +44,7 @@ function App () {
                   path='/settings'
                   element={<Settings />}
                 />
-                <Route path="*" element={<Navigate to='/map' replace />} />
+                <Route path="*" element={<Navigate to='/stations' replace />} />
               </Routes>
             </FavoritesContextProvider>
           </SearchContextProvider>
