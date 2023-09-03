@@ -1,5 +1,5 @@
 import React, { type ReactElement, useState, useEffect, useRef } from 'react'
-import { Map as AxiomMap, GeoJsonLayerType, GeoJsonElement } from '@axdspub/axiom-maps'
+import { Map as AxiomMap, IGeoJSONLayerProps, GeoJsonElement } from '@axdspub/axiom-maps'
 import SearchService, { IDatasetOnMap } from '@/Services/Search/index'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useSearchContext } from '@/Contexts/SearchContext'
@@ -35,7 +35,7 @@ export default function Map (): ReactElement {
     return datasets || []
   }
 
-  function createGeoJsonLayer (datasets: IDatasetOnMap[]): GeoJsonLayerType {
+  function createGeoJsonLayer (datasets: IDatasetOnMap[]): IGeoJSONLayerProps {
     const geoJson: GeoJsonElement[] = datasets.slice(1).map((dataset: IDatasetOnMap) => ({
       type: 'Feature',
       geometry: {
@@ -51,7 +51,7 @@ export default function Map (): ReactElement {
       }
     }))
     console.log(geoJson)
-    const layer: GeoJsonLayerType = {
+    const layer: IGeoJSONLayerProps = {
       id: 'geoJson',
       type: 'geoJson',
       label: 'geoJson',
