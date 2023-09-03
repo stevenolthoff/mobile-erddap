@@ -24,14 +24,14 @@ const StationMap = ({ datasetId }: IStationMapProps) => {
 
   useEffect(() => {
     const createMarker = () => {
-      const geoJson: GeoJsonElement = {
+      const geoJson: GeoJSON.Feature = {
         type: 'Feature',
         geometry: {
           type: 'Point',
           coordinates: [position.longitude || 0, position.latitude || 0]
         },
         properties: {
-          bindings: {} // TODO: Fix the fact that this is required
+          'point-radius': 10
         }
       }
       const layer: IGeoJSONLayerProps = {
