@@ -56,7 +56,7 @@ export default function Sensor (props: ISensorProps): ReactElement {
     return (
       <div className='text-blue-500 font-semibold flex gap-4 pl-4'>
         <div className='w-[6rem]'>{dateTime.toFormat('hh:mm a')}</div>
-        <div>{Math.round((+yValue + Number.EPSILON) * 100) / 100} {props.valueUnits}</div>
+        <div>{+yValue} {props.valueUnits}</div>
       </div>
     )
   }
