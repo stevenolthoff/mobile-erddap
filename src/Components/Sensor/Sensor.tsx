@@ -49,6 +49,10 @@ export default function Sensor (props: ISensorProps): ReactElement {
     setScrubPosition(Object.values(scrubPositions)[0])
   }
 
+  const onScrubEnd = () => {
+    setScrubPosition(undefined)
+  }
+
   const getScrubbedXValue = (): string => {
     if (scrubPosition === undefined) {
       return ''
@@ -65,11 +69,29 @@ export default function Sensor (props: ISensorProps): ReactElement {
     setScrubLabelX(labelX)
   }, [scrubPosition])
 
+  const getScrubInfo = (): ReactElement => {
+    if (scrubPosition === undefined) {
+      return <></>
+    }
+    return (
+      <div className='text-sm leading-none'>
+        <div className='w-full flex justify-center font-semibold text-slate-500'>
+          <p>{getScrubbedXValue()}</p>
+        </div>
+        <div className='w-full h-7 relative text-blue-800 font-semibold pb-2'>
+          <div ref={scrubRef} className='absolute' style={{ left: scrubLabelX }}>
+            {String(scrubPosition?.yValue) ?? ''}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (plots.length > 0) {
     return (
       <div>
         <div className='flex justify-between pr-4 pt-4'>
-          <div className='text-md uppercase font-semibold text-slate-500 px-4 pt-4 break-words max-w-[calc(100vw-48px-12px)]'>{getPrettyYAxisName()}</div>
+          <div className='leading-none text-lg font-semibold text-slate-800 px-4 pb-1 break-words max-w-[calc(100vw-48px-12px)]'>{getPrettyYAxisName()}</div>
           <FavoriteButton
             favorite={{
               ...props,
@@ -77,18 +99,12 @@ export default function Sensor (props: ISensorProps): ReactElement {
             }}
             />
         </div>
-        <div className='border-t pt-1 mt-1 w-full flex justify-center font-semibold text-slate-500'>
-          <p>{getScrubbedXValue()}</p>
-        </div>
-        <div className='w-full h-7 relative text-blue-800 font-semibold border-b pb-1'>
-          <div ref={scrubRef} className='absolute' style={{ left: scrubLabelX }}>
-            {String(scrubPosition?.yValue) ?? ''}
-          </div>
-        </div>
+        <div className='leading-none h-[2rem]'>{getScrubInfo()}</div>
         <Chart
           settings={{ width: 'auto', height: 300, margin: { left: 50, right: 40, bottom: 30, top: 10 } }}
           plots={plots}
           onScrub={onScrub}
+          onScrubEnd={onScrubEnd}
         />
       </div>
     )
