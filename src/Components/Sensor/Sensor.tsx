@@ -7,6 +7,7 @@ import { ISensor } from '@/Contexts/FavoritesContext'
 import SensorService from '@/Services/Sensor'
 import { apStyleTitleCase } from 'ap-style-title-case'
 import { DateTime } from 'luxon'
+import { INumericData } from '@axdspub/axiom-ui-data-services'
 
 export interface ISensorProps extends Omit<ISensor, 'type'> {}
 
@@ -69,6 +70,13 @@ export default function Sensor (props: ISensorProps): ReactElement {
     setScrubLabelX(labelX)
   }, [scrubPosition])
 
+  const getPrettyYValue = (): string => {
+    if (scrubPosition?.yValue === undefined) {
+      return ''
+    }
+    return String(Math.round((scrubPosition.yValue as number + Number.EPSILON) * 10000) / 10000)
+  }
+
   const getScrubInfo = (): ReactElement => {
     if (scrubPosition === undefined) {
       return <></>
@@ -80,7 +88,7 @@ export default function Sensor (props: ISensorProps): ReactElement {
         </div>
         <div className='w-full h-7 relative text-blue-800 font-semibold pb-2'>
           <div ref={scrubRef} className='absolute' style={{ left: scrubLabelX }}>
-            {String(scrubPosition?.yValue) ?? ''}
+            {getPrettyYValue()}
           </div>
         </div>
       </div>

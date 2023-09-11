@@ -36,7 +36,7 @@ export default function Sensors (props: ISensorsProps) {
   }).filter(item => item !== null)
   return <div>
     <TimeFrame timeFrame={timeFrame} />
-    <div className='flex flex-col gap-8 divide-y'>
+    <div className='flex flex-col gap-4 divide-y pb-8'>
       {listItems}
     </div>
   </div>
