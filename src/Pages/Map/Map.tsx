@@ -1,5 +1,5 @@
 import React, { type ReactElement, useState, useEffect, useRef } from 'react'
-import { Map as AxiomMap, GeoJsonLayerType, GeoJsonElement } from '@axdspub/axiom-maps'
+import { Map as AxiomMap, IGeoJSONLayerProps, type ILayerQueryEvent } from '@axdspub/axiom-maps'
 import SearchService, { IDatasetOnMap } from '@/Services/Search/index'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useSearchContext } from '@/Contexts/SearchContext'
@@ -35,29 +35,33 @@ export default function Map (): ReactElement {
     return datasets || []
   }
 
-  function createGeoJsonLayer (datasets: IDatasetOnMap[]): GeoJsonLayerType {
-    const geoJson: GeoJsonElement[] = datasets.slice(1).map((dataset: IDatasetOnMap) => ({
+  function createGeoJsonLayer (datasets: IDatasetOnMap[]): IGeoJSONLayerProps {
+    const geoJson: GeoJSON.Feature[] = datasets.slice(1).map((dataset: IDatasetOnMap) => ({
       type: 'Feature',
       geometry: {
         type: 'Point',
         coordinates: [Number(dataset.maxLongitude), Number(dataset.maxLatitude)]
       },
       properties: {
-        bindings: {
-          eventListeners: {
-            onClick: (event: PointerEvent) => { setActiveStation(dataset) }
-          }
-        }
+        'point-radius': 10,
+        dataset
       }
     }))
     console.log(geoJson)
-    const layer: GeoJsonLayerType = {
+    const layer: IGeoJSONLayerProps = {
       id: 'geoJson',
       type: 'geoJson',
       label: 'geoJson',
       zIndex: 20,
       isBaseLayer: false,
-      options: { geoJson }
+      options: { geoJson },
+      onSelect: (e: ILayerQueryEvent) => {
+        if(e?.data?.feature?.properties?.dataset !== undefined){
+          setActiveStation(e.data.feature.properties.dataset as IDatasetOnMap)
+        }else{
+          setActiveStation(null)
+        }
+      }
     }
     return layer
   }

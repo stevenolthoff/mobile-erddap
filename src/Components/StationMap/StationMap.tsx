@@ -1,5 +1,5 @@
 import useStationPosition from '@/Hooks/useStationPosition'
-import { Map as AxiomMap, GeoJsonElement, GeoJsonLayerType, ILatLon } from '@axdspub/axiom-maps'
+import { Map as AxiomMap, GeoJsonElement, IGeoJSONLayerProps, ILatLon } from '@axdspub/axiom-maps'
 import { useEffect, useState } from 'react'
 import { useWindowSize } from '@uidotdev/usehooks'
 
@@ -11,7 +11,7 @@ const StationMap = ({ datasetId }: IStationMapProps) => {
   const [position, positionLoading] = useStationPosition(datasetId)
   const [mapLoading, setMapLoading] = useState(true)
   const [latLon, setLatLon] = useState<ILatLon>()
-  const [geoJsonLayer, setGeoJsonLayer] = useState<GeoJsonLayerType>()
+  const [geoJsonLayer, setGeoJsonLayer] = useState<IGeoJSONLayerProps>()
   const windowSize = useWindowSize()
 
   useEffect(() => {
@@ -22,29 +22,28 @@ const StationMap = ({ datasetId }: IStationMapProps) => {
     })
   }, [positionLoading])
 
-  const createMarker = () => {
-    const geoJson: GeoJsonElement = {
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [position.longitude || 0, position.latitude || 0]
-      },
-      properties: {
-        bindings: {} // TODO: Fix the fact that this is required
-      }
-    }
-    const layer: GeoJsonLayerType = {
-      id: 'geoJson',
-      type: 'geoJson',
-      label: 'geoJson',
-      zIndex: 20,
-      isBaseLayer: false,
-      options: { geoJson: [geoJson] }
-    }
-    setGeoJsonLayer(layer)
-  }
-
   useEffect(() => {
+    const createMarker = () => {
+      const geoJson: GeoJSON.Feature = {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [position.longitude || 0, position.latitude || 0]
+        },
+        properties: {
+          'point-radius': 10
+        }
+      }
+      const layer: IGeoJSONLayerProps = {
+        id: 'geoJson',
+        type: 'geoJson',
+        label: 'geoJson',
+        zIndex: 20,
+        isBaseLayer: false,
+        options: { geoJson: [geoJson] }
+      }
+      setGeoJsonLayer(layer)
+    }
     if (positionLoading) return
     createMarker()
   }, [positionLoading])
