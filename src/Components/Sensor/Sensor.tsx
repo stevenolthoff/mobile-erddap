@@ -58,8 +58,10 @@ export default function Sensor (props: ISensorProps): ReactElement {
     if (scrubPosition === undefined) {
       return ''
     } else {
-      const dateTime = DateTime.fromJSDate(scrubPosition.xValue as Date)
-      return `${dateTime.toFormat('hh:mm:ss a')}`
+      const now = DateTime.now()
+      const scrubbed = DateTime.fromJSDate(scrubPosition.xValue as Date)
+      const duration = now.diff(scrubbed)
+      return now.minus(duration).toRelative() ?? ''
     }
   }
 
