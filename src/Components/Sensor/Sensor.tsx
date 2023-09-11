@@ -49,6 +49,15 @@ export default function Sensor (props: ISensorProps): ReactElement {
     setScrubPosition(Object.values(scrubPositions)[0])
   }
 
+  const getScrubbedXValue = (): string => {
+    if (scrubPosition === undefined) {
+      return ''
+    } else {
+      const dateTime = DateTime.fromJSDate(scrubPosition.xValue as Date)
+      return `${dateTime.toFormat('hh:mm:ss a')}`
+    }
+  }
+
   useEffect(() => {
     const labelWidth = scrubRef.current?.getBoundingClientRect().width ?? 0
     const xPosition = scrubPosition?.xPosition ?? 0
@@ -68,7 +77,10 @@ export default function Sensor (props: ISensorProps): ReactElement {
             }}
             />
         </div>
-        <div className='w-full h-8 relative text-blue-800 font-semibold'>
+        <div className='border-t pt-1 mt-1 w-full flex justify-center font-semibold text-slate-500'>
+          <p>{getScrubbedXValue()}</p>
+        </div>
+        <div className='w-full h-7 relative text-blue-800 font-semibold border-b pb-1'>
           <div ref={scrubRef} className='absolute' style={{ left: scrubLabelX }}>
             {String(scrubPosition?.yValue) ?? ''}
           </div>
