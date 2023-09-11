@@ -1,6 +1,6 @@
 'use client'
 
-import React, { type ReactElement, useState, useEffect } from 'react'
+import React, { type ReactElement, useState, useEffect, useRef } from 'react'
 import { Chart, EPlotTypes, IPlotScrubPosition, IPlotScrubPositions, type IPlot } from '@axdspub/axiom-charts'
 import FavoriteButton from '@/Components/FavoriteButton/FavoriteButton'
 import { ISensor } from '@/Contexts/FavoritesContext'
@@ -30,6 +30,8 @@ export default function Sensor (props: ISensorProps): ReactElement {
     type: EPlotTypes.line
   }
   const [plots, setPlots] = useState<IPlot[]>([])
+  const scrubRef = useRef<HTMLDivElement>(null)
+  const [scrubLabelX, setScrubLabelX] = useState<number | undefined>()
 
   const getData = (): void => {
     const newPlot = Object.assign({}, emptyPlot)
@@ -47,19 +49,12 @@ export default function Sensor (props: ISensorProps): ReactElement {
     setScrubPosition(Object.values(scrubPositions)[0])
   }
 
-  const getScrubValueElement = (): ReactElement => {
-    if (scrubPosition === undefined) {
-      return <></>
-    }
-    const { xValue, yValue } = scrubPosition
-    const dateTime = DateTime.fromJSDate(new Date(xValue))
-    return (
-      <div className='text-blue-500 font-semibold flex gap-4 pl-4'>
-        <div className='w-[6rem]'>{dateTime.toFormat('hh:mm a')}</div>
-        <div>{+yValue} {props.valueUnits}</div>
-      </div>
-    )
-  }
+  useEffect(() => {
+    const labelWidth = scrubRef.current?.getBoundingClientRect().width ?? 0
+    const xPosition = scrubPosition?.xPosition ?? 0
+    const labelX = xPosition - labelWidth / 2
+    setScrubLabelX(labelX)
+  }, [scrubPosition])
 
   if (plots.length > 0) {
     return (
@@ -73,7 +68,11 @@ export default function Sensor (props: ISensorProps): ReactElement {
             }}
             />
         </div>
-        {getScrubValueElement()}
+        <div className='w-full h-8 relative text-blue-800 font-semibold'>
+          <div ref={scrubRef} className='absolute' style={{ left: scrubLabelX }}>
+            {String(scrubPosition?.yValue) ?? ''}
+          </div>
+        </div>
         <Chart
           settings={{ width: 'auto', height: 300, margin: { left: 50, right: 40, bottom: 30, top: 10 } }}
           plots={plots}
