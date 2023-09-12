@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@axdspub/axiom-charts": "^0.0.15",
+    "@axdspub/axiom-charts": "^0.0.16",
     "@axdspub/axiom-maps": "^0.2.2",
     "@axdspub/axiom-ui-data-services": "^0.0.8",
     "@axdspub/axiom-ui-utilities": "^0.0.19",
