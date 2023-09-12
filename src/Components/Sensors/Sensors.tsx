@@ -12,7 +12,7 @@ interface ISensorsProps {
 export default function Sensors (props: ISensorsProps) {
   const { station } = props
   const { datasetId } = station
-  const [metadata, metadataLoading] = useMetadata(datasetId)
+  const [metadata] = useMetadata(datasetId)
   const { sensors } = metadata
   const timeFrame = TimeFrameService.getTimeFrame('past-week')
 
@@ -34,7 +34,7 @@ export default function Sensors (props: ISensorsProps) {
       />
     </div>
   }).filter(item => item !== null)
-  return <div>
+  return <div className='overflow-hidden'>
     <TimeFrame timeFrame={timeFrame} />
     <div className='flex flex-col gap-4 divide-y pb-8'>
       {listItems}
