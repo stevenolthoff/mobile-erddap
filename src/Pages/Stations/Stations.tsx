@@ -100,7 +100,7 @@ export default function Stations (): ReactElement {
     setLoading(true)
     setHasMore(true)
     setPage(page + 1)
-    getDatasets().then(dataServiceResponse => {
+    getDatasets(page + 1).then(dataServiceResponse => {
       setLoading(false)
       const newResults = dataServiceResponse.data as (api.IErddapIndexResponse[] | null)
       if (newResults === null) {
