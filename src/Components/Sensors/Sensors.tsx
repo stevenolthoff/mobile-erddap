@@ -4,7 +4,6 @@ import useMetadata from '@/Hooks/useMetadata'
 import TimeFrameService from '@/Services/TimeFrame'
 import { IStation } from '@/Contexts/FavoritesContext'
 import TimeFrame from '@/Components/TimeFrame/TimeFrame'
-import { DataService } from '@axdspub/axiom-ui-data-services'
 import SensorService from '@/Services/Sensor'
 
 interface ISensorsProps {
@@ -49,30 +48,20 @@ export default function Sensors (props: ISensorsProps) {
   useEffect(loadData, [sensors, datasetId, station])
 
   const getSensorElements = (sensorProps: ISensorProps[]): ReactElement[] => {
-    return sensorProps.sort((a, b) => a.name > b.name ? 1 : -1).map(sensor => {
+    return sensorProps.map(sensor => {
       return (
         <div key={sensor.name}>
-          <Sensor
-            {...sensor}
-          />
+          <Sensor {...sensor} />
         </div>
       )
     })
   }
 
-  const getNonEmptySensors = (): ReactElement[] => {
-    return getSensorElements(nonEmptySensors)
-  }
-
-  const getEmptySensors = (): ReactElement[] => {
-    return getSensorElements(emptySensors)
-  }
-
   return <div className='overflow-hidden'>
     <TimeFrame timeFrame={timeFrame} />
     <div className='flex flex-col gap-4 divide-y pb-8'>
-      {getNonEmptySensors()}
-      {getEmptySensors()}
+      {getSensorElements(nonEmptySensors)}
+      {getSensorElements(emptySensors)}
     </div>
   </div>
 }

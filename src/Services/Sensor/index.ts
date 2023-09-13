@@ -54,11 +54,13 @@ export default class SensorService {
     return dataService.get()
   }
 
-  public static async getNonEmptyAndEmptySensors (sensorsAsProps: ISensorProps[]): Promise<[NonEmptySensors, EmptySensors]> {
-    const dataFetchPromises = this.getDataForSensors(sensorsAsProps)
+  public static async getNonEmptyAndEmptySensors (sensorProps: ISensorProps[]): Promise<[NonEmptySensors, EmptySensors]> {
+    const dataFetchPromises = this.getDataForSensors(sensorProps)
     const sensors = await Promise.all(dataFetchPromises)
-    const propsOfEmptySensors: ISensorProps[] = []
-    const propsOfNonEmptySensors: ISensorProps[] = []
+
+    let propsOfNonEmptySensors: ISensorProps[] = []
+    let propsOfEmptySensors: ISensorProps[] = []
+
     sensors.forEach(sensorResult => {
       const y = sensorResult.result.parsed?.accessors.y
       if (y !== undefined) {
@@ -71,16 +73,19 @@ export default class SensorService {
         }
       }
     })
+
+    propsOfNonEmptySensors = propsOfNonEmptySensors.sort((a, b) => a.name > b.name ? 1 : -1)
+    propsOfEmptySensors = propsOfEmptySensors.sort((a, b) => a.name > b.name ? 1 : -1)
+
     return [propsOfNonEmptySensors, propsOfEmptySensors]
   }
 
-  private static getDataForSensors (sensorsAsProps: ISensorProps[]) {
-    const dataFetchPromises = sensorsAsProps.map(async props => {
+  private static getDataForSensors (sensorProps: ISensorProps[]) {
+    return sensorProps.map(async props => {
       const dataServiceProps = SensorService.getDataServiceForSensorChart(props)
       const dataService = new DataService(dataServiceProps)
       return { id: props.name, result: await dataService.get(), sensor: props }
     })
-    return dataFetchPromises
   }
 
   private static getUrlForSensorChartData (datasetId: string, sensorName: string, timeFrame: TimeFrame) {

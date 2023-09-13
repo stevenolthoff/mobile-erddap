@@ -20,7 +20,7 @@ const FavoriteSensors = (): ReactElement => {
   useEffect(loadData, [copied])
 
   const getSensorElements = (sensorProps: ISensorProps[]): ReactElement[] => {
-    return sensorProps.sort((a, b) => a.name > b.name ? 1 : -1).map(sensor => {
+    return sensorProps.map(sensor => {
       return (
         <div key={`${sensor.datasetId}-${sensor.name}`}>
           <FavoriteSensor id={sensor.name} sensor={{ ...sensor, type: 'sensor' }} />
@@ -29,17 +29,9 @@ const FavoriteSensors = (): ReactElement => {
     })
   }
 
-  const getNonEmptySensors = (): ReactElement[] => {
-    return getSensorElements(nonEmptySensors)
-  }
-
-  const getEmptySensors = (): ReactElement[] => {
-    return getSensorElements(emptySensors)
-  }
-
   return <div className='flex flex-col gap-4 divide-y divide-slate-300'>
-    {getNonEmptySensors()}
-    {getEmptySensors()}
+    {getSensorElements(nonEmptySensors)}
+    {getSensorElements(emptySensors)}
   </div>
 }
 
