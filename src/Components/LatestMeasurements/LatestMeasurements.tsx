@@ -6,6 +6,7 @@ import { ClipLoader } from 'react-spinners'
 import FavoriteButton from '../FavoriteButton/FavoriteButton'
 import { ILatestMeasurement } from '@/Contexts/FavoritesContext'
 import SensorService from '@/Services/Sensor'
+import { Loader } from '@axdspub/axiom-ui-utilities'
 
 interface ILatestMeasurementsProps extends Omit<ILatestMeasurement, 'type'> {
   hideFavoriteButton?: boolean
@@ -22,6 +23,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
   const [metadata, metadataLoading] = useMetadata(props.datasetId)
   const [columnNames, setColumnNames] = useState<string[]>([])
   const [sensorMetadata, setSensorMetadata] = useState<VariableToAttribute>({})
+  const [hasData, setHasData] = useState<boolean | undefined>(undefined)
 
   useEffect(() => {
     if (metadataLoading) return
@@ -33,6 +35,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
     if (metadataLoading && columnNames.length > 0) return
     SensorService.getLatestMeasurementsData(props.datasetId, columnNames).then(result => {
       setData(result.data)
+      setHasData(result.parsed !== null)
       setLoading(false)
     }).catch(error => {
       console.error(error)
@@ -111,6 +114,32 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
 
   const headerClassName = 'text-slate-500 px-0 md:px-4 font-semibold text-xs uppercase py-2 border-t'
 
+  const EmptyState = () => {
+    const className = 'h-[300px] flex justify-center items-center bg-slate-200 rounded-lg text-slate-500 text-sm'
+    if (hasData) {
+      return <></>
+    } else if (hasData === undefined) {
+      return <div className={`${className} animate-pulse`}><Loader /></div>
+    } else {
+      return <div className={className}>No data collected in this time period.</div>
+    }
+  }
+
+  const Table = () => {
+    if (loading || !hasData) {
+      return <></>
+    } else {
+      return (
+        <div className='grid grid-cols-3 divide-y'>
+          <div className={headerClassName}>Sensor</div>
+          <div className={headerClassName}>Measurement</div>
+          <div className={headerClassName}>Time</div>
+          {loading ? <></> : getTableRows() }
+        </div>
+      )
+    }
+  }
+
   return <div className='flex flex-col gap-2'>
     {
       props.hideFavoriteButton ? 
@@ -124,12 +153,7 @@ export default function LatestMeasurements (props: ILatestMeasurementsProps): Re
         />
       </div>
     }
-    <div className='grid grid-cols-3 divide-y'>
-      <div className={headerClassName}>Sensor</div>
-      <div className={headerClassName}>Measurement</div>
-      <div className={headerClassName}>Time</div>
-      {loading ? <></> : getTableRows() }
-    </div>
-    {getLoader()}
+    <EmptyState />
+    <Table />
   </div>
 }
