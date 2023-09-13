@@ -1,4 +1,4 @@
-import Sensor from '@/Components/Sensor/Sensor'
+import Sensor, { ISensorProps } from '@/Components/Sensor/Sensor'
 import { ReactElement, useEffect, useState } from 'react'
 import useMetadata from '@/Hooks/useMetadata'
 import TimeFrameService from '@/Services/TimeFrame'
@@ -17,60 +17,43 @@ export default function Sensors (props: ISensorsProps) {
   const [metadata] = useMetadata(datasetId)
   const { sensors } = metadata
   const timeFrame = TimeFrameService.getTimeFrame('past-week')
-  const [emptySensors, setEmptySensors] = useState<string[]>([])
-  const [nonEmptySensors, setNonEmptySensors] = useState<string[]>([])
+  const [emptySensors, setEmptySensors] = useState<ISensorProps[]>([])
+  const [nonEmptySensors, setNonEmptySensors] = useState<ISensorProps[]>([])
 
-  const loadData = () => {
+  const parseMetadataAsSensorProps = () => {
     const sensorsWithUnits = Object.keys(sensors).filter(key => sensors[key].units)
-    const dataFetchPromises = sensorsWithUnits.map(async key => {
+    const sensorsAsProps: ISensorProps[] = sensorsWithUnits.map(key => {
       const valueName = sensors[key].units['Variable Name']
       const valueUnits = sensors[key].units.Value
-      const dataServiceProps = SensorService.getDataServiceForSensorChart({
+      const sensorProps: ISensorProps = {
         name: key,
         datasetId,
         valueName,
         valueUnits,
         timeFrame: 'past-week',
         station
-      })
-      const dataService = new DataService(dataServiceProps)
-      return { id: key, result: await dataService.get() }
+      }
+      return sensorProps
     })
-    Promise.all(dataFetchPromises).then((sensors) => {
-      const idsOfEmptySensors: string[] = []
-      const idsOfNonEmptySensors: string[] = []
-      sensors.forEach(sensorResult => {
-        const y = sensorResult.result.parsed?.accessors.y
-        if (y !== undefined) {
-          const data = sensorResult.result.parsed?.data
-          const sensorIsEmpty = data?.filter(row => y(row) !== null).length === 0
-          if (sensorIsEmpty) {
-            idsOfEmptySensors.push(sensorResult.id)
-          } else {
-            idsOfNonEmptySensors.push(sensorResult.id)
-          }
-        }
-      })
-      setEmptySensors(idsOfEmptySensors)
-      setNonEmptySensors(idsOfNonEmptySensors)
-    }).catch(error => console.error(error))
+    return sensorsAsProps
+  }
+
+  const loadData = () => {
+    const sensorsAsProps: ISensorProps[] = parseMetadataAsSensorProps()
+    SensorService.getNonEmptyAndEmptySensors(sensorsAsProps).then(([nonEmptySensors, emptySensors]) => {
+      setNonEmptySensors(nonEmptySensors)
+      setEmptySensors(emptySensors)
+    }).catch(error => { console.error(error) })
   }
 
   useEffect(loadData, [sensors, datasetId, station])
 
-  const getSensorElements = (sensorIds: string[]): ReactElement[] => {
-    return sensorIds.sort().map(id => {
-      const valueName = sensors[id].units['Variable Name']
-      const valueUnits = sensors[id].units.Value
+  const getSensorElements = (sensorProps: ISensorProps[]): ReactElement[] => {
+    return sensorProps.sort((a, b) => a.name > b.name ? 1 : -1).map(sensor => {
       return (
-        <div key={id}>
+        <div key={sensor.name}>
           <Sensor
-            name={id}
-            datasetId={datasetId}
-            valueName={valueName}
-            valueUnits={valueUnits}
-            timeFrame='past-week'
-            station={station}
+            {...sensor}
           />
         </div>
       )

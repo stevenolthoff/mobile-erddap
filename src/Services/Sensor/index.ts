@@ -3,6 +3,9 @@ import { ErddapApi } from '@axdspub/erddap-service/lib/api'
 import TimeFrameService, { TimeFrame } from '@/Services/TimeFrame'
 import { ISensorProps } from '@/Components/Sensor/Sensor'
 
+type EmptySensors = ISensorProps[]
+type NonEmptySensors = ISensorProps[]
+
 export default class SensorService {
   static SERVER = process.env.REACT_APP_SERVER || 'https://erddap.sensors.axds.co/erddap'
   static erddapApi = new ErddapApi(this.SERVER)
@@ -49,6 +52,35 @@ export default class SensorService {
     })
     const dataService = new DataService({ type: '', resultType: 'csv', url })
     return dataService.get()
+  }
+
+  public static async getNonEmptyAndEmptySensors (sensorsAsProps: ISensorProps[]): Promise<[NonEmptySensors, EmptySensors]> {
+    const dataFetchPromises = this.getDataForSensors(sensorsAsProps)
+    const sensors = await Promise.all(dataFetchPromises)
+    const propsOfEmptySensors: ISensorProps[] = []
+    const propsOfNonEmptySensors: ISensorProps[] = []
+    sensors.forEach(sensorResult => {
+      const y = sensorResult.result.parsed?.accessors.y
+      if (y !== undefined) {
+        const data = sensorResult.result.parsed?.data
+        const sensorIsEmpty = data?.filter(row => y(row) !== null).length === 0
+        if (sensorIsEmpty) {
+          propsOfEmptySensors.push(sensorResult.sensor)
+        } else {
+          propsOfNonEmptySensors.push(sensorResult.sensor)
+        }
+      }
+    })
+    return [propsOfNonEmptySensors, propsOfEmptySensors]
+  }
+
+  private static getDataForSensors (sensorsAsProps: ISensorProps[]) {
+    const dataFetchPromises = sensorsAsProps.map(async props => {
+      const dataServiceProps = SensorService.getDataServiceForSensorChart(props)
+      const dataService = new DataService(dataServiceProps)
+      return { id: props.name, result: await dataService.get(), sensor: props }
+    })
+    return dataFetchPromises
   }
 
   private static getUrlForSensorChartData (datasetId: string, sensorName: string, timeFrame: TimeFrame) {

@@ -1,30 +1,45 @@
 import { useFavoritesContext } from '@/Contexts/FavoritesContext'
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import FavoriteSensor from '@/Components/FavoriteSensor/FavoriteSensor'
+import SensorService from '@/Services/Sensor'
+import { ISensorProps } from '../Sensor/Sensor'
 
 const FavoriteSensors = (): ReactElement => {
   const { sensors } = useFavoritesContext()
   const [copied] = useState(Object.assign({}, sensors))
+  const [emptySensors, setEmptySensors] = useState<ISensorProps[]>([])
+  const [nonEmptySensors, setNonEmptySensors] = useState<ISensorProps[]>([])
 
-  function getFavoriteSensors () {
-    if (Object.keys(copied).length === 0) {
-      return <div className='p-4 italic text-slate-500 text-sm'>No Sensors Saved</div>
-    }
-    return Object.entries(copied)
-      .sort(([idA, sensorA], [idB, sensorB]) => {
-        if (sensorA.station.title < sensorB.station.title) {
-          return -1
-        } else if (sensorA.station.title > sensorB.station.title) {
-          return 1
-        } else {
-          return 0
-        }
-      })
-      .map(([id, sensor]) => <FavoriteSensor id={id} sensor={sensor} />)
+  const loadData = () => {
+    SensorService.getNonEmptyAndEmptySensors(Object.values(copied)).then(([nonEmptySensors, emptySensors]) => {
+      setNonEmptySensors(nonEmptySensors)
+      setEmptySensors(emptySensors)
+    }).catch(error => { console.error(error) })
+  }
+
+  useEffect(loadData, [copied])
+
+  const getSensorElements = (sensorProps: ISensorProps[]): ReactElement[] => {
+    return sensorProps.sort((a, b) => a.name > b.name ? 1 : -1).map(sensor => {
+      return (
+        <div key={`${sensor.datasetId}-${sensor.name}`}>
+          <FavoriteSensor id={sensor.name} sensor={{ ...sensor, type: 'sensor' }} />
+        </div>
+      )
+    })
+  }
+
+  const getNonEmptySensors = (): ReactElement[] => {
+    return getSensorElements(nonEmptySensors)
+  }
+
+  const getEmptySensors = (): ReactElement[] => {
+    return getSensorElements(emptySensors)
   }
 
   return <div className='flex flex-col gap-4 divide-y divide-slate-300'>
-    {getFavoriteSensors()}
+    {getNonEmptySensors()}
+    {getEmptySensors()}
   </div>
 }
 

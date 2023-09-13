@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom'
 import TimeFrame from '@/Components/TimeFrame/TimeFrame'
 import TimeFrameService from '@/Services/TimeFrame'
 
-const FavoriteSensor = ({ id, sensor }: { id: string, sensor: ISensor}): ReactElement => {
+const FavoriteSensor = ({ id, sensor }: { id: string, sensor: ISensor }): ReactElement => {
   const { search } = useLocation()
   const { datasetId } = sensor.station
 
