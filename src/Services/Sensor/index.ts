@@ -56,28 +56,32 @@ export default class SensorService {
 
   public static async getNonEmptyAndEmptySensors (sensorProps: ISensorProps[]): Promise<[NonEmptySensors, EmptySensors]> {
     const dataFetchPromises = this.getDataForSensors(sensorProps)
-    const sensors = await Promise.all(dataFetchPromises)
-
-    let propsOfNonEmptySensors: ISensorProps[] = []
-    let propsOfEmptySensors: ISensorProps[] = []
-
-    sensors.forEach(sensorResult => {
-      const y = sensorResult.result.parsed?.accessors.y
-      if (y !== undefined) {
-        const data = sensorResult.result.parsed?.data
-        const sensorIsEmpty = data?.filter(row => y(row) !== null).length === 0
-        if (sensorIsEmpty) {
-          propsOfEmptySensors.push(sensorResult.sensor)
-        } else {
-          propsOfNonEmptySensors.push(sensorResult.sensor)
+    try {
+      const sensors = await Promise.all(dataFetchPromises)
+      let propsOfNonEmptySensors: ISensorProps[] = []
+      let propsOfEmptySensors: ISensorProps[] = []
+  
+      sensors.forEach(sensorResult => {
+        const y = sensorResult.result.parsed?.accessors.y
+        if (y !== undefined) {
+          const data = sensorResult.result.parsed?.data
+          const sensorIsEmpty = data?.filter(row => y(row) !== null).length === 0
+          if (sensorIsEmpty) {
+            propsOfEmptySensors.push(sensorResult.sensor)
+          } else {
+            propsOfNonEmptySensors.push(sensorResult.sensor)
+          }
         }
-      }
-    })
-
-    propsOfNonEmptySensors = propsOfNonEmptySensors.sort((a, b) => a.name > b.name ? 1 : -1)
-    propsOfEmptySensors = propsOfEmptySensors.sort((a, b) => a.name > b.name ? 1 : -1)
-
-    return [propsOfNonEmptySensors, propsOfEmptySensors]
+      })
+  
+      propsOfNonEmptySensors = propsOfNonEmptySensors.sort((a, b) => a.name > b.name ? 1 : -1)
+      propsOfEmptySensors = propsOfEmptySensors.sort((a, b) => a.name > b.name ? 1 : -1)
+  
+      return [propsOfNonEmptySensors, propsOfEmptySensors]
+    } catch (error) {
+      console.error('here', error)
+      return [[], []]
+    }
   }
 
   private static getDataForSensors (sensorProps: ISensorProps[]) {
