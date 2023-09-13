@@ -20,12 +20,12 @@ export default function Sensors (props: ISensorsProps) {
   const [nonEmptySensors, setNonEmptySensors] = useState<ISensorProps[]>([])
 
   const parseMetadataAsSensorProps = () => {
-    const sensorsWithUnits = Object.keys(sensors).filter(key => sensors[key].units)
-    const sensorsAsProps: ISensorProps[] = sensorsWithUnits.map(key => {
-      const valueName = sensors[key].units['Variable Name']
-      const valueUnits = sensors[key].units.Value
+    const sensorsWithUnits = Object.keys(sensors).filter(name => sensors[name].units)
+    const sensorsAsProps: ISensorProps[] = sensorsWithUnits.map(name => {
+      const valueName = sensors[name].units['Variable Name']
+      const valueUnits = sensors[name].units.Value
       const sensorProps: ISensorProps = {
-        name: key,
+        name,
         datasetId,
         valueName,
         valueUnits,
