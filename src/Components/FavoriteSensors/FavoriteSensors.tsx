@@ -3,6 +3,7 @@ import { ReactElement, useEffect, useState } from 'react'
 import FavoriteSensor from '@/Components/FavoriteSensor/FavoriteSensor'
 import SensorService from '@/Services/Sensor'
 import { ISensorProps } from '../Sensor/Sensor'
+import EmptyCard from '@/Components/EmptyCard/EmptyCard'
 
 const FavoriteSensors = (): ReactElement => {
   const { sensors } = useFavoritesContext()
@@ -29,9 +30,18 @@ const FavoriteSensors = (): ReactElement => {
     })
   }
 
+  const EmptyState = () => {
+    if (nonEmptySensors.length === 0 && emptySensors.length === 0) {
+      return <div className='p-4'><EmptyCard><p>You haven't favorited any sensors yet.</p></EmptyCard></div>
+    } else {
+      return <></>
+    }
+  }
+
   return <div className='flex flex-col gap-4 divide-y divide-slate-300'>
     {getSensorElements(nonEmptySensors)}
     {getSensorElements(emptySensors)}
+    <EmptyState></EmptyState>
   </div>
 }
 
