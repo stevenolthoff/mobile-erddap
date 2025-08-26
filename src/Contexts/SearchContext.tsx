@@ -11,7 +11,8 @@ const defaultState = {
   maxLongitude: 0,
   minLatitude: 0,
   centerLatitude: 0,
-  centerLongitude: 0
+  centerLongitude: 0,
+  zoom: 4
 }
 
 function getDefaultStartDate () {
@@ -38,9 +39,9 @@ export const SearchContext = createContext(defaultState)
 export default function SearchContextProvider ({ children }: PropsWithChildren) {
   const [minTime] = useState(defaultState.minTime)
   const [maxTime] = useState(defaultState.maxTime)
-  const [bounds, setBounds] = useBounds()
+  const [bounds] = useBounds()
   const { centerLatitude, centerLongitude } = useMapCenter()
-  const { minLatitude, maxLatitude, minLongitude, maxLongitude } = bounds
+  const { minLatitude, maxLatitude, minLongitude, maxLongitude, zoom } = bounds
 
   return (
     <SearchContext.Provider
@@ -52,7 +53,8 @@ export default function SearchContextProvider ({ children }: PropsWithChildren) 
         maxLongitude,
         minLatitude,
         centerLatitude,
-        centerLongitude
+        centerLongitude,
+        zoom
       }}
     >{children}</SearchContext.Provider>
   )

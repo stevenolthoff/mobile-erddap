@@ -19,9 +19,8 @@ export default function NavBar (): ReactElement {
   const { search } = location
   const navigate = useNavigate()
 
-  function onPathChanged () {
-    console.log(location)
-    const tab = tabs.find(tab => tab.path === location.pathname)
+  function onPathChanged() {
+    const tab = tabs.find((tab) => tab.path === location.pathname)
     if (tab === undefined) return
     setActiveTab(tab.id)
   }
