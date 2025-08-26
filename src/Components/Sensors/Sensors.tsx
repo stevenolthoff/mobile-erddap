@@ -65,12 +65,18 @@ export default function Sensors (props: ISensorsProps) {
   }
 
   const EmptyState = () => {
-    console.log(timeFrameHasData)
-    const className = 'm-4 w-[calc(100%-2rem)] h-[300px] flex justify-center items-center bg-slate-200 rounded-lg text-slate-500 text-sm'
+    const className =
+      'm-4 w-[calc(100%-2rem)] h-[300px] flex justify-center items-center bg-slate-200 rounded-lg text-slate-500 text-sm'
     if (timeFrameHasData === undefined) {
-      return <div className={`${className} animate-pulse`}><Loader></Loader></div>
+      return (
+        <div className={`${className} animate-pulse`}>
+          <Loader></Loader>
+        </div>
+      )
     } else if (!timeFrameHasData) {
-      return <div className={className}>No data collected in this time period.</div>
+      return (
+        <div className={className}>No data collected in this time period.</div>
+      )
     } else {
       return <></>
     }

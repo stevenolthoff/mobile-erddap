@@ -15,7 +15,8 @@ export default function Map (): ReactElement {
     minLongitude,
     maxLongitude,
     centerLatitude,
-    centerLongitude
+    centerLongitude,
+    zoom,
   } = useSearchContext()
 
   const [layer, setLayer] = useState<any>()
@@ -36,32 +37,36 @@ export default function Map (): ReactElement {
   }
 
   function createGeoJsonLayer (datasets: IDatasetOnMap[]): IGeoJSONLayerProps {
-    const geoJson: GeoJSON.Feature[] = datasets.slice(1).map((dataset: IDatasetOnMap) => ({
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [Number(dataset.maxLongitude), Number(dataset.maxLatitude)]
-      },
-      properties: {
-        'point-radius': 10,
-        dataset
-      }
-    }))
-    console.log(geoJson)
+    const geoJson: GeoJSON.Feature[] = datasets
+      .slice(1)
+      .map((dataset: IDatasetOnMap) => ({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [
+            Number(dataset.maxLongitude),
+            Number(dataset.maxLatitude),
+          ],
+        },
+        properties: {
+          'point-radius': 10,
+          dataset,
+        },
+      }))
     const layer: IGeoJSONLayerProps = {
       id: 'geoJson',
       type: 'geoJson',
       label: 'geoJson',
       zIndex: 20,
       isBaseLayer: false,
-      options: { geoJson },
+      options: { geoJson, cluster: true },
       onSelect: (e: ILayerQueryEvent) => {
-        if(e?.data?.feature?.properties?.dataset !== undefined){
+        if (e?.data?.feature?.properties?.dataset !== undefined) {
           setActiveStation(e.data.feature.properties.dataset as IDatasetOnMap)
-        }else{
+        } else {
           setActiveStation(null)
         }
-      }
+      },
     }
     return layer
   }
@@ -106,10 +111,10 @@ export default function Map (): ReactElement {
             top: '0px',
             right: '0px',
             bottom: '0px',
-            padding: '0'
+            padding: '0',
           }}
           center={{ lat: centerLatitude, lon: centerLongitude }}
-          zoom={5}
+          zoom={zoom}
           layers={[layer]}
         />
         {getStationCard()}
