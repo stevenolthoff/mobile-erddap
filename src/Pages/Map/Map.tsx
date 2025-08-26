@@ -19,6 +19,8 @@ export default function Map (): ReactElement {
     zoom,
   } = useSearchContext()
 
+  const MIN_ZOOM = 12 // Enforce a city-level minimum zoom
+
   const [layer, setLayer] = useState<any>()
   const [activeStation, setActiveStation] = useState<IDatasetOnMap | null>(null)
   const ref = useRef(null)
@@ -114,7 +116,7 @@ export default function Map (): ReactElement {
             padding: '0',
           }}
           center={{ lat: centerLatitude, lon: centerLongitude }}
-          zoom={zoom}
+          zoom={Math.max(zoom, MIN_ZOOM)}
           layers={[layer]}
         />
         {getStationCard()}
