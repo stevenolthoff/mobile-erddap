@@ -13,7 +13,7 @@ const DEFAULT_MIN_LONGITUDE = -171
 const DEFAULT_MAX_LONGITUDE = -136
 const DEFAULT_MIN_LATITUDE = 42
 const DEFAULT_MAX_LATITUDE = 77
-const DEFAULT_ZOOM = 4
+const DEFAULT_ZOOM = 12
 
 const formatBoundsForSearchParams = (bounds: IBounds) => {
   const formatted: Record<string, string> = {}
