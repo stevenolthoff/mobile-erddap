@@ -1,75 +1,69 @@
-# Mobile ERDDAP Explorer
+# Mobile ERDDAP
 
-A responsive web application for searching, viewing, and favoriting oceanographic data from ERDDAP servers, designed for mobile-first use.
+## Project Description
+A mobile-first React application providing a user-friendly interface to explore, visualize, and favorite environmental data from ERDDAP servers. It focuses on presenting station information, sensor measurements, and latest data readings, designed for quick access and readability on handheld devices.
 
-## Key Features
+## Features
+*   **Interactive Map:** Browse data stations geographically with selectable markers.
+*   **Station Details:** View comprehensive information for individual stations, including metadata, time-series charts for various sensors, and a table of the latest measurements.
+*   **Search & Filtering:** Efficiently search for data stations by name and filter results by specific sensor types.
+*   **Favorites Management:** Bookmark preferred stations, individual sensors, or entire latest measurement tables for quick access and personalized data tracking.
+*   **Responsive Design:** Optimized for a seamless user experience across mobile devices.
+*   **Configurable Map Boundaries:** Adjust default geographic map view and zoom level via settings.
+*   **Storybook Integration:** A dedicated component library for UI development and documentation.
 
-- **Station Search:** Search for data stations by text and sensor type.
-- **Interactive Map:** View station locations with marker clustering for performance.
-- **Detailed Station View:** Inspect individual stations, view latest measurements, and see sensor data charts.
-- **Favorites:** Save favorite stations, sensors, and data tables for quick access.
-- **Configurable Boundaries:** Set a default map area and zoom level for a personalized experience.
+## Tech Stack
+*   **Frontend Framework:** React with TypeScript
+*   **Styling:** Tailwind CSS
+*   **Mapping:** Leaflet (`@axdspub/axiom-maps`)
+*   **Charting:** `@axdspub/axiom-charts`
+*   **Data Services:** `@axdspub/erddap-service`, `@axdspub/axiom-ui-data-services` for ERDDAP data fetching and parsing.
+*   **UI Components:** Radix UI primitives
+*   **Build Tooling:** Craco (for custom Webpack/Jest configuration), Storybook.
+*   **Containerization:** Docker, Docker Compose
+*   **CI/CD:** GitLab CI
 
 ## Getting Started
 
 ### Prerequisites
+*   Node.js (v18 or later recommended)
+*   npm or Yarn
+*   Docker & Docker Compose (optional, for containerized setup)
 
-- Node.js (v18 or later recommended)
-- npm
-
-### Installation & Setup
-
+### Installation
 1.  Clone the repository:
-    ```sh
-    git clone <repository_url>
-    cd <repository_directory>
+    ```bash
+    git clone <repository-url>
+    cd mobile-erddap
     ```
-
-2.  Install dependencies:
-    ```sh
+2.  Install project dependencies:
+    ```bash
     npm install
-    ```
-
-3.  Configure the environment. Create a `.env` file in the project root and add the ERDDAP server URL:
-    ```env
-    # .env
-    REACT_APP_SERVER=https://erddap.sensors.axds.co/erddap
+    # or yarn install
     ```
 
 ### Running the Application
 
-- **Development Server:**
-  ```sh
-  npm start
-  ```
-  The application will be available at `http://localhost:3000`.
-
-- **Storybook Component Library:**
-  ```sh
-  npm run storybook
-  ```
-  Storybook will be available at `http://localhost:6006`.
-
-## Available Scripts
-
-- `npm start`: Runs the app in development mode.
-- `npm run build`: Builds the app for production.
-- `npm test`: Runs the test suite in watch mode.
-- `npm run storybook`: Starts the Storybook development server.
-- `npm run build-storybook`: Builds the Storybook component library for deployment.
-
-## Docker
-
-The project includes `Dockerfile` configurations for both the main application and Storybook, managed via `docker-compose`.
-
-1.  **Build the images:**
-    ```sh
-    docker-compose build
+*   **Development Mode:**
+    Starts the React development server.
+    ```bash
+    npm start
     ```
+    Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will reload on edits.
 
-2.  **Run the containers:**
-    ```sh
-    docker-compose up
+*   **Production Build:**
+    Builds the app for production to the `build` folder.
+    ```bash
+    npm run build
     ```
-    - The application will be served at `http://localhost:8787`.
-    - Storybook will be served at `http://localhost:8888`.
+    This bundles React in production mode and optimizes for performance.
+
+*   **With Docker Compose (Development):**
+    Builds and runs the application and Storybook in Docker containers.
+    ```bash
+    docker-compose up --build
+    ```
+    Access the application at `http://localhost:8787` and Storybook at `http://localhost:8888`.
+
+## CI/CD
+This project uses `.gitlab-ci.yml` to define automated build, test, and push stages for both the main application and its Storybook instance. It supports branching, tagging, and deployment to a staging environment (`aps apps-stage mobile-erddap-and-storybook`).
